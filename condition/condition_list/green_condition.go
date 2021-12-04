@@ -12,7 +12,7 @@ type GreenCondition struct {
 	CandleIndex int `json:"GreenCondition"`
 }
 
-func (c GreenCondition) DoesApply(stream *stream.CandleStream) bool {
+func (c GreenCondition) MeetsCondition(stream *stream.CandleStream) bool {
 	candle := stream.Get(c.CandleIndex)
 	return candle.Close() > candle.Open()
 }

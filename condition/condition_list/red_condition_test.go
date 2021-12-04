@@ -12,7 +12,7 @@ func TestRedCondition_GreenCandle(t *testing.T) {
 	cstream := candle_stream.CreateCandleStream(clst)
 
 	condition := RedCondition{CandleIndex: 0}
-	answer := condition.DoesApply(&cstream)
+	answer := condition.MeetsCondition(&cstream)
 
 	if answer {
 		t.Logf("Expected: %v\tGot: %v", false, answer)
@@ -26,7 +26,7 @@ func TestRedCondition_RedCandle(t *testing.T) {
 	cstream := candle_stream.CreateCandleStream(clst)
 
 	condition := RedCondition{CandleIndex: 0}
-	answer := condition.DoesApply(&cstream)
+	answer := condition.MeetsCondition(&cstream)
 
 	if !answer {
 		t.Logf("Expected: %v\tGot: %v", true, answer)
