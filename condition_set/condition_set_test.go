@@ -1,4 +1,4 @@
-package pipeline
+package conditionset
 
 import (
 	candle "branch_learning/candle"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestCandlePipeline_AllConditionsApplied(t *testing.T) {
+func TestConditionSet_AllConditionsApplied(t *testing.T) {
 	candle1 := candle.CreateCandle(1.1, 2.2, 3.3, 4.4)
 	candle2 := candle.CreateCandle(1.1, 2.2, 3.3, 4.4)
 	candles := []candle.Candle{candle1, candle2}
@@ -16,9 +16,9 @@ func TestCandlePipeline_AllConditionsApplied(t *testing.T) {
 	greenCondition1 := condition_list.GreenCondition{CandleIndex: 1}
 	greenCondition2 := condition_list.GreenCondition{CandleIndex: 0}
 	conditionsLst := []condition.ICondition{greenCondition2, greenCondition1}
-	pipeline := CreateCandlePipeline(conditionsLst)
+	set := CreateConditionSet(conditionsLst)
 
-	answer := pipeline.DoesApply(&cstream)
+	answer := set.DoesApply(&cstream)
 	if !answer {
 		t.Logf("Expected: %v\tGot: %v", true, answer)
 		t.Error("AssertionError")
