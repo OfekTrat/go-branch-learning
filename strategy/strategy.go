@@ -3,6 +3,7 @@ package strategy
 import (
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/condition"
+	exit "branch_learning/exit"
 )
 
 type Strategy struct {
@@ -44,8 +45,8 @@ func (strategy *Strategy) MeetsConditions(stream *candle_stream.CandleStream) bo
 	return true
 }
 
-func (strategy *Strategy) GetExit(price float32) Exit {
+func (strategy *Strategy) GetExit(price float32) exit.Exit {
 	takeProfit := (1 + strategy.takeProfit/100) * price
 	stopLoss := (1 - strategy.stopLoss/100) * price
-	return Exit{takeProfitPrice: takeProfit, stopLossPrice: stopLoss}
+	return exit.CreateExit(takeProfit, stopLoss)
 }
