@@ -12,6 +12,18 @@ func CreateCandleStream(candles []candle.Candle) CandleStream {
 	return CandleStream{candles: candles}
 }
 
-func (candleStream *CandleStream) Get(candleIndex int) candle.Candle {
-	return candleStream.candles[candleIndex]
+func LoadStreamFromCsv(csvPath string) CandleStream {
+	return CandleStream{} // TODO: Implement Function
+}
+
+func (stream *CandleStream) Get(candleIndex int) candle.Candle {
+	return stream.candles[candleIndex]
+}
+
+func (stream *CandleStream) Length() int {
+	return len(stream.candles)
+}
+
+func (stream *CandleStream) GetSlice(firstIndex int, lastIndex int) []candle.Candle {
+	return stream.candles[firstIndex:lastIndex]
 }
