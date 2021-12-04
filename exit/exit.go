@@ -1,8 +1,12 @@
-package strategy
+package exit
 
 type Exit struct {
 	takeProfitPrice float32
 	stopLossPrice   float32
+}
+
+func CreateExit(takeProfitPrice float32, stopLossPrice float32) Exit {
+	return Exit{takeProfitPrice: takeProfitPrice, stopLossPrice: stopLossPrice}
 }
 
 func (e Exit) TakeProfitPercentage() float32 {
