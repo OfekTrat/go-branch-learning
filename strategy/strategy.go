@@ -11,8 +11,8 @@ type Strategy struct {
 	conditions []condition.ICondition
 }
 
-func CreateStrategy(takeProfit, stopLoss float32, conditions []condition.ICondition) Strategy {
-	return Strategy{takeProfit: takeProfit, stopLoss: stopLoss, conditions: conditions}
+func CreateStrategy(takeProfit, stopLoss float32, conditions []condition.ICondition) *Strategy {
+	return &Strategy{takeProfit: takeProfit, stopLoss: stopLoss, conditions: conditions}
 }
 
 func (strategy *Strategy) MeetsConditions(stream candle_stream.CandleStream) bool {
