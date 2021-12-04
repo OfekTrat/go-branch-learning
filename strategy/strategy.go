@@ -35,9 +35,9 @@ func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []c
 	}
 }
 
-func (strategy *Strategy) MeetsConditions(stream candle_stream.CandleStream) bool {
+func (strategy *Strategy) MeetsConditions(stream *candle_stream.CandleStream) bool {
 	for _, condition := range strategy.conditions {
-		if !condition.MeetsCondition(&stream) {
+		if !condition.MeetsCondition(stream) {
 			return false
 		}
 	}
