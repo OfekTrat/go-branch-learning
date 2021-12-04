@@ -48,7 +48,8 @@ func TestTradeStats_Score(t *testing.T) {
 
 	score := stats.Score()
 
-	if score != 7.5 {
+	if score != 7.59375 {
 		t.Logf("Expected %v\tGot: %v", 7.5, score)
+		t.Error("AssertionError")
 	}
 }
