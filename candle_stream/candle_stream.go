@@ -8,12 +8,12 @@ type CandleStream struct {
 	candles []candle.Candle
 }
 
-func CreateCandleStream(candles []candle.Candle) CandleStream {
-	return CandleStream{candles: candles}
+func CreateCandleStream(candles []candle.Candle) *CandleStream {
+	return &CandleStream{candles: candles}
 }
 
-func LoadStreamFromCsv(csvPath string) CandleStream {
-	return CandleStream{} // TODO: Implement Function
+func LoadStreamFromCsv(csvPath string) *CandleStream {
+	return &CandleStream{} // TODO: Implement Function
 }
 
 func (stream *CandleStream) Get(candleIndex int) candle.Candle {
@@ -24,6 +24,6 @@ func (stream *CandleStream) Length() int {
 	return len(stream.candles)
 }
 
-func (stream *CandleStream) GetSlice(firstIndex int, lastIndex int) []candle.Candle {
-	return stream.candles[firstIndex:lastIndex]
+func (stream *CandleStream) GetSlice(firstIndex int, lastIndex int) *CandleStream {
+	return &CandleStream{candles: stream.candles[firstIndex:lastIndex]}
 }
