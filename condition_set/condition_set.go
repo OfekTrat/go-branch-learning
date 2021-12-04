@@ -1,4 +1,4 @@
-package pipeline
+package conditionset
 
 import (
 	candle_stream "branch_learning/candle_stream"
