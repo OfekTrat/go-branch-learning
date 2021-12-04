@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	ConditionType = "GreenCondition"
+	GreenConditionType = "GreenCondition"
 )
 
 type GreenCondition struct {
@@ -18,5 +18,5 @@ func (c GreenCondition) DoesApply(stream *stream.CandleStream) bool {
 }
 
 func (c GreenCondition) ConditionType() string {
-	return ConditionType
+	return GreenConditionType
 }
