@@ -3,7 +3,7 @@ package condition
 import candleStream "branch_learning/candle_stream"
 
 const (
-	ConditionType = "RedCondition"
+	RedConditionType = "RedCondition"
 )
 
 type RedCondition struct {
@@ -16,5 +16,5 @@ func (condition RedCondition) DoesApply(stream *candleStream.CandleStream) bool 
 }
 
 func (condition RedCondition) ConditionType() string {
-	return ConditionType
+	return RedConditionType
 }
