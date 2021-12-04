@@ -16,7 +16,7 @@ func TestCandlePipeline_AllConditionsApplied(t *testing.T) {
 	greenCondition1 := condition_list.GreenCondition{CandleIndex: 1}
 	greenCondition2 := condition_list.GreenCondition{CandleIndex: 0}
 	conditionsLst := []condition.ICondition{greenCondition2, greenCondition1}
-	pipeline := CreateCandlePipeline(conditionsLst)
+	pipeline := CreateConditionSet(conditionsLst)
 
 	answer := pipeline.DoesApply(&cstream)
 	if !answer {
