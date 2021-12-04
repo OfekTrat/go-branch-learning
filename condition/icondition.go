@@ -7,7 +7,7 @@ import (
 
 type ICondition interface {
 	ConditionType() string
-	DoesApply(*candleStream.CandleStream) bool
+	MeetsCondition(*candleStream.CandleStream) bool
 }
 
 func ConditionToJson(c ICondition) string {
