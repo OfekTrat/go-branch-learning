@@ -8,11 +8,31 @@ import (
 type Strategy struct {
 	takeProfit float32 //In Percentage
 	stopLoss   float32 //In Percentage
+	windowSize int
 	conditions []condition.ICondition
 }
 
-func CreateStrategy(takeProfit, stopLoss float32, conditions []condition.ICondition) *Strategy {
-	return &Strategy{takeProfit: takeProfit, stopLoss: stopLoss, conditions: conditions}
+func (strategy *Strategy) WindowSize() int {
+	return strategy.windowSize
+}
+
+func (strategy *Strategy) TakeProfit() float32 {
+	return strategy.takeProfit
+}
+func (strategy *Strategy) StopLoss() float32 {
+	return strategy.stopLoss
+}
+func (strategy *Strategy) Conditions() []condition.ICondition { // Copies memory so it cannot be changed from the outside
+	return strategy.conditions // TODO: Make the function return a copy
+}
+
+func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []condition.ICondition) *Strategy {
+	return &Strategy{
+		windowSize: windowSize,
+		takeProfit: takeProfit,
+		stopLoss:   stopLoss,
+		conditions: conditions,
+	}
 }
 
 func (strategy *Strategy) MeetsConditions(stream candle_stream.CandleStream) bool {

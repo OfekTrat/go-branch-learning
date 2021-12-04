@@ -5,11 +5,11 @@ type Exit struct {
 	stopLossPrice   float32
 }
 
-func (e Exit) TakeProfit() float32 {
+func (e Exit) TakeProfitPercentage() float32 {
 	return e.takeProfitPrice
 }
 
-func (e Exit) StopLoss() float32 {
+func (e Exit) StopLossPercentage() float32 {
 	return e.stopLossPrice
 }
 
