@@ -7,7 +7,10 @@ import (
 )
 
 func TestGreenCondition_GreenCandle(t *testing.T) {
-	c := candle.CreateCandle(1.1, 2.2, 3.3, 4.4)
+	candleMap := make(map[string]float32)
+	candleMap["close"] = 1.1
+	candleMap["open"] = 0.4
+	c := candle.CreateCandle(candleMap)
 	cstream := candle_stream.CreateCandleStream([]candle.Candle{c})
 	greenCondition := GreenCondition{CandleIndex: 0}
 
@@ -18,7 +21,10 @@ func TestGreenCondition_GreenCandle(t *testing.T) {
 }
 
 func TestGreenCondition_RedCandle(t *testing.T) {
-	c := candle.CreateCandle(1.1, 2.2, 3.3, 0.4)
+	candleMap := make(map[string]float32)
+	candleMap["close"] = 0.4
+	candleMap["open"] = 1.1
+	c := candle.CreateCandle(candleMap)
 	cstream := candle_stream.CreateCandleStream([]candle.Candle{c})
 	greenCondition := GreenCondition{CandleIndex: 0}
 

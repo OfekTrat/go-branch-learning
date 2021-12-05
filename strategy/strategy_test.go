@@ -9,8 +9,15 @@ import (
 )
 
 func TestStrategy_MeetsConditions(t *testing.T) {
-	redCandle := candle.CreateCandle(10, 0, 0, 9)
-	greenCandle := candle.CreateCandle(9, 0, 0, 10)
+	redCandleMap := make(map[string]float32)
+	redCandleMap["close"] = 9
+	redCandleMap["open"] = 10
+	greenCandleMap := make(map[string]float32)
+	greenCandleMap["close"] = 10
+	greenCandleMap["open"] = 9
+
+	redCandle := candle.CreateCandle(redCandleMap)
+	greenCandle := candle.CreateCandle(greenCandleMap)
 	candleStream := candle_stream.CreateCandleStream([]candle.Candle{redCandle, greenCandle})
 
 	redCond := conditions.RedCondition{CandleIndex: 0}
