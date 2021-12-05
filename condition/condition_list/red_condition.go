@@ -12,7 +12,7 @@ type RedCondition struct {
 
 func (condition RedCondition) MeetsCondition(stream *candleStream.CandleStream) bool {
 	candle := stream.Get(condition.CandleIndex)
-	return candle.Close() < candle.Open()
+	return candle.Get("close") < candle.Get("open")
 }
 
 func (condition RedCondition) ConditionType() string {

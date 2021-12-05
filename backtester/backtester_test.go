@@ -14,8 +14,17 @@ func TestBackTester_TestStream(t *testing.T) {
 	greenCondition := condition_list.GreenCondition{CandleIndex: 1}
 	conditions := []condition.ICondition{redCondition, greenCondition}
 
-	redCandle := candle.CreateCandle(10, 200, 6, 7)
-	greenCandle := candle.CreateCandle(7, 11, 6, 10)
+	redCandleMap := make(map[string]float32)
+	redCandleMap["close"] = 6
+	redCandleMap["open"] = 10
+	redCandleMap["high"] = 200
+
+	greenCandleMap := make(map[string]float32)
+	greenCandleMap["close"] = 10
+	greenCandleMap["open"] = 6
+	greenCandleMap["high"] = 11
+	redCandle := candle.CreateCandle(redCandleMap)
+	greenCandle := candle.CreateCandle(greenCandleMap)
 	candles := []candle.Candle{redCandle, greenCandle, redCandle, greenCandle}
 	stream := candle_stream.CreateCandleStream(candles)
 

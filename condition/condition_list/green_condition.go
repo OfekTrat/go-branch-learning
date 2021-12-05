@@ -14,7 +14,7 @@ type GreenCondition struct {
 
 func (c GreenCondition) MeetsCondition(stream *stream.CandleStream) bool {
 	candle := stream.Get(c.CandleIndex)
-	return candle.Close() > candle.Open()
+	return candle.Get("close") > candle.Get("open")
 }
 
 func (c GreenCondition) ConditionType() string {
