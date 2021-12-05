@@ -27,6 +27,6 @@ func (stats *TradeStats) AddLoss() {
 	stats.matches++
 }
 
-func (stats *TradeStats) Score() float64 {
-	return math.Pow((float64(stats.wins) / float64(stats.losses)), float64(stats.matches))
+func (stats *TradeStats) Score() float64 { // TODO: Take care of zero division
+	return float64(stats.wins) / float64(stats.losses) * (100 / (1 + math.Pow(math.E, -1*float64(stats.matches))))
 }
