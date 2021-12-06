@@ -18,3 +18,7 @@ func (condition RedCondition) MeetsCondition(stream *candleStream.CandleStream) 
 func (condition RedCondition) ConditionType() string {
 	return RedConditionType
 }
+
+func (c RedCondition) IsValidStreamSize(streamsize int) bool {
+	return c.CandleIndex <= streamsize
+}

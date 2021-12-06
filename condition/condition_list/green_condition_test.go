@@ -42,3 +42,18 @@ func TestGreenCondition_ConditionType(t *testing.T) {
 		t.Error("AssertionError")
 	}
 }
+
+func TestGreenCondition_IsValidStreamSize(t *testing.T) {
+	gc1 := GreenCondition{CandleIndex: 4}
+	gc2 := GreenCondition{CandleIndex: 2}
+
+	valid1 := gc1.IsValidStreamSize(3)
+	valid2 := gc2.IsValidStreamSize(3)
+
+	if valid1 {
+		t.Error("AssertionError")
+	}
+	if !valid2 {
+		t.Error("AssertionError")
+	}
+}

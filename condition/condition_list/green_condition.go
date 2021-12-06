@@ -20,3 +20,7 @@ func (c GreenCondition) MeetsCondition(stream *stream.CandleStream) bool {
 func (c GreenCondition) ConditionType() string {
 	return GreenConditionType
 }
+
+func (c GreenCondition) IsValidStreamSize(streamsize int) bool {
+	return c.CandleIndex <= streamsize
+}

@@ -8,6 +8,7 @@ import (
 type ICondition interface {
 	ConditionType() string
 	MeetsCondition(*candleStream.CandleStream) bool
+	IsValidStreamSize(int) bool
 }
 
 func ConditionToJson(c ICondition) string {

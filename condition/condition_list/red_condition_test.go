@@ -48,3 +48,18 @@ func TestRedCondition_ConditionType(t *testing.T) {
 		t.Errorf("AssertionError")
 	}
 }
+
+func TestRedCondition_ValidStreamSize(t *testing.T) {
+	rc1 := RedCondition{CandleIndex: 4}
+	rc2 := RedCondition{CandleIndex: 2}
+
+	valid1 := rc1.IsValidStreamSize(3)
+	valid2 := rc2.IsValidStreamSize(3)
+
+	if valid1 {
+		t.Error("AssertionError")
+	}
+	if !valid2 {
+		t.Error("AssertionError")
+	}
+}
