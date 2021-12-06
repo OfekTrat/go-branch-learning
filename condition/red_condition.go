@@ -30,3 +30,7 @@ func (c RedCondition) Mutate() ICondition {
 	c.CandleIndex += int((float32(rand.Intn(2)) - 0.5) * 2)
 	return c
 }
+
+func CreateRandomRedCondition(streamsize int) ICondition {
+	return RedCondition{CandleIndex: rand.Intn(streamsize)}
+}
