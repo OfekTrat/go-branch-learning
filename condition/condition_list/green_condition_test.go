@@ -57,3 +57,16 @@ func TestGreenCondition_IsValidStreamSize(t *testing.T) {
 		t.Error("AssertionError")
 	}
 }
+
+func TestGreenCondition_Mutate(t *testing.T) {
+	rc := GreenCondition{CandleIndex: 4}
+	rcMutation := rc.Mutate()
+
+	if rcMutation.CandleIndex == 4 {
+		t.Error("AssertionError")
+	}
+	if rc.CandleIndex != 4 {
+		t.Log("Changed the type itself")
+		t.Error("AssertionError")
+	}
+}

@@ -2,6 +2,7 @@ package condition
 
 import (
 	stream "branch_learning/candle_stream"
+	"math/rand"
 )
 
 const (
@@ -23,4 +24,9 @@ func (c GreenCondition) ConditionType() string {
 
 func (c GreenCondition) IsValidStreamSize(streamsize int) bool {
 	return c.CandleIndex <= streamsize
+}
+
+func (c GreenCondition) Mutate() GreenCondition {
+	c.CandleIndex += int((float32(rand.Intn(2)) - 0.5) * 2)
+	return c
 }
