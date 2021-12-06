@@ -4,7 +4,6 @@ import (
 	"branch_learning/candle"
 	candle_stream "branch_learning/candle_stream"
 	condition "branch_learning/condition"
-	conditions "branch_learning/condition/condition_list"
 	"testing"
 )
 
@@ -20,8 +19,8 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 	greenCandle := candle.CreateCandle(greenCandleMap)
 	candleStream := candle_stream.CreateCandleStream([]candle.Candle{redCandle, greenCandle})
 
-	redCond := conditions.RedCondition{CandleIndex: 0}
-	greenCond := conditions.GreenCondition{CandleIndex: 1}
+	redCond := condition.RedCondition{CandleIndex: 0}
+	greenCond := condition.GreenCondition{CandleIndex: 1}
 
 	strategy := CreateStrategy(10, 1, 1, []condition.ICondition{redCond, greenCond})
 	answer := strategy.MeetsConditions(candleStream)

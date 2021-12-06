@@ -4,14 +4,13 @@ import (
 	"branch_learning/candle"
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/condition"
-	condition_list "branch_learning/condition/condition_list"
 	"branch_learning/strategy"
 	"testing"
 )
 
 func TestBackTester_TestStream(t *testing.T) {
-	redCondition := condition_list.RedCondition{CandleIndex: 0}
-	greenCondition := condition_list.GreenCondition{CandleIndex: 1}
+	redCondition := condition.RedCondition{CandleIndex: 0}
+	greenCondition := condition.GreenCondition{CandleIndex: 1}
 	conditions := []condition.ICondition{redCondition, greenCondition}
 
 	redCandleMap := make(map[string]float32)

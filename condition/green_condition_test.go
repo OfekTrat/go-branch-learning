@@ -60,7 +60,7 @@ func TestGreenCondition_IsValidStreamSize(t *testing.T) {
 
 func TestGreenCondition_Mutate(t *testing.T) {
 	rc := GreenCondition{CandleIndex: 4}
-	rcMutation := rc.Mutate()
+	rcMutation := rc.Mutate().(GreenCondition)
 
 	if rcMutation.CandleIndex == 4 {
 		t.Error("AssertionError")
