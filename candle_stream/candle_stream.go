@@ -1,4 +1,4 @@
-package candleStream
+package candlestream
 
 import (
 	"branch_learning/candle"
