@@ -26,8 +26,8 @@ func (c RedCondition) IsValidStreamSize(streamsize int) bool {
 	return c.CandleIndex <= streamsize
 }
 
-func (c RedCondition) Mutate() ICondition {
-	c.CandleIndex += int((float32(rand.Intn(2)) - 0.5) * 2)
+func (c RedCondition) Mutate(streamsize int) ICondition {
+	c.CandleIndex = rand.Intn(streamsize)
 	return c
 }
 
