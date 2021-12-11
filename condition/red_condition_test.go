@@ -48,3 +48,31 @@ func TestRedCondition_ConditionType(t *testing.T) {
 		t.Errorf("AssertionError")
 	}
 }
+
+func TestRedCondition_ValidStreamSize(t *testing.T) {
+	rc1 := RedCondition{CandleIndex: 4}
+	rc2 := RedCondition{CandleIndex: 2}
+
+	valid1 := rc1.IsValidStreamSize(3)
+	valid2 := rc2.IsValidStreamSize(3)
+
+	if valid1 {
+		t.Error("AssertionError")
+	}
+	if !valid2 {
+		t.Error("AssertionError")
+	}
+}
+
+func TestRedCondition_Mutate(t *testing.T) {
+	rc := RedCondition{CandleIndex: 4}
+	rcMutation := rc.Mutate(1000).(RedCondition)
+
+	if rcMutation.CandleIndex == 4 {
+		t.Error("AssertionError")
+	}
+	if rc.CandleIndex != 4 {
+		t.Log("Changed the type itself")
+		t.Error("AssertionError")
+	}
+}
