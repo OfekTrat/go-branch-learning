@@ -4,7 +4,6 @@ import (
 	"branch_learning/candle"
 	candle_stream "branch_learning/candle_stream"
 	condition "branch_learning/condition"
-	conditions "branch_learning/condition/condition_list"
 	"testing"
 )
 
@@ -20,11 +19,11 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 	greenCandle := candle.CreateCandle(greenCandleMap)
 	candleStream := candle_stream.CreateCandleStream([]candle.Candle{redCandle, greenCandle})
 
-	redCond := conditions.RedCondition{CandleIndex: 0}
-	greenCond := conditions.GreenCondition{CandleIndex: 1}
+	redCond := condition.RedCondition{CandleIndex: 0}
+	greenCond := condition.GreenCondition{CandleIndex: 1}
 
-	strategy := CreateStrategy(10, 1, 1, []condition.ICondition{redCond, greenCond})
-	answer := strategy.MeetsConditions(candleStream)
+	s := CreateStrategy(10, 1, 1, []condition.ICondition{redCond, greenCond})
+	answer := s.MeetsConditions(candleStream)
 
 	if !answer {
 		t.Logf("Expected %v\tGot: %v", true, answer)
@@ -33,9 +32,24 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 }
 
 func TestStrategy_GetExit(t *testing.T) {
-	strategy := CreateStrategy(10, 1, 1, []condition.ICondition{})
-	exit := strategy.GetExit(100)
+	s := CreateStrategy(10, 1, 1, []condition.ICondition{})
+	exit := s.GetExit(100)
 	if exit.StopLossPercentage() != 99 || exit.TakeProfitPercentage() != 101 {
+		t.Error("AssertionError")
+	}
+}
+
+func TestStrategy_GettingConditions(t *testing.T) {
+	redCondition := condition.RedCondition{CandleIndex: 1}
+	redCondition2 := condition.RedCondition{CandleIndex: 4}
+	s := CreateStrategy(10, 1, 1, []condition.ICondition{redCondition, redCondition2})
+
+	conditions1 := s.Conditions()
+	conditions2 := s.Conditions()
+
+	conditions1[0] = condition.GreenCondition{CandleIndex: 2}
+
+	if conditions1[0] == conditions2[0] {
 		t.Error("AssertionError")
 	}
 }

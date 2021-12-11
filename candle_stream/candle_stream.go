@@ -12,10 +12,6 @@ func CreateCandleStream(candles []candle.Candle) *CandleStream {
 	return &CandleStream{candles: candles}
 }
 
-func LoadStreamFromCsv(csvPath string) *CandleStream {
-	return &CandleStream{} // TODO: Implement Function
-}
-
 func (stream *CandleStream) Get(candleIndex int) candle.Candle {
 	return stream.candles[candleIndex]
 }
