@@ -23,8 +23,11 @@ func (strategy *Strategy) TakeProfit() float32 {
 func (strategy *Strategy) StopLoss() float32 {
 	return strategy.stopLoss
 }
-func (strategy *Strategy) Conditions() []condition.ICondition { // Copies memory so it cannot be changed from the outside
-	return strategy.conditions // TODO: Make the function return a copy
+
+func (strategy *Strategy) Conditions() []condition.ICondition {
+	copyConditions := make([]condition.ICondition, len(strategy.conditions))
+	copy(copyConditions, strategy.conditions)
+	return copyConditions
 }
 
 func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []condition.ICondition) *Strategy {
