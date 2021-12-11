@@ -1,5 +1,5 @@
 package mutator
 
 type IMutator interface {
-	Mutate() interface{}
+	Mutate(int) interface{}
 }

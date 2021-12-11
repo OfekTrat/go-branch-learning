@@ -3,14 +3,16 @@ package mutator
 import (
 	st "branch_learning/strategy"
 	"math/rand"
+	"time"
 )
 
 const (
 	WindowSizeReducer = 5 // either increases or decreases by 10% (1 + random/reducer - (1/reducer/2))
 )
 
-func mutateWindowSize(strategy *st.Strategy) *st.Strategy {
-	multiplier := 0.5 + (rand.Float32() / WindowSizeReducer) + (0.5 * WindowSizeReducer)
+func MutateWindowSize(strategy *st.Strategy) *st.Strategy {
+	rand.Seed(time.Now().Unix())
+	multiplier := 1.0 + (rand.Float32()/5.0 - 1.0/2.0/WindowSizeReducer)
 	windowSize := int(multiplier * float32(strategy.WindowSize()))
 	conditions := strategy.Conditions()
 

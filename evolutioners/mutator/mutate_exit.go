@@ -3,20 +3,22 @@ package mutator
 import (
 	st "branch_learning/strategy"
 	"math/rand"
+	"time"
 )
 
 const (
 	ExitReducer = 5
 )
 
-func mutateStopLoss(strategy *st.Strategy) *st.Strategy {
-	multiplier := 0.5 + (rand.Float32() / ExitReducer) + 0.5*ExitReducer
+func MutateStopLoss(strategy *st.Strategy) *st.Strategy {
+	rand.Seed(time.Now().Unix())
+	multiplier := 1.0 + (rand.Float32()/5.0 - 1.0/2.0/ExitReducer)
 	stopLoss := strategy.StopLoss() * multiplier
 	return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), stopLoss, strategy.Conditions())
 }
 
-func mutateTakeProfit(strategy *st.Strategy) *st.Strategy {
-	multiplier := 0.5 + (rand.Float32() / ExitReducer) + 0.5*ExitReducer
+func MutateTakeProfit(strategy *st.Strategy) *st.Strategy {
+	multiplier := 1.0 + (rand.Float32()/5.0 - 1.0/2.0/ExitReducer)
 	takeProfit := strategy.TakeProfit() * multiplier
 	return st.CreateStrategy(strategy.WindowSize(), takeProfit, strategy.StopLoss(), strategy.Conditions())
 }
