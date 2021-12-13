@@ -1,23 +1,14 @@
 package mutator
 
 import (
-	condition "branch_learning/condition"
 	st "branch_learning/strategy"
+	utils "branch_learning/utils/random"
 	"math/rand"
 	"time"
 )
 
-var (
-	randConditionCreators = []func(int) condition.ICondition{
-		condition.CreateRandomGreenCondition,
-		condition.CreateRandomRedCondition,
-	}
-)
-
 func MutateAddCondition(strategy *st.Strategy) *st.Strategy {
-	rand.Seed(time.Now().Unix())
-	randCreator := rand.Intn(len(randConditionCreators))
-	c := randConditionCreators[randCreator](strategy.WindowSize())
+	c := utils.GetRandomCondition(strategy.WindowSize())
 	conditions := append(strategy.Conditions(), c)
 	return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), conditions)
 }
