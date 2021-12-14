@@ -44,7 +44,7 @@ func createChances(s scores) chances {
 	currentSum := float64(0)
 	for i, score := range s {
 		currentSum += score.score
-		chs[i] = indexScorePair{score.strategyIndex, score.score}
+		chs[i] = indexScorePair{score.strategyIndex, currentSum}
 	}
 	return chs
 }
