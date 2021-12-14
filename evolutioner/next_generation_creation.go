@@ -48,7 +48,7 @@ func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *Ev
 	}
 
 	for k := 0; k < nNew; k++ {
-		nextGeneration[i] = random.CreateRandomStrategy(&config.RandomStrategyConfig)
+		nextGeneration[i] = random.CreateRandomStrategy(&config.RandomConfig)
 	}
 	return nextGeneration
 }
