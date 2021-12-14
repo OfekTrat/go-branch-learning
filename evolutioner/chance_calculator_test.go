@@ -40,3 +40,14 @@ func TestChance_GetByChance(t *testing.T) {
 		t.Error("AssertionError")
 	}
 }
+
+func TestScoresCreation(t *testing.T) {
+	btScores := []float64{4, 10, 23, 9, 2, 6, 5}
+	scs := createScores(btScores)
+
+	for i, s := range btScores {
+		if scs[i].score != s {
+			t.Error("AssertionError")
+		}
+	}
+}

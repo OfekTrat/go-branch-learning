@@ -13,6 +13,6 @@ var (
 )
 
 func GetRandomCondition(windowSize int) condition.ICondition {
-	index := rand.Intn(windowSize)
+	index := rand.Intn(len(randConditionCreators))
 	return randConditionCreators[index](windowSize)
 }
