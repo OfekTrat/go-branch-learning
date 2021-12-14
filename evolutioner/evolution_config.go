@@ -13,7 +13,7 @@ type EvolutionConfig struct {
 	ReproducedPercentage float32
 	RandomPercentage     float32
 
-	random.RandomStrategyConfig
+	RandomConfig random.RandomStrategyConfig
 
 	ExitMutateMultiplier int
 	WindowSizeMultiplier int
