@@ -1,7 +1,5 @@
 package tradestats
 
-import "math"
-
 type TradeStats struct {
 	wins    int
 	losses  int
@@ -28,11 +26,11 @@ func (stats *TradeStats) AddLoss() {
 }
 
 func (stats *TradeStats) Score() float64 {
-	winLoseRatio := float64(stats.wins) / float64(stats.losses)
+	var winLoseRatio float64
 
 	if stats.losses == 0 {
-		winLoseRatio = 10
+		winLoseRatio = float64(stats.wins) / 0.1
 	}
-
-	return winLoseRatio * (100 / (1 + math.Pow(math.E, -1*float64(stats.matches))))
+	winLoseRatio = float64(stats.wins) / float64(stats.losses)
+	return winLoseRatio * float64(stats.wins+stats.losses)
 }
