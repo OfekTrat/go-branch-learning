@@ -17,8 +17,8 @@ type RandomStrategyConfig struct {
 
 func CreateRandomStrategy(config *RandomStrategyConfig) *st.Strategy {
 	windowSize := getRandomInt(config.WindowMin, config.WindowMax)
-	takeProfit := getRandomFloat32(config.ExitMin, config.ExitMax)
-	stopLoss := getRandomFloat32(config.ExitMin, config.ExitMax)
+	takeProfit := getRandomFloat32(1.0, config.ExitMax)
+	stopLoss := getRandomFloat32(config.ExitMin, 1.0)
 	nConditions := getRandomInt(config.ConditionNumberMin, config.ConditionNumberMax)
 
 	randConditions := getRandomConditions(nConditions, windowSize)
