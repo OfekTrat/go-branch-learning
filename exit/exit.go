@@ -17,9 +17,9 @@ func (e Exit) StopLossPercentage() float32 {
 	return e.stopLossPrice
 }
 
-func (e Exit) Take(price float32) bool {
+func (e Exit) IsTake(price float32) bool {
 	return e.takeProfitPrice < price
 }
-func (e Exit) Stop(price float32) bool {
+func (e Exit) IsStop(price float32) bool {
 	return e.stopLossPrice > price
 }
