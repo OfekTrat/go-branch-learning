@@ -35,12 +35,12 @@ func TestBackTester_TestStream(t *testing.T) {
 	stats := backtester.Stats()
 	exits := backtester.orderMananger.Exits()
 
-	if stats.Losses() != 0 || stats.Wins() != 1 || stats.Matches() != 1 {
+	if stats.Losses() != 0 || stats.Wins() != 1 || stats.Losses()+stats.Wins() != 1 {
 		t.Log("Error in the addition to the stats")
 		t.Error("AssertionError")
 	}
-	if len(exits) != 1 {
-		t.Log("Should have had one order exit")
+	if len(exits) != 0 {
+		t.Log("Should have had zero order exit")
 		t.Error("AssertionError")
 	}
 }
