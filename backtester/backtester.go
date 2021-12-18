@@ -2,19 +2,20 @@ package backtester
 
 import (
 	cst "branch_learning/candle_stream"
-	om "branch_learning/order_manager"
 	st "branch_learning/strategy"
 	ts "branch_learning/trade_stats"
+
+	logger "github.com/sirupsen/logrus"
 )
 
 type BackTester struct {
-	orderMananger *om.OrderManager
+	orderMananger *OrderManager
 	tradeStats    *ts.TradeStats
 	strategy      *st.Strategy
 }
 
 func CreateBackTester(strategy *st.Strategy) *BackTester {
-	manager := om.OrderManager{}
+	manager := OrderManager{}
 	stats := ts.TradeStats{}
 	return &BackTester{strategy: strategy, orderMananger: &manager, tradeStats: &stats}
 }
