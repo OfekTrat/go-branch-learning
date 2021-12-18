@@ -34,6 +34,9 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 	var metCondition bool
 	windowSize := bt.strategy.WindowSize()
 
+	logger.Debugf("Testing Strategy: Window=%v, TakeProfit/StopLoss=%v/%v", bt.strategy.WindowSize(),
+		bt.strategy.TakeProfit(), bt.strategy.StopLoss())
+
 	for i := 0; i < stream.Length()-windowSize; i++ {
 		slicedStream := stream.GetSlice(i, i+windowSize)
 		lastCandle := slicedStream.Get(windowSize - 1)
@@ -56,4 +59,6 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 		exit := bt.strategy.GetExit(lastCandle.Get("close"))
 		bt.orderMananger.AddExit(exit)
 	}
+
+	logger.Debugf("Finished Testing: Wins=%v, Loss=%v", bt.tradeStats.Wins(), bt.tradeStats.Losses())
 }
