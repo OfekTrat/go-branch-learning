@@ -1,24 +1,32 @@
 package evolutioner
 
 import (
+	bt "branch_learning/backtester"
 	candle_stream "branch_learning/candle_stream"
 	st "branch_learning/strategy"
 	"branch_learning/utils/random"
 	"fmt"
 )
 
-func Evolve(data *candle_stream.CandleStream, config *EvolutionConfig) {
+func Evolve(data *candle_stream.CandleStream, config *EvolutionConfig, printResults bool) {
+	var scs []float64
+	var chs chances
+	var backtesters []*bt.BackTester
 	generation := random.CreateRandomGeneration(config.GenerationSize, &config.RandomConfig)
 
 	for i := 0; i < config.NumEvolutions; i++ {
-		scs := backtestGeneration(data, generation)
-		chs := calcChances(scs)
-		printBestStrategy(generation, chs, scs)
+		backtesters = createBacktesters(generation)
+		scs = backtestGeneration(data, backtesters)
+		chs = calcChances(scs)
+		if printResults {
+			printBestStrategy(backtesters, chs, scs)
+		}
 		generation = createNextGeneration(chs, generation, config)
 	}
+	printBestStrategy(backtesters, chs, scs)
 }
 
-func printBestStrategy(generation []*st.Strategy, chs chances, scs []float64) {
+func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64) {
 	bestStrategyIndex := chs[len(chs)-1].strategyIndex
 	bestScore := scs[bestStrategyIndex]
 	backtesterOfBestStrategy := backtesters[bestStrategyIndex]
@@ -32,4 +40,13 @@ func printBestStrategy(generation []*st.Strategy, chs chances, scs []float64) {
 	fmt.Printf("Wins: %v, Losses: %v", backtesters[bestStrategyIndex].Stats().Wins(), backtesters[bestStrategyIndex].Stats().Losses())
 	fmt.Println("##################")
 	fmt.Println()
+}
+
+func createBacktesters(generation []*st.Strategy) []*bt.BackTester {
+	backtesters := make([]*bt.BackTester, len(generation))
+
+	for i := 0; i < len(generation); i++ {
+		backtesters[i] = bt.CreateBackTester(generation[i])
+	}
+	return backtesters
 }
