@@ -37,5 +37,3 @@ func mutateStrategy(strategy *st.Strategy, mutationType int) *st.Strategy {
 		return nil
 	}
 }
-
-// TODO: Add mutation tests (but first make sure you copy conditions)
