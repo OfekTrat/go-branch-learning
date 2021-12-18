@@ -5,10 +5,12 @@ import (
 	"math/rand"
 )
 
-func CreateRandomGreenCondition(streamsize int) condition.ICondition {
-	return condition.GreenCondition{CandleIndex: rand.Intn(streamsize)}
-}
+func CreateRandomCandleTypeCondition(streamsize int) condition.ICondition {
+	n := rand.Intn(streamsize)
+	isGreen := rand.Intn(2)
 
-func CreateRandomRedCondition(streamsize int) condition.ICondition {
-	return condition.RedCondition{CandleIndex: rand.Intn(streamsize)}
+	if isGreen == 1 {
+		return condition.CandleTypeCondition{CandleIndex: n, IsGreen: true}
+	}
+	return condition.CandleTypeCondition{CandleIndex: n, IsGreen: false}
 }

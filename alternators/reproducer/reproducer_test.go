@@ -7,11 +7,11 @@ import (
 )
 
 func TestReproducer(t *testing.T) {
-	cond1 := condition.RedCondition{CandleIndex: 1}
-	cond2 := condition.RedCondition{CandleIndex: 2}
-	cond3 := condition.RedCondition{CandleIndex: 3}
-	cond4 := condition.RedCondition{CandleIndex: 4}
-	cond5 := condition.RedCondition{CandleIndex: 5}
+	cond1 := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: false}
+	cond2 := condition.CandleTypeCondition{CandleIndex: 2, IsGreen: false}
+	cond3 := condition.CandleTypeCondition{CandleIndex: 3, IsGreen: false}
+	cond4 := condition.CandleTypeCondition{CandleIndex: 4, IsGreen: false}
+	cond5 := condition.CandleTypeCondition{CandleIndex: 5, IsGreen: false}
 
 	s1 := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{cond1, cond2, cond3})
 	s2 := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{cond4, cond5})
