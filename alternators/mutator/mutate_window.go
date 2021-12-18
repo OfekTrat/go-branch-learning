@@ -17,8 +17,7 @@ func MutateWindowSize(strategy *st.Strategy) *st.Strategy {
 	conditions := strategy.Conditions()
 
 	for i := len(conditions) - 1; i >= 0; i-- {
-		c := conditions[i]
-		if !c.IsValidStreamSize(windowSize) {
+		if !conditions[i].IsValidStreamSize(windowSize) {
 			conditions = append(conditions[:i], conditions[i+1:]...)
 		}
 	}
