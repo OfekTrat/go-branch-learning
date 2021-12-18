@@ -1,4 +1,4 @@
-package ordermanager
+package backtester
 
 import (
 	"branch_learning/exit"
@@ -22,12 +22,12 @@ func (om *OrderManager) CheckExits(price float32) (int, int) { // (wins, losses)
 	indexesToRemove := []int{}
 
 	for i, e := range om.exits {
-		isTake := e.Take(price)
-		isLoss := e.Stop(price)
+		isTake := e.IsTake(price)
+		isLoss := e.IsStop(price)
 
 		if isTake && !isLoss {
+			indexesToRemove = append(indexesToRemove, i)
 			wins++
-
 			continue
 		}
 		if isLoss && !isTake {

@@ -33,8 +33,8 @@ func TestTradeStats_Matches(t *testing.T) {
 	stats.AddLoss()
 	stats.AddWin()
 
-	if stats.Matches() != 2 {
-		t.Logf("Expected %v\tGot: %v", 2, stats.Matches())
+	if stats.Losses()+stats.Wins() != 2 {
+		t.Logf("Expected %v\tGot: %v", 2, stats.Losses()+stats.Wins())
 	}
 }
 

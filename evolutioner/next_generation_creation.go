@@ -5,7 +5,6 @@ import (
 	"branch_learning/alternators/reproducer"
 	st "branch_learning/strategy"
 	"branch_learning/utils/random"
-	"fmt"
 	"math/rand"
 )
 
@@ -16,7 +15,6 @@ func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *Ev
 	var randNumber float64
 	var randNumber2 float64
 	maxScore := chs[len(chs)-1].score
-	fmt.Println(maxScore)
 
 	nOld := int(config.OldPercentage * float32(config.GenerationSize))
 	nMutated := int(config.MutatePercentage * float32(config.GenerationSize))
@@ -49,6 +47,7 @@ func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *Ev
 
 	for k := 0; k < nNew; k++ {
 		nextGeneration[i] = random.CreateRandomStrategy(&config.RandomConfig)
+		i++
 	}
 	return nextGeneration
 }

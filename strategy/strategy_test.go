@@ -19,8 +19,8 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 	greenCandle := candle.CreateCandle(greenCandleMap)
 	candleStream := candle_stream.CreateCandleStream([]candle.Candle{redCandle, greenCandle})
 
-	redCond := condition.RedCondition{CandleIndex: 0}
-	greenCond := condition.GreenCondition{CandleIndex: 1}
+	redCond := condition.CandleTypeCondition{CandleIndex: 0, IsGreen: false}
+	greenCond := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: true}
 
 	s := CreateStrategy(10, 1, 1, []condition.ICondition{redCond, greenCond})
 	answer := s.MeetsConditions(candleStream)
@@ -40,14 +40,14 @@ func TestStrategy_GetExit(t *testing.T) {
 }
 
 func TestStrategy_GettingConditions(t *testing.T) {
-	redCondition := condition.RedCondition{CandleIndex: 1}
-	redCondition2 := condition.RedCondition{CandleIndex: 4}
+	redCondition := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: false}
+	redCondition2 := condition.CandleTypeCondition{CandleIndex: 4, IsGreen: false}
 	s := CreateStrategy(10, 1, 1, []condition.ICondition{redCondition, redCondition2})
 
 	conditions1 := s.Conditions()
 	conditions2 := s.Conditions()
 
-	conditions1[0] = condition.GreenCondition{CandleIndex: 2}
+	conditions1[0] = condition.CandleTypeCondition{CandleIndex: 2, IsGreen: true}
 
 	if conditions1[0] == conditions2[0] {
 		t.Error("AssertionError")

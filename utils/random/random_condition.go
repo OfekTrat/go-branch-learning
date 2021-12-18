@@ -7,8 +7,7 @@ import (
 
 var (
 	randConditionCreators = []func(int) condition.ICondition{
-		CreateRandomGreenCondition,
-		CreateRandomRedCondition,
+		CreateRandomCandleTypeCondition,
 	}
 )
 

@@ -7,7 +7,7 @@ import (
 )
 
 func TestMutateAddCondition(t *testing.T) {
-	redCondition := condition.RedCondition{CandleIndex: 2}
+	redCondition := condition.CandleTypeCondition{CandleIndex: 2, IsGreen: false}
 	s := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{redCondition})
 	newS := MutateAddCondition(s)
 
@@ -17,7 +17,7 @@ func TestMutateAddCondition(t *testing.T) {
 }
 
 func TestMutateRemoveCondition(t *testing.T) {
-	gCond := condition.GreenCondition{CandleIndex: 4}
+	gCond := condition.CandleTypeCondition{CandleIndex: 4, IsGreen: true}
 	s := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{gCond})
 	newS := MutateRemoveCondition(s)
 

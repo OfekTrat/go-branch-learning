@@ -2,19 +2,20 @@ package backtester
 
 import (
 	cst "branch_learning/candle_stream"
-	om "branch_learning/order_manager"
 	st "branch_learning/strategy"
 	ts "branch_learning/trade_stats"
+
+	logger "github.com/sirupsen/logrus"
 )
 
 type BackTester struct {
-	orderMananger *om.OrderManager
+	orderMananger *OrderManager
 	tradeStats    *ts.TradeStats
 	strategy      *st.Strategy
 }
 
 func CreateBackTester(strategy *st.Strategy) *BackTester {
-	manager := om.OrderManager{}
+	manager := OrderManager{}
 	stats := ts.TradeStats{}
 	return &BackTester{strategy: strategy, orderMananger: &manager, tradeStats: &stats}
 }
@@ -33,6 +34,9 @@ func (bt *BackTester) Score() float64 {
 func (bt *BackTester) Test(stream *cst.CandleStream) {
 	var metCondition bool
 	windowSize := bt.strategy.WindowSize()
+
+	logger.Debugf("Testing Strategy: Window=%v, TakeProfit/StopLoss=%v/%v", bt.strategy.WindowSize(),
+		bt.strategy.TakeProfit(), bt.strategy.StopLoss())
 
 	for i := 0; i < stream.Length()-windowSize; i++ {
 		slicedStream := stream.GetSlice(i, i+windowSize)
@@ -56,4 +60,6 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 		exit := bt.strategy.GetExit(lastCandle.Get("close"))
 		bt.orderMananger.AddExit(exit)
 	}
+
+	logger.Debugf("Finished Testing: Wins=%v, Loss=%v", bt.tradeStats.Wins(), bt.tradeStats.Losses())
 }

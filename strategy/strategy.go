@@ -4,6 +4,9 @@ import (
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/condition"
 	exit "branch_learning/exit"
+	"fmt"
+
+	logger "github.com/sirupsen/logrus"
 )
 
 type Strategy struct {
@@ -40,11 +43,25 @@ func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []c
 }
 
 func (strategy *Strategy) MeetsConditions(stream *candle_stream.CandleStream) bool {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("-----------------------------------")
+			fmt.Println("Strategy Problem")
+			fmt.Printf("WindowSize: %v\n", strategy.WindowSize())
+			fmt.Printf("Conditions: %v\n", strategy.Conditions())
+			fmt.Println("-----------------------------------")
+			panic(r)
+		}
+	}()
+
 	for _, condition := range strategy.conditions {
 		if !condition.MeetsCondition(stream) {
 			return false
 		}
 	}
+	c := stream.Get(stream.Length() - 1)
+	ts := c.Get("mts")
+	logger.Debugf("ts=%v, op=MetCondition", ts)
 	return true
 }
 
