@@ -5,11 +5,11 @@ import (
 )
 
 const (
-	ToJsonTest = "{\n\t\"candle_index\": 2,\n\t\"type\": \"RedCondition\"\n}"
+	ToJsonTest = "{\n\t\"candle_index\": 2,\n\t\"is_green\": false,\n\t\"type\": \"CandleType\"\n}"
 )
 
 func TestRedConditionToJson(t *testing.T) {
-	c := RedCondition{CandleIndex: 2}
+	c := CandleTypeCondition{CandleIndex: 2, IsGreen: false}
 	conditionJson := ConditionToJson(c)
 
 	if conditionJson != ToJsonTest {
