@@ -7,7 +7,7 @@ import (
 )
 
 func TestMutateStopLoss(t *testing.T) {
-	s := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{})
+	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{}))
 	s2 := MutateStopLoss(s)
 
 	if s2.StopLoss() == s.StopLoss() {
@@ -16,7 +16,7 @@ func TestMutateStopLoss(t *testing.T) {
 }
 
 func TestMutateTakeProfit(t *testing.T) {
-	s := strategy.CreateStrategy(10, 1, 1, []condition.ICondition{})
+	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{}))
 	s2 := MutateTakeProfit(s)
 	if s2.TakeProfit() == s.TakeProfit() {
 		t.Error("AssertionError")
