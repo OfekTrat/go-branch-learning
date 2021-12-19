@@ -1,17 +1,16 @@
 package condition
 
 import (
-	condition_list "branch_learning/condition/condition_list"
 	"testing"
 )
 
 const (
-	ToJsonTest = "{\n\t\"candle_index\": 2,\n\t\"type\": \"RedCondition\"\n}"
+	ToJsonTest = "{\n\t\"candle_index\": 2,\n\t\"is_green\": false,\n\t\"type\": \"CandleType\"\n}"
 )
 
 func TestRedConditionToJson(t *testing.T) {
-	condition := condition_list.RedCondition{CandleIndex: 2}
-	conditionJson := ConditionToJson(&condition)
+	c := CandleTypeCondition{CandleIndex: 2, IsGreen: false}
+	conditionJson := ConditionToJson(c)
 
 	if conditionJson != ToJsonTest {
 		t.Log("Assertion Error:")

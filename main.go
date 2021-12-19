@@ -1,16 +1,35 @@
 package main
 
 import (
-	candle "branch_learning/candle"
-	candleStream "branch_learning/candle_stream"
-	"fmt"
+	candle_stream "branch_learning/candle_stream"
+	"branch_learning/evolutioner"
+	"branch_learning/utils/random"
 )
 
 func main() {
-	c := candle.CreateCandle(1.1, 2.2, 3.3, 4.4)
-	c2 := candle.CreateCandle(4.4, 3.3, 2.2, 1.1)
-	cs := candleStream.CreateCandleStream([]candle.Candle{c, c2})
-	fmt.Println(cs.Get(0))
-	fmt.Println(cs.Get(1))
+	cs := candle_stream.LoadCandleStreamFromCsv("data/data.csv")
+	randomConfig := random.RandomStrategyConfig{
+		WindowMin:          10,
+		WindowMax:          30,
+		ExitMin:            0.5,
+		ExitMax:            1.5,
+		ConditionNumberMin: 6,
+		ConditionNumberMax: 10,
+	}
 
+	configuration := evolutioner.EvolutionConfig{
+		EvolutionLogFile:     "",
+		GenerationSize:       1000,
+		NumEvolutions:        100,
+		OldPercentage:        0.05,
+		MutatePercentage:     0.1,
+		ReproducedPercentage: 0.2,
+		RandomPercentage:     0.65,
+
+		RandomConfig:         randomConfig,
+		ExitMutateMultiplier: 5,
+		WindowSizeMultiplier: 5,
+	}
+
+	evolutioner.Evolve(cs, &configuration, true)
 }

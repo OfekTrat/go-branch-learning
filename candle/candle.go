@@ -1,33 +1,15 @@
 package candle
 
+import "strings"
+
 type Candle struct {
-	open  float32
-	high  float32
-	low   float32
-	close float32
+	data map[string]float32
 }
 
-func CreateCandle(open float32, high float32, low float32, close float32) Candle {
-	return Candle{
-		open:  open,
-		high:  high,
-		low:   low,
-		close: close,
-	}
+func CreateCandle(candleMap map[string]float32) Candle {
+	return Candle{candleMap}
 }
 
-func (c Candle) Open() float32 {
-	return c.open
-}
-
-func (c Candle) Close() float32 {
-	return c.close
-}
-
-func (c Candle) High() float32 {
-	return c.high
-}
-
-func (c Candle) Low() float32 {
-	return c.low
+func (c *Candle) Get(key string) float32 {
+	return c.data[strings.ToLower(key)]
 }
