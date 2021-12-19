@@ -27,7 +27,7 @@ func TestBackTester_TestStream(t *testing.T) {
 	candles := []candle.Candle{redCandle, greenCandle, redCandle, greenCandle}
 	stream := candle_stream.CreateCandleStream(candles)
 
-	strategy := strategy.CreateStrategy(2, 100, 100, conditions)
+	strategy := strategy.CreateStrategy(2, 100, 100, condition.CreateConditions(conditions))
 	backtester := CreateBackTester(strategy)
 
 	backtester.Test(stream)

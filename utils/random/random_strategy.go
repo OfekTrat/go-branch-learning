@@ -33,11 +33,11 @@ func getRandomFloat32(min, max float32) float32 {
 	return min + rand.Float32()*(max-min)
 }
 
-func getRandomConditions(nConditions, windowSize int) []condition.ICondition {
+func getRandomConditions(nConditions, windowSize int) *condition.Conditions {
 	conditions := make([]condition.ICondition, nConditions)
 
 	for i := 0; i < nConditions; i++ {
 		conditions[i] = GetRandomCondition(windowSize)
 	}
-	return conditions
+	return condition.CreateConditions(conditions)
 }

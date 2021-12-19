@@ -1,25 +1,26 @@
 package mutator
 
 import (
+	"branch_learning/condition"
 	st "branch_learning/strategy"
 	utils "branch_learning/utils/random"
 	"math/rand"
-	"time"
 )
 
 func MutateAddCondition(strategy *st.Strategy) *st.Strategy {
 	c := utils.GetRandomCondition(strategy.WindowSize())
-	conditions := append(strategy.Conditions(), c)
-	return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), conditions)
+	conditionList := strategy.Conditions().ToList()
+	conditions := append(conditionList, c)
+	return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), condition.CreateConditions(conditions))
 }
 
 func MutateRemoveCondition(strategy *st.Strategy) *st.Strategy {
-	rand.Seed(time.Now().Unix())
-	conditions := strategy.Conditions()
-	if len(conditions) > 0 {
+	conditions := strategy.Conditions().ToList()
+	if len(conditions) > 1 {
 		randCondition := rand.Intn(len(conditions))
 		conditions = append(conditions[:randCondition], conditions[randCondition+1:]...)
-		return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), conditions)
+		return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), condition.CreateConditions(conditions))
+	} else {
+		return st.CreateStrategy(strategy.WindowSize(), strategy.TakeProfit(), strategy.StopLoss(), condition.CreateConditions([]condition.ICondition{}))
 	}
-	return strategy
 }

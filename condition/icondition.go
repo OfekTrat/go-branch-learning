@@ -10,6 +10,7 @@ type ICondition interface {
 	MeetsCondition(*candleStream.CandleStream) bool
 	IsValidStreamSize(int) bool
 	Mutate(int) ICondition
+	Hash() string
 }
 
 func ConditionToJson(c ICondition) string {
@@ -34,3 +35,6 @@ func ConditionFromJson(conditionJson string) ICondition {
 	json.Unmarshal([]byte(conditionJson), condition)
 	return condition
 }
+
+// TODO: Create a hash function for conditions
+// TODO: Create a struct of conditions for pruning the conditions when they are created

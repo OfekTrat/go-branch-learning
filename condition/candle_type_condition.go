@@ -3,6 +3,8 @@ package condition
 import (
 	candle_stream "branch_learning/candle_stream"
 	"math/rand"
+	"strconv"
+	"strings"
 )
 
 type CandleTypeCondition struct {
@@ -35,4 +37,8 @@ func (c CandleTypeCondition) Mutate(streamsize int) ICondition {
 	} else {
 		return CandleTypeCondition{CandleIndex: randIndex, IsGreen: false}
 	}
+}
+
+func (c CandleTypeCondition) Hash() string {
+	return strings.Join([]string{c.ConditionType(), strconv.FormatInt(int64(c.CandleIndex), 10), strconv.FormatBool(c.IsGreen)}, "|")
 }

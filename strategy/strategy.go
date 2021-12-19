@@ -4,16 +4,13 @@ import (
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/condition"
 	exit "branch_learning/exit"
-	"fmt"
-
-	logger "github.com/sirupsen/logrus"
 )
 
 type Strategy struct {
 	takeProfit float32 //In Percentage
 	stopLoss   float32 //In Percentage
 	windowSize int
-	conditions []condition.ICondition
+	conditions *condition.Conditions
 }
 
 func (strategy *Strategy) WindowSize() int {
@@ -27,13 +24,11 @@ func (strategy *Strategy) StopLoss() float32 {
 	return strategy.stopLoss
 }
 
-func (strategy *Strategy) Conditions() []condition.ICondition {
-	copyConditions := make([]condition.ICondition, len(strategy.conditions))
-	copy(copyConditions, strategy.conditions)
-	return copyConditions
+func (strategy *Strategy) Conditions() *condition.Conditions {
+	return strategy.conditions.Clone()
 }
 
-func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []condition.ICondition) *Strategy {
+func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions *condition.Conditions) *Strategy {
 	return &Strategy{
 		windowSize: windowSize,
 		takeProfit: takeProfit,
@@ -43,26 +38,7 @@ func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions []c
 }
 
 func (strategy *Strategy) MeetsConditions(stream *candle_stream.CandleStream) bool {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("-----------------------------------")
-			fmt.Println("Strategy Problem")
-			fmt.Printf("WindowSize: %v\n", strategy.WindowSize())
-			fmt.Printf("Conditions: %v\n", strategy.Conditions())
-			fmt.Println("-----------------------------------")
-			panic(r)
-		}
-	}()
-
-	for _, condition := range strategy.conditions {
-		if !condition.MeetsCondition(stream) {
-			return false
-		}
-	}
-	c := stream.Get(stream.Length() - 1)
-	ts := c.Get("mts")
-	logger.Debugf("ts=%v, op=MetCondition", ts)
-	return true
+	return strategy.conditions.MeetsConditions(stream)
 }
 
 func (strategy *Strategy) GetExit(price float32) exit.Exit {

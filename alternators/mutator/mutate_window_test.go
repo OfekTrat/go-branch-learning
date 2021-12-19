@@ -7,7 +7,7 @@ import (
 )
 
 func TestMutateWindow(t *testing.T) {
-	s := strategy.CreateStrategy(100, 1, 1, []condition.ICondition{})
+	s := strategy.CreateStrategy(100, 1, 1, condition.CreateConditions([]condition.ICondition{}))
 	s2 := MutateWindowSize(s)
 
 	if s2.WindowSize() == s.WindowSize() {
