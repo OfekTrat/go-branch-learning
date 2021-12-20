@@ -1,6 +1,6 @@
-module gopls-workspace
+module branch_learning
 
-go 1.12
+go 1.17
 
 replace branch_learning => D:\git\branch_learning
 require (
@@ -8,7 +8,3 @@ require (
 	golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 )
 
-
-replace gopls-workspace => D:\git\branch_learning
-
-replace branch_learning => D:\git\branch_learning
