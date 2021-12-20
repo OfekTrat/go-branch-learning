@@ -9,8 +9,8 @@ import (
 )
 
 func TestBackTester_TestStream(t *testing.T) {
-	redCondition := condition.CandleTypeCondition{CandleIndex: 0, IsGreen: false}
-	greenCondition := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: true}
+	redCondition := condition.DummyCondition{CandleIndex: 0, IsGreen: false}
+	greenCondition := condition.DummyCondition{CandleIndex: 1, IsGreen: true}
 	conditions := []condition.ICondition{redCondition, greenCondition}
 
 	redCandleMap := make(map[string]float32)
