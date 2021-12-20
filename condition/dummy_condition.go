@@ -7,16 +7,16 @@ import (
 	"strings"
 )
 
-type CandleTypeCondition struct {
+type DummyCondition struct {
 	CandleIndex int  `json:"candle_index"`
 	IsGreen     bool `json:"is_green"`
 }
 
-func (c CandleTypeCondition) ConditionType() string {
+func (c DummyCondition) ConditionType() string {
 	return "CandleType"
 }
 
-func (c CandleTypeCondition) MeetsCondition(cs *candle_stream.CandleStream) bool {
+func (c DummyCondition) MeetsCondition(cs *candle_stream.CandleStream) bool {
 	candle := cs.Get(c.CandleIndex)
 	if c.IsGreen {
 		return candle.Get("close") > candle.Get("open")
@@ -24,21 +24,21 @@ func (c CandleTypeCondition) MeetsCondition(cs *candle_stream.CandleStream) bool
 	return candle.Get("open") > candle.Get("close")
 }
 
-func (c CandleTypeCondition) IsValidStreamSize(streamsize int) bool {
+func (c DummyCondition) IsValidStreamSize(streamsize int) bool {
 	return c.CandleIndex < streamsize
 }
 
-func (c CandleTypeCondition) Mutate(streamsize int) ICondition {
+func (c DummyCondition) Mutate(streamsize int) ICondition {
 	randIndex := rand.Intn(streamsize)
 	isGreen := rand.Intn(2)
 
 	if isGreen == 1 {
-		return CandleTypeCondition{CandleIndex: randIndex, IsGreen: true}
+		return DummyCondition{CandleIndex: randIndex, IsGreen: true}
 	} else {
-		return CandleTypeCondition{CandleIndex: randIndex, IsGreen: false}
+		return DummyCondition{CandleIndex: randIndex, IsGreen: false}
 	}
 }
 
-func (c CandleTypeCondition) Hash() string {
+func (c DummyCondition) Hash() string {
 	return strings.Join([]string{c.ConditionType(), strconv.FormatInt(int64(c.CandleIndex), 10), strconv.FormatBool(c.IsGreen)}, "|")
 }

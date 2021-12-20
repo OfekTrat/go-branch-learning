@@ -9,8 +9,8 @@ import (
 func TestCreateConditions_MeetsConditions(t *testing.T) {
 	candle1 := map[string]float32{"close": 2, "open": 1}
 	candle2 := map[string]float32{"close": 1, "open": 2}
-	c1 := CandleTypeCondition{0, true}
-	c2 := CandleTypeCondition{1, false}
+	c1 := DummyCondition{0, true}
+	c2 := DummyCondition{1, false}
 	stream := candlestream.CreateCandleStream([]candle.Candle{
 		candle.CreateCandle(candle1),
 		candle.CreateCandle(candle2),
@@ -26,8 +26,8 @@ func TestCreateConditions_MeetsConditions(t *testing.T) {
 func TestCreateConditions_DoesNotMeetConditions(t *testing.T) {
 	candle1 := map[string]float32{"close": 1, "open": 2}
 	candle2 := map[string]float32{"close": 2, "open": 1}
-	c1 := CandleTypeCondition{0, true}
-	c2 := CandleTypeCondition{1, false}
+	c1 := DummyCondition{0, true}
+	c2 := DummyCondition{1, false}
 	stream := candlestream.CreateCandleStream([]candle.Candle{
 		candle.CreateCandle(candle1),
 		candle.CreateCandle(candle2),
@@ -41,9 +41,9 @@ func TestCreateConditions_DoesNotMeetConditions(t *testing.T) {
 }
 
 func TestAddCondition(t *testing.T) {
-	cond1 := CandleTypeCondition{1, false}
-	cond2 := CandleTypeCondition{2, true}
-	cond3 := CandleTypeCondition{3, false}
+	cond1 := DummyCondition{1, false}
+	cond2 := DummyCondition{2, true}
+	cond3 := DummyCondition{3, false}
 	conds := []ICondition{cond1, cond2}
 	cs := CreateConditions(conds)
 	cs.Add(cond3)
@@ -60,9 +60,9 @@ func TestAddCondition(t *testing.T) {
 }
 
 func TestLength(t *testing.T) {
-	cond1 := CandleTypeCondition{1, false}
-	cond2 := CandleTypeCondition{2, true}
-	cond3 := CandleTypeCondition{3, false}
+	cond1 := DummyCondition{1, false}
+	cond2 := DummyCondition{2, true}
+	cond3 := DummyCondition{3, false}
 	conds := []ICondition{cond1, cond2, cond3}
 	cs := CreateConditions(conds)
 
@@ -72,9 +72,9 @@ func TestLength(t *testing.T) {
 }
 
 func TestToList(t *testing.T) {
-	cond1 := CandleTypeCondition{1, false}
-	cond2 := CandleTypeCondition{2, true}
-	cond3 := CandleTypeCondition{3, false}
+	cond1 := DummyCondition{1, false}
+	cond2 := DummyCondition{2, true}
+	cond3 := DummyCondition{3, false}
 	conds := []ICondition{cond1, cond2, cond3}
 	cs := CreateConditions(conds)
 
