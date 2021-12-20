@@ -19,7 +19,7 @@ func main() {
 
 	configuration := evolutioner.EvolutionConfig{
 		EvolutionLogFile:     "",
-		GenerationSize:       1000,
+		GenerationSize:       100,
 		NumEvolutions:        100,
 		OldPercentage:        0.05,
 		MutatePercentage:     0.1,
