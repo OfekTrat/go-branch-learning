@@ -19,7 +19,9 @@ func Evolve(data *candle_stream.CandleStream, config *EvolutionConfig, printResu
 		scs = backtestGeneration(data, backtesters)
 		chs = calcChances(scs)
 		if printResults {
+			fmt.Printf("################## %v ##################\n", i)
 			printBestStrategy(backtesters, chs, scs)
+			fmt.Printf("#######################################\n")
 		}
 		generation = createNextGeneration(chs, generation, config)
 	}
@@ -32,13 +34,11 @@ func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64)
 	backtesterOfBestStrategy := backtesters[bestStrategyIndex]
 	bestStrategy := backtesterOfBestStrategy.Strategy()
 	fmt.Println()
-	fmt.Println("##################")
 	fmt.Printf("Score: %f\n", bestScore)
 	fmt.Printf("Strategy - TakeProfit: %v, StopLoss: %v, WindowSize: %v\n", bestStrategy.TakeProfit(),
 		bestStrategy.StopLoss(), bestStrategy.WindowSize())
 	fmt.Printf("Best Conditions: %v\n", bestStrategy.Conditions())
-	fmt.Printf("Wins: %v, Losses: %v", backtesters[bestStrategyIndex].Stats().Wins(), backtesters[bestStrategyIndex].Stats().Losses())
-	fmt.Println("##################")
+	fmt.Printf("Wins: %v, Losses: %v\n", backtesters[bestStrategyIndex].Stats().Wins(), backtesters[bestStrategyIndex].Stats().Losses())
 	fmt.Println()
 }
 
