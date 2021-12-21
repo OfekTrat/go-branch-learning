@@ -13,8 +13,8 @@ func main() {
 		WindowMax:          30,
 		ExitMin:            0.5,
 		ExitMax:            1.5,
-		ConditionNumberMin: 6,
-		ConditionNumberMax: 10,
+		ConditionNumberMin: 1,
+		ConditionNumberMax: 3,
 	}
 
 	configuration := evolutioner.EvolutionConfig{
@@ -22,9 +22,9 @@ func main() {
 		GenerationSize:       100,
 		NumEvolutions:        100,
 		OldPercentage:        0.05,
-		MutatePercentage:     0.1,
-		ReproducedPercentage: 0.2,
-		RandomPercentage:     0.65,
+		MutatePercentage:     0.3, // 30%
+		ReproducedPercentage: 0.3, // 30%
+		RandomPercentage:     0.35,
 
 		RandomConfig:         randomConfig,
 		ExitMutateMultiplier: 5,
