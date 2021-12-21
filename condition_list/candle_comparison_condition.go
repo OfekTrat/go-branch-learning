@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-var (
-	candleParts = []string{"open", "high", "close", "low"}
-)
-
 type CandleComparisonCondition struct {
 	CandleIndex1 int
 	CandlePart1  string
