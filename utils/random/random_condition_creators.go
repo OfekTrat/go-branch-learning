@@ -11,6 +11,7 @@ var (
 	randConditionCreators = []func(int) condition.ICondition{
 		CreateRandomCandleComparisonCondition,
 		CreateRandomRSICondition,
+		CreateRandomRSICompareCondition,
 	}
 )
 
@@ -33,5 +34,11 @@ func CreateRandomRSICondition(streamsize int) condition.ICondition {
 	} else {
 		return condition_list.RSICondition{CandleIndex: randIndex, GreaterThan: false, RsiValue: randRSIValue}
 	}
+}
 
+func CreateRandomRSICompareCondition(streamsize int) condition.ICondition {
+	randIndex1 := rand.Intn(streamsize)
+	randIndex2 := rand.Intn(streamsize)
+	percentage := (rand.Float32() - 0.5) * 200
+	return condition_list.RSICompareCondition{CandleIndex1: randIndex1, CandleIndex2: randIndex2, Percentage: percentage}
 }
