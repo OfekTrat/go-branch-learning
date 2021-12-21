@@ -21,10 +21,10 @@ func main() {
 		EvolutionLogFile:     "",
 		GenerationSize:       100,
 		NumEvolutions:        100,
-		OldPercentage:        0.05,
+		OldPercentage:        0.1,
 		MutatePercentage:     0.3, // 30%
 		ReproducedPercentage: 0.3, // 30%
-		RandomPercentage:     0.35,
+		RandomPercentage:     0.3,
 
 		RandomConfig:         randomConfig,
 		ExitMutateMultiplier: 5,
