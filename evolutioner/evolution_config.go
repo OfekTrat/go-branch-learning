@@ -5,7 +5,6 @@ import (
 )
 
 type EvolutionConfig struct {
-	EvolutionLogFile     string
 	GenerationSize       int
 	NumEvolutions        int
 	OldPercentage        float32
