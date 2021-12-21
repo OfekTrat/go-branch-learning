@@ -7,24 +7,13 @@ import (
 )
 
 var (
+	candleParts           = []string{"open", "high", "close", "low"}
 	randConditionCreators = []func(int) condition.ICondition{
-		CreateRandomCandleTypeCondition,
 		CreateRandomCandleComparisonCondition,
 	}
 )
 
-func CreateRandomCandleTypeCondition(streamsize int) condition.ICondition {
-	n := rand.Intn(streamsize)
-	isGreen := rand.Intn(2)
-
-	if isGreen == 1 {
-		return condition_list.CandleTypeCondition{CandleIndex: n, IsGreen: true}
-	}
-	return condition_list.CandleTypeCondition{CandleIndex: n, IsGreen: false}
-}
-
 func CreateRandomCandleComparisonCondition(streamsize int) condition.ICondition {
-	candleParts := []string{"open", "high", "close", "low"}
 	index1 := rand.Intn(streamsize)
 	index2 := rand.Intn(streamsize)
 	part1 := candleParts[rand.Intn(len(candleParts))]

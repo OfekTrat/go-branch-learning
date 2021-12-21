@@ -8,7 +8,7 @@ import (
 )
 
 func TestMutateAddCondition(t *testing.T) {
-	redCondition := condition_list.CandleTypeCondition{CandleIndex: 2, IsGreen: false}
+	redCondition := condition_list.CandleComparisonCondition{CandleIndex1: 0, CandlePart1: "open", CandleIndex2: 0, CandlePart2: "close", Percentage: 0}
 	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition}))
 	newS := MutateAddCondition(s)
 
@@ -18,8 +18,8 @@ func TestMutateAddCondition(t *testing.T) {
 }
 
 func TestMutateRemoveCondition(t *testing.T) {
-	gCond := condition_list.CandleTypeCondition{CandleIndex: 4, IsGreen: true}
-	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{gCond}))
+	cond := condition_list.CandleComparisonCondition{CandleIndex1: 0, CandlePart1: "open", CandleIndex2: 0, CandlePart2: "close", Percentage: 0}
+	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{cond}))
 	newS := MutateRemoveCondition(s)
 
 	if newS.Conditions().Length() != s.Conditions().Length()-1 {
