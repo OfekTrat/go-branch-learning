@@ -28,7 +28,9 @@ func (bt *BackTester) Strategy() *st.Strategy {
 }
 
 func (bt *BackTester) Score() float64 {
-	return bt.tradeStats.Score()
+	stopLossPercentage := float64(bt.tradeStats.Losses()) * float64(bt.strategy.StopLoss())
+	takeProfitPercentage := float64(bt.tradeStats.Wins()) * float64(bt.strategy.TakeProfit())
+	return (takeProfitPercentage - stopLossPercentage)
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
