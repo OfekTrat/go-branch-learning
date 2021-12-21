@@ -42,3 +42,10 @@ func CreateRandomRSICompareCondition(streamsize int) condition.ICondition {
 	percentage := (rand.Float32() - 0.5) * 200
 	return condition_list.RSICompareCondition{CandleIndex1: randIndex1, CandleIndex2: randIndex2, Percentage: percentage}
 }
+
+func CreateRandomMACDCompareCondition(streamsize int) condition.ICondition {
+	randIndex1 := rand.Intn(streamsize)
+	randIndex2 := rand.Intn(streamsize)
+	percentage := (rand.Float32() - 0.5) * 20
+	return condition_list.MACDCompareCondition{CandleIndex1: randIndex1, CandleIndex2: randIndex2, Percentage: percentage}
+}
