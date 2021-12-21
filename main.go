@@ -3,10 +3,13 @@ package main
 import (
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/evolutioner"
+	log_init "branch_learning/log_initializer"
+	"branch_learning/output"
 	"branch_learning/utils/random"
 )
 
 func main() {
+
 	cs := candle_stream.LoadCandleStreamFromCsv("data/data.csv")
 	randomConfig := random.RandomStrategyConfig{
 		WindowMin:          10,
@@ -18,9 +21,8 @@ func main() {
 	}
 
 	configuration := evolutioner.EvolutionConfig{
-		EvolutionLogFile:     "",
 		GenerationSize:       100,
-		NumEvolutions:        100,
+		NumEvolutions:        10,
 		OldPercentage:        0.1,
 		MutatePercentage:     0.3, // 30%
 		ReproducedPercentage: 0.3, // 30%
@@ -31,5 +33,11 @@ func main() {
 		WindowSizeMultiplier: 5,
 	}
 
-	evolutioner.Evolve(cs, &configuration, true)
+	outputConfig := output.OutputConfig{
+		LogFile:           "",
+		PrintFrequency:    "foreach",
+		PrintBestStrategy: false,
+	}
+	log_init.LogInitialize(&outputConfig)
+	evolutioner.Evolve(cs, &configuration, &outputConfig)
 }
