@@ -10,10 +10,11 @@ import (
 	"log"
 )
 
-func Evolve(data *candle_stream.CandleStream, config *EvolutionConfig, output_config *output.OutputConfig) {
+func Evolve(data_path string, config *EvolutionConfig, output_config *output.OutputConfig) {
 	var scs []float64
 	var chs chances
 	var backtesters []*bt.BackTester
+	data := candle_stream.GetStreamsFromPath(data_path)
 	generation := random.CreateRandomGeneration(config.GenerationSize, &config.RandomConfig)
 
 	for i := 0; i < config.NumEvolutions; i++ {

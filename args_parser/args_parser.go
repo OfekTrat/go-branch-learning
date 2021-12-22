@@ -16,7 +16,7 @@ func InitArgs() *Configuration {
 	config.EvolutionConfig = initEvolutionConfig()
 	config.EvolutionConfig.RandomConfig = *initRandConfig()
 	config.OutputConfig = initOutputConfig()
-	flag.StringVar(&config.DataFile, "data", "", "The file with the csv data")
+	flag.StringVar(&config.DataPath, "data", "", "The file with the csv data")
 	flag.StringVar(&config.StrategyFile, "strategy", "", "The file in which the strategy to be tested is found")
 	flag.Parse()
 	config.CallType = flag.Arg(0)
