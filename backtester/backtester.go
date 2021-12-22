@@ -34,7 +34,7 @@ func (bt *BackTester) Score() float64 {
 		stopLossPercentage = 0.33
 	}
 
-	return math.Pow((takeProfitPercentage / stopLossPercentage), power)
+	return (takeProfitPercentage / stopLossPercentage) * power
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
