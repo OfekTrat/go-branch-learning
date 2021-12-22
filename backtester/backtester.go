@@ -4,8 +4,7 @@ import (
 	cst "branch_learning/candle_stream"
 	st "branch_learning/strategy"
 	ts "branch_learning/trade_stats"
-
-	logger "github.com/sirupsen/logrus"
+	"math"
 )
 
 type BackTester struct {
@@ -30,15 +29,17 @@ func (bt *BackTester) Strategy() *st.Strategy {
 func (bt *BackTester) Score() float64 {
 	stopLossPercentage := float64(bt.tradeStats.Losses()) * float64(bt.strategy.StopLoss())
 	takeProfitPercentage := float64(bt.tradeStats.Wins()) * float64(bt.strategy.TakeProfit())
-	return (takeProfitPercentage - stopLossPercentage)
+	power := 4/(1+math.Pow(float64(math.E), -0.005*float64(bt.tradeStats.Losses()+bt.tradeStats.Wins()))) - 2 // kind of sigmoid function
+	if bt.tradeStats.Losses() == 0 {
+		stopLossPercentage = 0.33
+	}
+
+	return math.Pow((takeProfitPercentage / stopLossPercentage), power)
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
 	var metCondition bool
 	windowSize := bt.strategy.WindowSize()
-
-	logger.Debugf("Testing Strategy: Window=%v, TakeProfit/StopLoss=%v/%v", bt.strategy.WindowSize(),
-		bt.strategy.TakeProfit(), bt.strategy.StopLoss())
 
 	for i := 0; i < stream.Length()-windowSize; i++ {
 		slicedStream := stream.GetSlice(i, i+windowSize)
@@ -62,6 +63,4 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 		exit := bt.strategy.GetExit(lastCandle.Get("close"))
 		bt.orderMananger.AddExit(exit)
 	}
-
-	logger.Debugf("Finished Testing: Wins=%v, Loss=%v", bt.tradeStats.Wins(), bt.tradeStats.Losses())
 }
