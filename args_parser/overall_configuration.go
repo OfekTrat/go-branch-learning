@@ -6,7 +6,7 @@ import (
 )
 
 type Configuration struct {
-	DataFile        string
+	DataPath        string
 	CallType        string
 	StrategyFile    string
 	EvolutionConfig *evolutioner.EvolutionConfig
