@@ -21,6 +21,4 @@ func main() {
 	}
 }
 
-// TODO: Accept folder of data and train on multiple data files.
-// TODO: Speed up training (use goroutines - check if multiple cores are used)
 // TODO: Create a test strategy option. This is for strategies that have been trained but not tested on the test data that i'll have.
