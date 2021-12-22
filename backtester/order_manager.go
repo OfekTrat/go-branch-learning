@@ -16,23 +16,22 @@ func (om *OrderManager) AddExit(e exit.Exit) {
 	om.exits = append(om.exits, e)
 }
 
-func (om *OrderManager) CheckExits(price float32) (int, int) { // (wins, losses)
+func (om *OrderManager) CheckExits(high, low float32) (int, int) { // (wins, losses)
 	wins := 0
 	losses := 0
 	indexesToRemove := []int{}
 
 	for i, e := range om.exits {
-		isTake := e.IsTake(price)
-		isLoss := e.IsStop(price)
-
-		if isTake && !isLoss {
-			indexesToRemove = append(indexesToRemove, i)
-			wins++
-			continue
-		}
-		if isLoss && !isTake {
+		isTake := e.IsTake(high)
+		isLoss := e.IsStop(low)
+		if isLoss {
 			indexesToRemove = append(indexesToRemove, i)
 			losses++
+			continue
+		}
+		if isTake {
+			indexesToRemove = append(indexesToRemove, i)
+			wins++
 			continue
 		}
 	}
