@@ -34,7 +34,7 @@ func TestOrderManager_CheckingExists(t *testing.T) {
 	om.AddExit(exit1)
 	om.AddExit(exit2)
 
-	wins, losses := om.CheckExits(74)
+	wins, losses := om.CheckExits(74, 0)
 
 	if wins != 0 {
 		t.Logf("Expected: %v\tGot: %v", 0, wins)

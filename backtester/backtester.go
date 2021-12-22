@@ -45,7 +45,7 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 		slicedStream := stream.GetSlice(i, i+windowSize)
 		lastCandle := slicedStream.Get(windowSize - 1)
 
-		wins, losses := bt.orderMananger.CheckExits(lastCandle.Get("high"))
+		wins, losses := bt.orderMananger.CheckExits(lastCandle.Get("high"), lastCandle.Get("low"))
 
 		for k := 0; k < wins; k++ {
 			bt.tradeStats.AddWin()
