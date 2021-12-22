@@ -9,7 +9,7 @@ const (
 )
 
 func TestRedConditionToJson(t *testing.T) {
-	c := CandleTypeCondition{CandleIndex: 2, IsGreen: false}
+	c := DummyCondition{CandleIndex: 2, IsGreen: false}
 	conditionJson := ConditionToJson(c)
 
 	if conditionJson != ToJsonTest {

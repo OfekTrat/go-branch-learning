@@ -1,13 +1,14 @@
 package mutator
 
 import (
-	"branch_learning/condition"
+	condition "branch_learning/condition"
+	condition_list "branch_learning/condition_list"
 	"branch_learning/strategy"
 	"testing"
 )
 
 func TestMutateAddCondition(t *testing.T) {
-	redCondition := condition.CandleTypeCondition{CandleIndex: 2, IsGreen: false}
+	redCondition := condition_list.CandleComparisonCondition{CandleIndex1: 0, CandlePart1: "open", CandleIndex2: 0, CandlePart2: "close", Percentage: 0}
 	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition}))
 	newS := MutateAddCondition(s)
 
@@ -17,8 +18,8 @@ func TestMutateAddCondition(t *testing.T) {
 }
 
 func TestMutateRemoveCondition(t *testing.T) {
-	gCond := condition.CandleTypeCondition{CandleIndex: 4, IsGreen: true}
-	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{gCond}))
+	cond := condition_list.CandleComparisonCondition{CandleIndex1: 0, CandlePart1: "open", CandleIndex2: 0, CandlePart2: "close", Percentage: 0}
+	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{cond}))
 	newS := MutateRemoveCondition(s)
 
 	if newS.Conditions().Length() != s.Conditions().Length()-1 {

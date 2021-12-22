@@ -3,7 +3,7 @@ package strategy
 import (
 	"branch_learning/candle"
 	candle_stream "branch_learning/candle_stream"
-	condition "branch_learning/condition"
+	"branch_learning/condition"
 	"testing"
 )
 
@@ -19,8 +19,8 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 	greenCandle := candle.CreateCandle(greenCandleMap)
 	candleStream := candle_stream.CreateCandleStream([]candle.Candle{redCandle, greenCandle})
 
-	redCond := condition.CandleTypeCondition{CandleIndex: 0, IsGreen: false}
-	greenCond := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: true}
+	redCond := condition.DummyCondition{CandleIndex: 0, IsGreen: false}
+	greenCond := condition.DummyCondition{CandleIndex: 1, IsGreen: true}
 	conditions := condition.CreateConditions([]condition.ICondition{redCond, greenCond})
 
 	s := CreateStrategy(10, 1, 1, conditions)
@@ -41,14 +41,14 @@ func TestStrategy_GetExit(t *testing.T) {
 }
 
 func TestStrategy_GettingConditions(t *testing.T) {
-	redCondition := condition.CandleTypeCondition{CandleIndex: 1, IsGreen: false}
-	redCondition2 := condition.CandleTypeCondition{CandleIndex: 4, IsGreen: false}
+	redCondition := condition.DummyCondition{CandleIndex: 1, IsGreen: false}
+	redCondition2 := condition.DummyCondition{CandleIndex: 4, IsGreen: false}
 	s := CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition, redCondition2}))
 
 	conditions1 := s.Conditions().ToList()
 	conditions2 := s.Conditions().ToList()
 
-	conditions1[0] = condition.CandleTypeCondition{CandleIndex: 2, IsGreen: true}
+	conditions1[0] = condition.DummyCondition{CandleIndex: 2, IsGreen: true}
 
 	if conditions1[0] == conditions2[0] {
 		t.Error("AssertionError")

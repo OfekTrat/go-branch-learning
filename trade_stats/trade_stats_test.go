@@ -37,22 +37,3 @@ func TestTradeStats_Matches(t *testing.T) {
 		t.Logf("Expected %v\tGot: %v", 2, stats.Losses()+stats.Wins())
 	}
 }
-
-func TestTradeStats_Score(t *testing.T) {
-	return
-	stats := &TradeStats{}
-	stats.AddWin()
-	stats.AddWin()
-	stats.AddWin()
-	stats.AddLoss()
-	stats.AddLoss()
-	stats.AddLoss()
-	stats.AddLoss()
-
-	score := stats.Score()
-
-	if score != 7.59375 {
-		t.Logf("Expected %v\tGot: %v", 7.5, score)
-		t.Error("AssertionError")
-	}
-}
