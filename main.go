@@ -14,7 +14,7 @@ func main() {
 	configuration := parser.InitArgs()
 
 	switch configuration.CallType {
-	case "test": // TODO: Create a mechanism for testing strategies (load strategy, and test it)
+	case "test":
 		tester.TestStrategy(configuration)
 	default:
 		log_init.LogInitialize(configuration.OutputConfig)

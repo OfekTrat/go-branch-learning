@@ -22,7 +22,7 @@ func getDataFiles(data_path string) []string {
 	var fileList []string
 	fileInfo, err := os.Stat(data_path)
 	if err != nil {
-		log.Println(err)
+		log.Println("Please specify an existing data path")
 		os.Exit(1)
 	}
 	if fileInfo.IsDir() {

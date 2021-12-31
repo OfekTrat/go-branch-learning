@@ -12,8 +12,7 @@ func LogInitialize(output_config *output.OutputConfig) {
 	if output_config.LogFile != "" {
 		f, err := os.Create(output_config.LogFile)
 		if err != nil {
-			log.Fatal(err)
-			os.Exit(1)
+			f = os.Stdout
 		}
 		log.SetOutput(f)
 	}
