@@ -34,7 +34,7 @@ func TestOrderManager_CheckingExists(t *testing.T) {
 	om.AddExit(exit1)
 	om.AddExit(exit2)
 
-	wins, losses := om.CheckExits(74, 0)
+	wins, losses := om.CheckExits(85, 74)
 
 	if wins != 0 {
 		t.Logf("Expected: %v\tGot: %v", 0, wins)
@@ -48,6 +48,7 @@ func TestOrderManager_CheckingExists(t *testing.T) {
 	exits := om.Exits()
 
 	if len(exits) != 1 {
+		t.Log(exits)
 		t.Logf("Expected Length: %v\tGot: %v", 1, len(exits))
 		t.Error("AssertionError")
 	}
