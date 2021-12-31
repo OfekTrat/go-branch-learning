@@ -15,6 +15,7 @@ var (
 		CreateRandomMACDCondition,
 		CreateRandomMACDCompareCondition,
 		CreateRandomVolumeCompareCondition,
+		CreateRandomPivotPointCondition,
 	}
 )
 
@@ -69,4 +70,16 @@ func CreateRandomVolumeCompareCondition(streamsize int) condition.ICondition {
 	randIndex2 := rand.Intn(streamsize)
 	percentage := (rand.Float32() - 0.5) * 200
 	return condition_list.VolumeCompareCondition{CandleIndex1: randIndex1, CandleIndex2: randIndex2, Percentage: percentage}
+}
+
+func CreateRandomPivotPointCondition(streamsize int) condition.ICondition {
+	randIndex := rand.Intn(streamsize)
+	isGreaterThan := rand.Intn(2)
+	percentage := (rand.Float32() - 0.5) * 200
+	part := candleParts[rand.Intn(len(candleParts))]
+	if isGreaterThan == 1 {
+		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: part, Percentage: percentage, GreaterThan: true}
+	} else {
+		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: part, Percentage: percentage, GreaterThan: false}
+	}
 }
