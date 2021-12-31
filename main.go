@@ -2,7 +2,7 @@ package main
 
 import (
 	"branch_learning/evolutioner"
-	log_init "branch_learning/log_initializer"
+	"branch_learning/output"
 	"branch_learning/parser"
 	tester "branch_learning/strategy_tester"
 	"math/rand"
@@ -17,7 +17,7 @@ func main() {
 	case "test":
 		tester.TestStrategy(configuration)
 	default:
-		log_init.LogInitialize(configuration.OutputConfig)
+		output.LogInitialize(configuration.OutputConfig)
 		evolutioner.Evolve(configuration.DataPath, configuration.EvolutionConfig, configuration.OutputConfig)
 	}
 }
