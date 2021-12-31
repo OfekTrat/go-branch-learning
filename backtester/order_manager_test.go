@@ -31,13 +31,15 @@ func TestOrderManager_CheckingExists(t *testing.T) {
 	om := &OrderManager{}
 	exit1 := exit.CreateExit(100, 80)
 	exit2 := exit.CreateExit(90, 70)
+	exit3 := exit.CreateExit(84, 70)
 	om.AddExit(exit1)
 	om.AddExit(exit2)
+	om.AddExit(exit3)
 
 	wins, losses := om.CheckExits(85, 74)
 
-	if wins != 0 {
-		t.Logf("Expected: %v\tGot: %v", 0, wins)
+	if wins != 1 {
+		t.Logf("Expected: %v\tGot: %v", 1, wins)
 		t.Error("AssertionError")
 	}
 	if losses != 1 {
