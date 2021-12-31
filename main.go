@@ -4,6 +4,7 @@ import (
 	"branch_learning/args_parser"
 	"branch_learning/evolutioner"
 	log_init "branch_learning/log_initializer"
+	tester "branch_learning/strategy_tester"
 	"math/rand"
 	"time"
 )
@@ -14,7 +15,7 @@ func main() {
 
 	switch configuration.CallType {
 	case "test": // TODO: Create a mechanism for testing strategies (load strategy, and test it)
-		break
+		tester.TestStrategy(configuration)
 	default:
 		log_init.LogInitialize(configuration.OutputConfig)
 		evolutioner.Evolve(configuration.DataPath, configuration.EvolutionConfig, configuration.OutputConfig)
