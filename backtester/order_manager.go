@@ -2,7 +2,6 @@ package backtester
 
 import (
 	"branch_learning/exit"
-	"fmt"
 )
 
 type OrderManager struct {
@@ -26,11 +25,9 @@ func (om *OrderManager) CheckExits(high, low float32) (int, int) { // (wins, los
 		isTake := e.IsTake(high)
 		isLoss := e.IsStop(low)
 		if isLoss {
-			fmt.Println("Loss", e, high, low)
 			indicesToRemove = append(indicesToRemove, i)
 			losses++
 		} else if isTake {
-			fmt.Println("Win", e, high, low)
 			indicesToRemove = append(indicesToRemove, i)
 			wins++
 		}
