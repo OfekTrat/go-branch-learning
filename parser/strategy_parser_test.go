@@ -1,8 +1,8 @@
-package tester
+package parser
 
 import "testing"
 
-func TestStrategyLoader(t *testing.T) {
+func TestStrategyParser(t *testing.T) {
 	strategyString := `
 	StopLoss: 0.768
 	TakeProfit: 1.2455
@@ -22,7 +22,7 @@ func TestStrategyLoader(t *testing.T) {
 		"GreaterThan": false
 	}
 	`
-	strategy := parseStrategy(strategyString)
+	strategy := ParseStrategy(strategyString)
 	if strategy == nil {
 		t.Error("AssertionError - Strategy is nil")
 	}

@@ -1,4 +1,4 @@
-package args_parser
+package parser
 
 import (
 	evolution "branch_learning/evolutioner"
