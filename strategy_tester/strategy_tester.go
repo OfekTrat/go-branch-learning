@@ -1,7 +1,6 @@
 package tester
 
 import (
-	args_parser "branch_learning/args_parser"
 	bt "branch_learning/backtester"
 	candle_stream "branch_learning/candle_stream"
 	"branch_learning/output"
@@ -10,7 +9,7 @@ import (
 	"os"
 )
 
-func TestStrategy(configuration *args_parser.Configuration) {
+func TestStrategy(configuration *parser.Configuration) {
 	validateStrategyFile(configuration.StrategyFile)
 	fileData, err := os.ReadFile(configuration.StrategyFile)
 
