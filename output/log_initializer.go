@@ -1,19 +1,17 @@
-package log_init
+package output
 
 import (
-	"branch_learning/output"
 	"log"
 	"os"
 )
 
-func LogInitialize(output_config *output.OutputConfig) {
+func LogInitialize(output_config *OutputConfig) {
 	log.SetFlags(0)
 
 	if output_config.LogFile != "" {
 		f, err := os.Create(output_config.LogFile)
 		if err != nil {
-			log.Fatal(err)
-			os.Exit(1)
+			f = os.Stdout
 		}
 		log.SetOutput(f)
 	}

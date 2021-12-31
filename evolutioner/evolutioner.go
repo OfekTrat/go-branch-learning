@@ -6,8 +6,7 @@ import (
 	"branch_learning/output"
 	st "branch_learning/strategy"
 	"branch_learning/utils/random"
-
-	"log"
+	"fmt"
 )
 
 func Evolve(data_path string, config *EvolutionConfig, output_config *output.OutputConfig) {
@@ -32,18 +31,13 @@ func Evolve(data_path string, config *EvolutionConfig, output_config *output.Out
 }
 
 func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64, iteration int, output_config *output.OutputConfig) {
+	fmt.Printf("\n####### %v\n", iteration)
 	bestStrategyIndex := chs[len(chs)-1].strategyIndex
-	bestScore := scs[bestStrategyIndex]
 	backtesterOfBestStrategy := backtesters[bestStrategyIndex]
 	bestStrategy := backtesterOfBestStrategy.Strategy()
 
 	if output_config.PrintFrequency == "foreach" {
-		log.Printf("---")
-		log.Printf("Iteration %v", iteration)
-		log.Printf("Score: %f", bestScore)
-		log.Printf("Strategy - TakeProfit: %v, StopLoss: %v, WindowSize: %v", bestStrategy.TakeProfit(),
-			bestStrategy.StopLoss(), bestStrategy.WindowSize())
-		log.Printf("Wins: %v, Losses: %v", backtesters[bestStrategyIndex].Stats().Wins(), backtesters[bestStrategyIndex].Stats().Losses())
+		output.PrintScore(backtesterOfBestStrategy)
 	}
 	if output_config.PrintBestStrategy && output_config.PrintFrequency == "foreach" {
 		output.PrintStrategyConditions(bestStrategy)

@@ -31,7 +31,7 @@ func (bt *BackTester) Score() float64 {
 	takeProfitPercentage := float64(bt.tradeStats.Wins()) * float64(bt.strategy.TakeProfit())
 	power := 4/(1+math.Pow(float64(math.E), -0.005*float64(bt.tradeStats.Losses()+bt.tradeStats.Wins()))) - 2 // kind of sigmoid function
 	if bt.tradeStats.Losses() == 0 {
-		stopLossPercentage = 0.33
+		stopLossPercentage = 1
 	}
 
 	return (takeProfitPercentage / stopLossPercentage) * power
