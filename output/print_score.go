@@ -2,7 +2,7 @@ package output
 
 import (
 	bt "branch_learning/backtester"
-	"fmt"
+	"log"
 )
 
 func PrintScore(backtester *bt.BackTester) {
@@ -12,7 +12,7 @@ func PrintScore(backtester *bt.BackTester) {
 	takeProfit := backtester.Strategy().TakeProfit()
 	stopLoss := backtester.Strategy().StopLoss()
 
-	fmt.Printf("Score: %v\n", score)
-	fmt.Printf("Wins: %v, Losses: %v\n", wins, losses)
-	fmt.Printf("TakeProfit %v, StopLoss: %v\n", takeProfit, stopLoss)
+	log.Printf("Score: %v\n", score)
+	log.Printf("Wins: %v, Losses: %v\n", wins, losses)
+	log.Printf("TakeProfit %v, StopLoss: %v\n", takeProfit, stopLoss)
 }
