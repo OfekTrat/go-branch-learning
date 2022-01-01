@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	candleParts           = []string{"open", "high", "close", "low"}
 	randConditionCreators = []func(int) condition.ICondition{
 		CreateRandomCandleComparisonCondition,
 		CreateRandomRSICondition,
@@ -22,8 +21,8 @@ var (
 func CreateRandomCandleComparisonCondition(streamsize int) condition.ICondition {
 	index1 := rand.Intn(streamsize)
 	index2 := rand.Intn(streamsize)
-	part1 := candleParts[rand.Intn(len(candleParts))]
-	part2 := candleParts[rand.Intn(len(candleParts))]
+	part1 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
+	part2 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
 	percentage := (rand.Float32() - 0.5) * 200
 	return condition_list.CandleComparisonCondition{CandleIndex1: index1, CandlePart1: part1,
 		CandleIndex2: index2, CandlePart2: part2, Percentage: percentage}
@@ -76,10 +75,11 @@ func CreateRandomPivotPointCondition(streamsize int) condition.ICondition {
 	randIndex := rand.Intn(streamsize)
 	isGreaterThan := rand.Intn(2)
 	percentage := (rand.Float32() - 0.5) * 200
-	part := candleParts[rand.Intn(len(candleParts))]
+	candlePart := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
+	pivotPart := condition_list.PivotParts[rand.Intn(len(condition_list.PivotParts))]
 	if isGreaterThan == 1 {
-		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: part, Percentage: percentage, GreaterThan: true}
+		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: candlePart, PivotPart: pivotPart, Percentage: percentage, GreaterThan: true}
 	} else {
-		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: part, Percentage: percentage, GreaterThan: false}
+		return condition_list.PivotPointCondition{CandleIndex: randIndex, CandlePart: candlePart, PivotPart: pivotPart, Percentage: percentage, GreaterThan: false}
 	}
 }

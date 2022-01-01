@@ -66,6 +66,7 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 			CandlePart:  condMap["CandlePart"].(string),
 			Percentage:  condMap["Percentage"].(float32),
 			GreaterThan: condMap["GreaterThan"].(bool),
+			PivotPart:   condMap["PivotPart"].(string),
 		}
 	default:
 		fmt.Printf("Please implement a parser that will include %s", condMap["type"])
