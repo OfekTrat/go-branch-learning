@@ -7,9 +7,12 @@ import (
 	st "branch_learning/strategy"
 	"branch_learning/utils/random"
 	"fmt"
+	"log"
 )
 
 func Evolve(data_path string, config *EvolutionConfig, output_config *output.OutputConfig) {
+	fmt.Println("Starting to train generation, this could take a while, please check progress in log file")
+	fmt.Println("Do not open file, try to copy the logfile to check the progress (I'm afraid it would crash the training)")
 	var scs []float64
 	var chs chances
 	var backtesters []*bt.BackTester
@@ -31,7 +34,7 @@ func Evolve(data_path string, config *EvolutionConfig, output_config *output.Out
 }
 
 func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64, iteration int, output_config *output.OutputConfig) {
-	fmt.Printf("\n####### %v\n", iteration)
+	log.Printf("\n####### %v\n", iteration)
 	bestStrategyIndex := chs[len(chs)-1].strategyIndex
 	backtesterOfBestStrategy := backtesters[bestStrategyIndex]
 	bestStrategy := backtesterOfBestStrategy.Strategy()

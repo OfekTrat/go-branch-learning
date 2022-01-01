@@ -36,14 +36,14 @@ func (c CandleComparisonCondition) IsValidStreamSize(streamsize int) bool {
 
 func (c CandleComparisonCondition) Mutate(streamsize int) icondition.ICondition {
 	randCandle := rand.Intn(2)
-	randCandlePart := rand.Intn(len(candleParts))
+	randCandlePart := rand.Intn(len(CandleParts))
 	randIndex := rand.Intn(streamsize)
 	randPercentage := (rand.Float32() - 0.5) * 20
 
 	if randCandle == 0 {
 		return CandleComparisonCondition{
 			CandleIndex1: randIndex,
-			CandlePart1:  candleParts[randCandlePart],
+			CandlePart1:  CandleParts[randCandlePart],
 			CandleIndex2: c.CandleIndex2,
 			CandlePart2:  c.CandlePart2,
 			Percentage:   c.Percentage + randPercentage,
@@ -53,7 +53,7 @@ func (c CandleComparisonCondition) Mutate(streamsize int) icondition.ICondition 
 			CandleIndex1: c.CandleIndex1,
 			CandlePart1:  c.CandlePart1,
 			CandleIndex2: randIndex,
-			CandlePart2:  candleParts[randCandlePart],
+			CandlePart2:  CandleParts[randCandlePart],
 			Percentage:   c.Percentage + randPercentage,
 		}
 	}
