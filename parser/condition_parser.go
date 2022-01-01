@@ -60,6 +60,14 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 			CandleIndex2: condMap["CandleIndex2"].(int),
 			Percentage:   condMap["Percentage"].(float32),
 		}
+	case "PivotPoint":
+		cond = condition_list.PivotPointCondition{
+			CandleIndex: condMap["CandleIndex"].(int),
+			CandlePart:  condMap["CandlePart"].(string),
+			Percentage:  condMap["Percentage"].(float32),
+			GreaterThan: condMap["GreaterThan"].(bool),
+			PivotPart:   condMap["PivotPart"].(string),
+		}
 	default:
 		fmt.Printf("Please implement a parser that will include %s", condMap["type"])
 		os.Exit(1)
