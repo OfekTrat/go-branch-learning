@@ -32,9 +32,9 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 		}
 	case "MACDCompare":
 		cond = condition_list.MACDCompareCondition{
-			CandleIndex1: condMap["CandleIndex1"].(int),
-			CandleIndex2: condMap["CandleIndex2"].(int),
-			Percentage:   condMap["Percentage"].(float32),
+			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
+			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
+			Percentage:   float32(condMap["Percentage"].(float64)),
 		}
 	case "MACD":
 		cond = condition_list.MACDCondition{
@@ -44,32 +44,32 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 		}
 	case "RSICompare":
 		cond = condition_list.RSICompareCondition{
-			CandleIndex1: condMap["CandleIndex1"].(int),
-			CandleIndex2: condMap["CandleIndex2"].(int),
-			Percentage:   condMap["Percentage"].(float32),
+			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
+			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
+			Percentage:   float32(condMap["Percentage"].(float64)),
 		}
 	case "RSI":
 		cond = condition_list.RSICondition{
-			CandleIndex: condMap["CandleIndex1"].(int),
-			RsiValue:    condMap["RsiValue"].(float32),
+			CandleIndex: int(condMap["CandleIndex"].(float64)),
+			RsiValue:    float32(condMap["RsiValue"].(float64)),
 			GreaterThan: condMap["GreaterThan"].(bool),
 		}
 	case "VolumeCompare":
 		cond = condition_list.VolumeCompareCondition{
-			CandleIndex1: condMap["CandleIndex1"].(int),
-			CandleIndex2: condMap["CandleIndex2"].(int),
-			Percentage:   condMap["Percentage"].(float32),
+			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
+			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
+			Percentage:   float32(condMap["Percentage"].(float64)),
 		}
-	case "PivotPoint":
+	case "PivotPointCondition":
 		cond = condition_list.PivotPointCondition{
-			CandleIndex: condMap["CandleIndex"].(int),
+			CandleIndex: int(condMap["CandleIndex"].(float64)),
 			CandlePart:  condMap["CandlePart"].(string),
-			Percentage:  condMap["Percentage"].(float32),
+			Percentage:  float32(condMap["Percentage"].(float64)),
 			GreaterThan: condMap["GreaterThan"].(bool),
 			PivotPart:   condMap["PivotPart"].(string),
 		}
 	default:
-		fmt.Printf("Please implement a parser that will include %s", condMap["type"])
+		fmt.Printf("Please implement a parser that will include %s\n", condMap["type"])
 		os.Exit(1)
 	}
 	return cond
