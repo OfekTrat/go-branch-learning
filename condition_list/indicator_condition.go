@@ -25,9 +25,9 @@ func (c IndicatorCondition) MeetsCondition(cs *candle_stream.CandleStream) bool 
 	candleIndicatorValue := candle.Get(c.Indicator)
 
 	if c.GreaterThan {
-		return (candleIndicatorValue-c.IndicatorValue)/c.IndicatorValue > c.Percentage
+		return ((candleIndicatorValue-c.IndicatorValue)/c.IndicatorValue)*100 > c.Percentage
 	} else {
-		return (candleIndicatorValue-c.IndicatorValue)/c.IndicatorValue < c.Percentage
+		return ((candleIndicatorValue-c.IndicatorValue)/c.IndicatorValue)*100 < c.Percentage
 	}
 }
 

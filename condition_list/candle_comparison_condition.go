@@ -27,7 +27,7 @@ func (c CandleComparisonCondition) MeetsCondition(cs *candle_stream.CandleStream
 	candle1Value := candle1.Get(c.CandlePart1)
 	candle2Value := candle2.Get(c.CandlePart2)
 
-	return (candle1Value-candle2Value)/candle1Value > c.Percentage
+	return ((candle1Value-candle2Value)/candle2Value)*100 > c.Percentage
 }
 
 func (c CandleComparisonCondition) IsValidStreamSize(streamsize int) bool {
