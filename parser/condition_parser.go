@@ -30,36 +30,6 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 			CandlePart2:  condMap["CandlePart2"].(string),
 			Percentage:   float32(condMap["Percentage"].(float64)),
 		}
-	case "MACDCompare":
-		cond = condition_list.MACDCompareCondition{
-			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
-			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
-			Percentage:   float32(condMap["Percentage"].(float64)),
-		}
-	case "MACD":
-		cond = condition_list.MACDCondition{
-			CandleIndex: int(condMap["CandleIndex"].(float64)),
-			MacdValue:   float32(condMap["MacdValue"].(float64)),
-			GreaterThan: condMap["GreaterThan"].(bool),
-		}
-	case "RSICompare":
-		cond = condition_list.RSICompareCondition{
-			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
-			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
-			Percentage:   float32(condMap["Percentage"].(float64)),
-		}
-	case "RSI":
-		cond = condition_list.RSICondition{
-			CandleIndex: int(condMap["CandleIndex"].(float64)),
-			RsiValue:    float32(condMap["RsiValue"].(float64)),
-			GreaterThan: condMap["GreaterThan"].(bool),
-		}
-	case "VolumeCompare":
-		cond = condition_list.VolumeCompareCondition{
-			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
-			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
-			Percentage:   float32(condMap["Percentage"].(float64)),
-		}
 	case "PivotPointCondition":
 		cond = condition_list.PivotPointCondition{
 			CandleIndex: int(condMap["CandleIndex"].(float64)),
@@ -67,6 +37,21 @@ func assertCond(condMap map[string]interface{}) condition.ICondition {
 			Percentage:  float32(condMap["Percentage"].(float64)),
 			GreaterThan: condMap["GreaterThan"].(bool),
 			PivotPart:   condMap["PivotPart"].(string),
+		}
+	case "IndicatorCondition":
+		cond = condition_list.IndicatorCondition{
+			Indicator:      condMap["Indicator"].(string),
+			CandleIndex:    int(condMap["CandleIndex"].(float64)),
+			IndicatorValue: float32(condMap["IndicatorValue"].(float64)),
+			Percentage:     float32(condMap["Percentage"].(float64)),
+			GreaterThan:    condMap["GreaterThan"].(bool),
+		}
+	case "IndicatorCompareCondition":
+		cond = condition_list.IndicatorCompareCondition{
+			Indicator:    condMap["Indicator"].(string),
+			CandleIndex1: int(condMap["CandleIndex1"].(float64)),
+			CandleIndex2: int(condMap["CandleIndex2"].(float64)),
+			Percentage:   float32(condMap["Percentage"].(float64)),
 		}
 	default:
 		fmt.Printf("Please implement a parser that will include %s\n", condMap["type"])
