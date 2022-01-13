@@ -83,5 +83,5 @@ func getRandomGreaterThan() bool {
 }
 
 func getRandomPercentage() float32 {
-	return (rand.Float32() - 0.5) * 200
+	return (rand.Float32() - 0.5) * 20000
 }
