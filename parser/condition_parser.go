@@ -3,21 +3,9 @@ package parser
 import (
 	"branch_learning/condition"
 	"branch_learning/condition_list"
-	"encoding/json"
 	"fmt"
 	"os"
 )
-
-func ParseConditionFromJson(condStr string) condition.ICondition {
-	condMap := make(map[string]interface{})
-	err := json.Unmarshal([]byte(condStr), &condMap)
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	return assertCond(condMap)
-}
 
 func assertCond(condMap map[string]interface{}) condition.ICondition {
 	var cond condition.ICondition

@@ -18,7 +18,7 @@ func TestStrategy(configuration *parser.Configuration) {
 		os.Exit(1)
 	}
 
-	strategy := parser.ParseStrategy(string(fileData))
+	strategy := parser.ParseStrategy(fileData)
 	backtester := bt.CreateBackTester(strategy)
 	stream := candle_stream.GetStreamsFromPath(configuration.DataPath)
 

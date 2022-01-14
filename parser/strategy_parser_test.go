@@ -3,38 +3,36 @@ package parser
 import "testing"
 
 func TestStrategyParser(t *testing.T) {
-	strategyString := `
-	StopLoss: 0.768
-	TakeProfit: 1.2455
-	Window: 12
-	{
-		"type": "CandleComparison",
-		"CandleIndex1": 2,
-		"CandlePart1": "close",
-		"CandleIndex2": 8,
-		"CandlePart2": "high",
-		"Percentage": 28.325
-	}
-	{
-		"type": "MACD",
-		"CandleIndex": 7,
-		"MacdValue": -1.5,
-		"GreaterThan": false
-	}
-	`
-	strategy := ParseStrategy(strategyString)
-	if strategy == nil {
-		t.Error("AssertionError - Strategy is nil")
-	}
+	strategyString := `{
+		"stop_loss": 0.768,
+		"take_profit": 1.2455,
+		"window": 12,
+		"conditions": [
+			{
+				"type": "CandleComparison",
+				"CandleIndex1": 2,
+				"CandlePart1": "close",
+				"CandleIndex2": 8,
+				"CandlePart2": "high",
+				"Percentage": 28.325
+			},
+			{
+				"type": "IndicatorCondition",
+				"Indicator": "rsi",
+				"CandleIndex": 7,
+				"IndicatorValue": -1.5,
+				"Percentage": 50,
+				"GreaterThan": false
+			}	
+		]
+	}`
 
-	if strategy.StopLoss() != 0.768 || strategy.TakeProfit() != 1.2455 || strategy.WindowSize() != 12 {
-		t.Error("AssertionError - Did not parse stoploss|takeprofit|windowsize correctly")
-	}
+	strategy := ParseStrategy([]byte(strategyString))
 	conditions := strategy.Conditions().ToList()
-	if len(conditions) != 2 {
-		t.Error("AssertionError - Did not parse conditions correctly")
-	}
-	if conditions[0].ConditionType() != "MACD" && conditions[1].ConditionType() != "MACD" {
-		t.Error("AssertionError - Did not parse by condition type correctly")
+
+	if conditions[0].ConditionType() != "CandleComparison" && conditions[1].ConditionType() != "IndicatorCondition" {
+		t.Log(conditions[0].ConditionType())
+		t.Log(conditions[1].ConditionType())
+		t.Error()
 	}
 }
