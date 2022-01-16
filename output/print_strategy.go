@@ -26,10 +26,10 @@ func PrintStrategy(strategy *st.Strategy) {
 func getConditionStrList(strategy *st.Strategy) []map[string]interface{} {
 	var err error
 	var conditionJsonNoType []byte
-	mappedCond := make(map[string]interface{})
 	conditions := []map[string]interface{}{}
 
 	for _, cond := range strategy.Conditions().ToList() {
+		mappedCond := make(map[string]interface{})
 		conditionJsonNoType, err = json.Marshal(cond)
 		if err != nil {
 			log.Fatal(err)
