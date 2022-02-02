@@ -28,7 +28,8 @@ func getConditionStrList(strategy *st.Strategy) []map[string]interface{} {
 	var conditionJsonNoType []byte
 	conditions := []map[string]interface{}{}
 
-	for _, cond := range strategy.Conditions().ToList() {
+	for i := 0; i < strategy.Conditions().Length(); i++ {
+		cond := strategy.Conditions().GetByIndex(i)
 		mappedCond := make(map[string]interface{})
 		conditionJsonNoType, err = json.Marshal(cond)
 		if err != nil {

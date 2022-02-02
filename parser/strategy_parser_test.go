@@ -28,11 +28,11 @@ func TestStrategyParser(t *testing.T) {
 	}`
 
 	strategy := ParseStrategy([]byte(strategyString))
-	conditions := strategy.Conditions().ToList()
+	conditions := strategy.Conditions()
 
-	if conditions[0].ConditionType() != "CandleComparison" && conditions[1].ConditionType() != "IndicatorCondition" {
-		t.Log(conditions[0].ConditionType())
-		t.Log(conditions[1].ConditionType())
+	if conditions.GetByIndex(0).ConditionType() != "CandleComparison" && conditions.GetByIndex(1).ConditionType() != "IndicatorCondition" {
+		t.Log(conditions.GetByIndex(0).ConditionType())
+		t.Log(conditions.GetByIndex(1).ConditionType())
 		t.Error()
 	}
 }

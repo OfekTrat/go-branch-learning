@@ -3,6 +3,7 @@ package condition
 import (
 	"branch_learning/candle"
 	candlestream "branch_learning/candle_stream"
+	"fmt"
 	"testing"
 )
 
@@ -47,14 +48,14 @@ func TestAddCondition(t *testing.T) {
 	conds := []ICondition{cond1, cond2}
 	cs := CreateConditions(conds)
 	cs.Add(cond3)
-
-	if len(*cs) != 3 {
+	fmt.Println(cs)
+	if cs.Length() != 3 {
 		t.Error("AssertionError")
 	}
 
 	cs.Add(cond2)
-
-	if len(*cs) != 3 {
+	fmt.Println(cs)
+	if cs.Length() != 3 {
 		t.Error("AssertionError")
 	}
 }
@@ -78,9 +79,7 @@ func TestToList(t *testing.T) {
 	conds := []ICondition{cond1, cond2, cond3}
 	cs := CreateConditions(conds)
 
-	lst := cs.ToList()
-
-	if len(lst) != 3 {
+	if cs.Length() != 3 {
 		t.Error("AssertionError")
 	}
 }

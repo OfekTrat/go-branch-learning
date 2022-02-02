@@ -42,3 +42,15 @@ func (c DummyCondition) Mutate(streamsize int) ICondition {
 func (c DummyCondition) Hash() string {
 	return strings.Join([]string{c.ConditionType(), strconv.FormatInt(int64(c.CandleIndex), 10), strconv.FormatBool(c.IsGreen)}, "|")
 }
+
+func (c DummyCondition) IsOverriddenBy(o ICondition) bool {
+	return true
+}
+
+func (c DummyCondition) Equals(o ICondition) bool {
+	other, ok := o.(DummyCondition)
+	if !ok {
+		return false
+	}
+	return c.IsGreen == other.IsGreen && c.CandleIndex == other.CandleIndex
+}

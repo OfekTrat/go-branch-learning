@@ -59,3 +59,21 @@ func (c PivotPointCondition) Hash() string {
 			strconv.FormatBool(c.GreaterThan),
 		}, "|")
 }
+
+func (c PivotPointCondition) IsOverriddenBy(o icondition.ICondition) bool {
+	other := o.(PivotPointCondition)
+	if c.GreaterThan {
+		return c.Percentage > other.Percentage
+	} else {
+		return c.Percentage < other.Percentage
+	}
+}
+
+func (c PivotPointCondition) Equals(o icondition.ICondition) bool {
+	other, ok := o.(PivotPointCondition)
+	if !ok {
+		return false
+	}
+	return other.PivotPart == c.PivotPart && other.CandleIndex == c.CandleIndex && other.CandlePart == c.CandlePart &&
+		other.Percentage == c.Percentage && other.GreaterThan == c.GreaterThan
+}

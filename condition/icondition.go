@@ -10,6 +10,8 @@ type ICondition interface {
 	MeetsCondition(*candleStream.CandleStream) bool
 	IsValidStreamSize(int) bool
 	Mutate(int) ICondition
+	IsOverriddenBy(ICondition) bool
+	Equals(ICondition) bool
 	Hash() string
 }
 
