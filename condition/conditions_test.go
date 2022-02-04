@@ -44,15 +44,39 @@ func TestAddCondition(t *testing.T) {
 	cond1 := DummyCondition{1, false, "cond1"}
 	cond2 := DummyCondition{2, true, "cond2"}
 	cond3 := DummyCondition{3, false, "cond3"}
+	cond4 := DummyCondition{3, false, "cond4"}
 	conds := []ICondition{cond1, cond2}
 	cs := CreateConditions(conds)
 	cs.Add(cond3)
-	if cs.Length() != 3 {
+	if cs.Length() != 3 && !cs.GetByIndex(2).Equals(cond3) {
 		t.Error("AssertionError")
 	}
 
 	cs.Add(cond2)
-	if cs.Length() != 3 {
+	if cs.Length() != 3 && !cs.GetByIndex(1).Equals(cond2) {
+		t.Error("AssertionError")
+	}
+	cs.Add(cond4)
+	if cs.Length() != 3 && !cs.GetByIndex(2).Equals(cond4) {
+		t.Error("AssertionError")
+	}
+}
+
+func TestConditions_AddToIndexSameHash(t *testing.T) {
+	cond1 := DummyCondition{1, false, "cond1"}
+	cond2 := DummyCondition{2, false, "cond2"}
+	cond3 := DummyCondition{1, false, "cond3"}
+
+	conditions := CreateConditions([]ICondition{cond1, cond2})
+	conditions.SetInIndex(cond3, 1)
+
+	if conditions.Length() != 2 {
+		t.Log(conditions)
+		t.Error("AssertionError")
+	}
+
+	if conditions.GetByHash(cond1.Hash()).Equals(cond1) {
+		t.Log(conditions)
 		t.Error("AssertionError")
 	}
 }

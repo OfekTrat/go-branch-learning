@@ -46,7 +46,6 @@ func (cs *Conditions) Add(c ICondition) {
 		cs.length++
 	} else {
 		cond := cs.conditions[c.Hash()]
-
 		if cond.IsOverriddenBy(c) {
 			cs.conditions[c.Hash()] = c
 		}
@@ -57,10 +56,23 @@ func (cs *Conditions) SetInIndex(c ICondition, index int) {
 	if index >= cs.length {
 		panic("index is bigger than conditions length")
 	}
-	currentHash := cs.keys[index]
-	cs.keys[index] = c.Hash()
-	delete(cs.conditions, currentHash)
-	cs.conditions[c.Hash()] = c
+	if cs.conditions[c.Hash()] == nil {
+		currentHash := cs.keys[index]
+		cs.keys[index] = c.Hash()
+		delete(cs.conditions, currentHash)
+		cs.conditions[c.Hash()] = c
+		cs.length++
+	} else {
+		cs.conditions[c.Hash()] = c
+
+		for index, hash := range cs.keys {
+			if hash == c.Hash() {
+				cs.keys[index] = c.Hash()
+				break
+			}
+		}
+	}
+
 }
 
 func (cs *Conditions) GetByHash(hash string) ICondition {
