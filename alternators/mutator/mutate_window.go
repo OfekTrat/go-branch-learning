@@ -16,7 +16,7 @@ func MutateWindowSize(strategy *st.Strategy) *st.Strategy {
 	windowSize := int(multiplier * float32(strategy.WindowSize()))
 	conditions := strategy.Conditions()
 
-	for i := 0; i < conditions.Length(); i++ {
+	for i := conditions.Length() - 1; i >= 0; i-- {
 		if !conditions.GetByIndex(i).IsValidStreamSize(windowSize) {
 			conditions.RemoveByIndex(i)
 		}
