@@ -34,7 +34,7 @@ func Evolve(data_path string, config *EvolutionConfig, output_config *output.Out
 }
 
 func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64, iteration int, output_config *output.OutputConfig) {
-	log.Printf("\n####### %v\n", iteration)
+	log.Printf("\n####### %v #######\n", iteration)
 	bestStrategyIndex := chs[len(chs)-1].strategyIndex
 	backtesterOfBestStrategy := backtesters[bestStrategyIndex]
 	bestStrategy := backtesterOfBestStrategy.Strategy()
@@ -43,7 +43,8 @@ func printBestStrategy(backtesters []*bt.BackTester, chs chances, scs []float64,
 		output.PrintScore(backtesterOfBestStrategy)
 	}
 	if output_config.PrintBestStrategy && output_config.PrintFrequency == "foreach" {
-		output.PrintStrategyConditions(bestStrategy)
+		log.Println()
+		output.PrintStrategy(bestStrategy)
 	}
 }
 

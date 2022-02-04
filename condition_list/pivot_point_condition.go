@@ -25,9 +25,9 @@ func (c PivotPointCondition) MeetsCondition(cs *candle_stream.CandleStream) bool
 	pp_res_sup := candle.Get(c.PivotPart)
 
 	if c.GreaterThan {
-		return (candle.Get(c.CandlePart)-pp_res_sup)/pp_res_sup > c.Percentage
+		return ((candle.Get(c.CandlePart)-pp_res_sup)/pp_res_sup)*100 > c.Percentage
 	} else {
-		return (candle.Get(c.CandlePart)-pp_res_sup)/pp_res_sup < c.Percentage
+		return ((candle.Get(c.CandlePart)-pp_res_sup)/pp_res_sup)*100 < c.Percentage
 	}
 }
 
