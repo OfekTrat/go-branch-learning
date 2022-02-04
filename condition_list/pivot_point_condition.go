@@ -55,7 +55,6 @@ func (c PivotPointCondition) Hash() string {
 			c.PivotPart,
 			strconv.FormatInt(int64(c.CandleIndex), 10),
 			c.CandlePart,
-			strconv.FormatFloat(float64(c.Percentage), 'e', -1, 32),
 			strconv.FormatBool(c.GreaterThan),
 		}, "|")
 }
