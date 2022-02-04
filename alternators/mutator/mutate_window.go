@@ -1,7 +1,6 @@
 package mutator
 
 import (
-	"branch_learning/condition"
 	st "branch_learning/strategy"
 	"math/rand"
 	"time"
@@ -15,12 +14,12 @@ func MutateWindowSize(strategy *st.Strategy) *st.Strategy {
 	rand.Seed(time.Now().Unix())
 	multiplier := 1.0 + (rand.Float32()/5.0 - 1.0/2.0/WindowSizeReducer)
 	windowSize := int(multiplier * float32(strategy.WindowSize()))
-	conditions := strategy.Conditions().ToList()
+	conditions := strategy.Conditions()
 
-	for i := len(conditions) - 1; i >= 0; i-- {
-		if !conditions[i].IsValidStreamSize(windowSize) {
-			conditions = append(conditions[:i], conditions[i+1:]...)
+	for i := conditions.Length() - 1; i >= 0; i-- {
+		if !conditions.GetByIndex(i).IsValidStreamSize(windowSize) {
+			conditions.RemoveByIndex(i)
 		}
 	}
-	return st.CreateStrategy(windowSize, strategy.TakeProfit(), strategy.StopLoss(), condition.CreateConditions(conditions))
+	return st.CreateStrategy(windowSize, strategy.TakeProfit(), strategy.StopLoss(), conditions)
 }

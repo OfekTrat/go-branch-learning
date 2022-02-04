@@ -67,6 +67,21 @@ func (c CandleComparisonCondition) Hash() string {
 			c.CandlePart1,
 			strconv.FormatInt(int64(c.CandleIndex2), 10),
 			c.CandlePart2,
-			strconv.FormatFloat(float64(c.Percentage), 'e', -1, 32),
 		}, "|")
+}
+
+func (c CandleComparisonCondition) IsOverriddenBy(o icondition.ICondition) bool {
+	other := o.(CandleComparisonCondition)
+	return c.Percentage > other.Percentage
+}
+
+func (c CandleComparisonCondition) Equals(o icondition.ICondition) bool {
+	other, ok := o.(CandleComparisonCondition)
+
+	if !ok {
+		return false
+	}
+	return other.Percentage == c.Percentage && other.CandleIndex1 == c.CandleIndex1 && other.CandleIndex2 == c.CandleIndex2 &&
+		other.CandlePart1 == c.CandlePart1 && other.CandlePart2 == c.CandlePart2
+
 }

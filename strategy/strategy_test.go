@@ -45,12 +45,12 @@ func TestStrategy_GettingConditions(t *testing.T) {
 	redCondition2 := condition.DummyCondition{CandleIndex: 4, IsGreen: false}
 	s := CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition, redCondition2}))
 
-	conditions1 := s.Conditions().ToList()
-	conditions2 := s.Conditions().ToList()
+	conditions1 := s.Conditions()
+	conditions2 := s.Conditions()
 
-	conditions1[0] = condition.DummyCondition{CandleIndex: 2, IsGreen: true}
+	conditions1.SetInIndex(condition.DummyCondition{CandleIndex: 2, IsGreen: true}, 0)
 
-	if conditions1[0] == conditions2[0] {
+	if conditions1.GetByIndex(0).Equals(conditions2.GetByIndex(0)) {
 		t.Error("AssertionError")
 	}
 }

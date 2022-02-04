@@ -18,11 +18,7 @@ func TestReproducer(t *testing.T) {
 	s2 := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{cond4, cond5}))
 	s3 := reproduceByNConditions(s1, s2, 1)
 
-	t.Log(s1.Conditions().ToList())
-	t.Log(s2.Conditions().ToList())
-	t.Log(s3.Conditions().ToList())
-
 	if s3.Conditions().Length() != s1.Conditions().Length()+1 {
-		t.Error("AssertionError1")
+		t.Error("AssertionError")
 	}
 }

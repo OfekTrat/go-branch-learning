@@ -60,3 +60,21 @@ func (c IndicatorCondition) Hash() string {
 			strconv.FormatBool(c.GreaterThan),
 		}, "|")
 }
+
+func (c IndicatorCondition) IsOverriddenBy(o condition.ICondition) bool {
+	other := o.(IndicatorCondition)
+	if c.GreaterThan {
+		return c.Percentage > other.Percentage
+	} else {
+		return c.Percentage < other.Percentage
+	}
+}
+
+func (c IndicatorCondition) Equals(o condition.ICondition) bool {
+	other, ok := o.(IndicatorCondition)
+	if !ok {
+		return false
+	}
+	return other.Indicator == c.Indicator && other.CandleIndex == c.CandleIndex && other.IndicatorValue == c.IndicatorValue &&
+		other.Percentage == c.Percentage && other.GreaterThan == c.GreaterThan
+}
