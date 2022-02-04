@@ -8,8 +8,9 @@ import (
 )
 
 type DummyCondition struct {
-	CandleIndex int  `json:"candle_index"`
-	IsGreen     bool `json:"is_green"`
+	CandleIndex int    `json:"candle_index"`
+	IsGreen     bool   `json:"is_green"`
+	Text        string `json:"text"`
 }
 
 func (c DummyCondition) ConditionType() string {
@@ -52,5 +53,5 @@ func (c DummyCondition) Equals(o ICondition) bool {
 	if !ok {
 		return false
 	}
-	return c.IsGreen == other.IsGreen && c.CandleIndex == other.CandleIndex
+	return c.IsGreen == other.IsGreen && c.CandleIndex == other.CandleIndex && c.Text == other.Text
 }

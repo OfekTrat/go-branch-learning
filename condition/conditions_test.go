@@ -10,8 +10,8 @@ import (
 func TestCreateConditions_MeetsConditions(t *testing.T) {
 	candle1 := map[string]float32{"close": 2, "open": 1}
 	candle2 := map[string]float32{"close": 1, "open": 2}
-	c1 := DummyCondition{0, true}
-	c2 := DummyCondition{1, false}
+	c1 := DummyCondition{0, true, "c1"}
+	c2 := DummyCondition{1, false, "c2"}
 	stream := candlestream.CreateCandleStream([]candle.Candle{
 		candle.CreateCandle(candle1),
 		candle.CreateCandle(candle2),
@@ -27,8 +27,8 @@ func TestCreateConditions_MeetsConditions(t *testing.T) {
 func TestCreateConditions_DoesNotMeetConditions(t *testing.T) {
 	candle1 := map[string]float32{"close": 1, "open": 2}
 	candle2 := map[string]float32{"close": 2, "open": 1}
-	c1 := DummyCondition{0, true}
-	c2 := DummyCondition{1, false}
+	c1 := DummyCondition{0, true, "c1"}
+	c2 := DummyCondition{1, false, "c2"}
 	stream := candlestream.CreateCandleStream([]candle.Candle{
 		candle.CreateCandle(candle1),
 		candle.CreateCandle(candle2),
@@ -42,9 +42,9 @@ func TestCreateConditions_DoesNotMeetConditions(t *testing.T) {
 }
 
 func TestAddCondition(t *testing.T) {
-	cond1 := DummyCondition{1, false}
-	cond2 := DummyCondition{2, true}
-	cond3 := DummyCondition{3, false}
+	cond1 := DummyCondition{1, false, "cond1"}
+	cond2 := DummyCondition{2, true, "cond2"}
+	cond3 := DummyCondition{3, false, "cond3"}
 	conds := []ICondition{cond1, cond2}
 	cs := CreateConditions(conds)
 	cs.Add(cond3)
@@ -61,9 +61,9 @@ func TestAddCondition(t *testing.T) {
 }
 
 func TestLength(t *testing.T) {
-	cond1 := DummyCondition{1, false}
-	cond2 := DummyCondition{2, true}
-	cond3 := DummyCondition{3, false}
+	cond1 := DummyCondition{1, false, "cond1"}
+	cond2 := DummyCondition{2, true, "cond2"}
+	cond3 := DummyCondition{3, false, "cond3"}
 	conds := []ICondition{cond1, cond2, cond3}
 	cs := CreateConditions(conds)
 
@@ -72,14 +72,16 @@ func TestLength(t *testing.T) {
 	}
 }
 
-func TestToList(t *testing.T) {
-	cond1 := DummyCondition{1, false}
-	cond2 := DummyCondition{2, true}
-	cond3 := DummyCondition{3, false}
-	conds := []ICondition{cond1, cond2, cond3}
-	cs := CreateConditions(conds)
+func TestConditions_SetInIndex(t *testing.T) {
+	cond1 := DummyCondition{1, false, "cond1"}
+	cond2 := DummyCondition{1, false, "cond2"}
+	conditions := CreateConditions([]ICondition{cond1})
+	conditions.SetInIndex(cond2, 0)
 
-	if cs.Length() != 3 {
+	if conditions.Length() != 1 {
+		t.Error("AssertionError")
+	}
+	if !conditions.GetByIndex(0).Equals(cond2) {
 		t.Error("AssertionError")
 	}
 }
