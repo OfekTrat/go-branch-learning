@@ -27,14 +27,37 @@ func (bt *BackTester) Strategy() *st.Strategy {
 }
 
 func (bt *BackTester) Score() float64 {
-	stopLossPercentage := float64(bt.tradeStats.Losses()) * float64(bt.strategy.StopLoss())
-	takeProfitPercentage := float64(bt.tradeStats.Wins()) * float64(bt.strategy.TakeProfit())
-	power := 4/(1+math.Pow(float64(math.E), -0.005*float64(bt.tradeStats.Losses()+bt.tradeStats.Wins()))) - 2 // kind of sigmoid function
-	if bt.tradeStats.Losses() == 0 {
-		stopLossPercentage = 1
-	}
+	sumOrders := bt.tradeStats.Wins() + bt.tradeStats.Losses()
 
-	return (takeProfitPercentage / stopLossPercentage) * power
+	if sumOrders == 0 {
+		return 0
+	}
+	numberOfConditionWeight := calcConditionLengthWeight(bt.strategy.Conditions().Length())
+	winRate := float32(bt.tradeStats.Wins()) / float32(sumOrders)
+	lossRate := float32(bt.tradeStats.Losses()) / float32(sumOrders)
+	totalEstimatedEarningsForHundredOrders := (winRate * bt.strategy.TakeProfit()) - (lossRate * bt.strategy.StopLoss())
+	sumOrdersWeight := calcSumOrdersWeight(sumOrders)
+
+	return float64(totalEstimatedEarningsForHundredOrders) * sumOrdersWeight * numberOfConditionWeight
+}
+
+func calcSumOrdersWeight(sumOrders int) float64 {
+	// kind of sigmoid function aims for 3% of number of orders
+	//    4
+	// 1 + e^(-0.005*sumOrders)
+	// minus 2
+
+	return 4/(1+math.Pow(float64(math.E), -0.005*float64(sumOrders))) - 2
+}
+
+func calcConditionLengthWeight(numberOfConditions int) float64 {
+	threshold := 100.0
+	slope := -0.02
+	if float64(numberOfConditions) <= threshold {
+		return float64(1)
+	} else {
+		return slope*float64(numberOfConditions) + (1 - (slope * threshold))
+	}
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
