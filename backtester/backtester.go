@@ -27,14 +27,18 @@ func (bt *BackTester) Strategy() *st.Strategy {
 }
 
 func (bt *BackTester) Score() float64 {
-	stopLossPercentage := float64(bt.tradeStats.Losses()) * float64(bt.strategy.StopLoss())
-	takeProfitPercentage := float64(bt.tradeStats.Wins()) * float64(bt.strategy.TakeProfit())
-	power := 4/(1+math.Pow(float64(math.E), -0.005*float64(bt.tradeStats.Losses()+bt.tradeStats.Wins()))) - 2 // kind of sigmoid function
-	if bt.tradeStats.Losses() == 0 {
-		stopLossPercentage = 1
+	sumOrders := bt.tradeStats.Wins() + bt.tradeStats.Losses()
+
+	if sumOrders == 0 {
+		return 0
 	}
 
-	return (takeProfitPercentage / stopLossPercentage) * power
+	winRate := float32(bt.tradeStats.Wins()) / float32(sumOrders)
+	lossRate := float32(bt.tradeStats.Losses()) / float32(sumOrders)
+	totalEstimatedEarningsForHundredOrders := (winRate * bt.strategy.TakeProfit()) - (lossRate * bt.strategy.StopLoss())
+	power := 4/(1+math.Pow(float64(math.E), -0.005*float64(bt.tradeStats.Losses()+bt.tradeStats.Wins()))) - 2 // kind of sigmoid function
+
+	return float64(totalEstimatedEarningsForHundredOrders) * power
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
