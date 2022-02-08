@@ -47,6 +47,8 @@ func calcSumOrdersWeight(sumOrders int) float64 {
 	// 1 + e^(-0.005*sumOrders)
 	// minus 2
 
+	// It should be changed to be relative to the given data size (if possible)
+
 	return 4/(1+math.Pow(float64(math.E), -0.005*float64(sumOrders))) - 2
 }
 
