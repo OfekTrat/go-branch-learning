@@ -16,12 +16,12 @@ func MakeOrderFromCandleAndStrategy(strategy *st.Strategy, candle c.Candle) Orde
 	time := int(candle.Get("mts"))
 	price := candle.Get("close")
 	takeProfit := price * (100 + strategy.TakeProfit())
-	stopLoss := price * (100 + strategy.StopLoss())
+	stopLoss := price * (100 - strategy.StopLoss())
 
 	return MakeOrder(time, price, takeProfit, stopLoss)
 }
 func MakeOrder(time int, price, takeProfit, stopLoss float32) Order {
-	return Order{time, price, takeProfit, stopLoss}
+	return Order{time: time, price: price, takeProfit: takeProfit, stopLoss: stopLoss}
 }
 
 func (o Order) Time() int {
