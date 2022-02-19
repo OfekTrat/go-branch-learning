@@ -1,40 +1,39 @@
 package backtester
 
 import (
+	b "branch_learning/broker"
 	cst "branch_learning/candle_stream"
 	st "branch_learning/strategy"
-	ts "branch_learning/trade_stats"
 	"math"
 )
 
 type BackTester struct {
-	orderMananger *OrderManager
-	tradeStats    *ts.TradeStats
-	strategy      *st.Strategy
+	broker   *b.Broker
+	strategy *st.Strategy
 }
 
 func CreateBackTester(strategy *st.Strategy) *BackTester {
-	manager := OrderManager{}
-	stats := ts.TradeStats{}
-	return &BackTester{strategy: strategy, orderMananger: &manager, tradeStats: &stats}
+	broker := b.CreateBroker()
+	return &BackTester{broker: broker, strategy: strategy}
 }
 
-func (bt *BackTester) Stats() *ts.TradeStats {
-	return bt.tradeStats
-}
 func (bt *BackTester) Strategy() *st.Strategy {
 	return bt.strategy
 }
 
+func (bt *BackTester) Broker() *b.Broker {
+	return bt.broker
+}
+
 func (bt *BackTester) Score() float64 {
-	sumOrders := bt.tradeStats.Wins() + bt.tradeStats.Losses()
+	sumOrders := bt.broker.ScanResults().Wins() + bt.broker.ScanResults().Losses()
 
 	if sumOrders == 0 {
 		return 0
 	}
 	numberOfConditionWeight := calcConditionLengthWeight(bt.strategy.Conditions().Length())
-	winRate := float32(bt.tradeStats.Wins()) / float32(sumOrders)
-	lossRate := float32(bt.tradeStats.Losses()) / float32(sumOrders)
+	winRate := float32(bt.broker.ScanResults().Wins()) / float32(sumOrders)
+	lossRate := float32(bt.broker.ScanResults().Losses()) / float32(sumOrders)
 	totalEstimatedEarningsForHundredOrders := (winRate * bt.strategy.TakeProfit()) - (lossRate * bt.strategy.StopLoss())
 	sumOrdersWeight := calcSumOrdersWeight(sumOrders)
 
@@ -69,29 +68,16 @@ func calcConditionLengthWeight(numberOfConditions int) float64 {
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
-	var metCondition bool
 	windowSize := bt.strategy.WindowSize()
 
 	for i := 0; i < stream.Length()-windowSize; i++ {
 		slicedStream := stream.GetSlice(i, i+windowSize)
 		lastCandle := slicedStream.Get(windowSize - 1)
 
-		wins, losses := bt.orderMananger.CheckExits(lastCandle.Get("high"), lastCandle.Get("low"))
+		bt.broker.ScanOrders(lastCandle.Get("low"), lastCandle.Get("high"))
 
-		for k := 0; k < wins; k++ {
-			bt.tradeStats.AddWin()
+		if bt.strategy.MeetsConditions(slicedStream) {
+			bt.broker.AddOrder(b.MakeOrderFromCandleAndStrategy(bt.strategy, lastCandle))
 		}
-		for k := 0; k < losses; k++ {
-			bt.tradeStats.AddLoss()
-		}
-
-		metCondition = bt.strategy.MeetsConditions(slicedStream)
-
-		if !metCondition {
-			continue
-		}
-
-		exit := bt.strategy.GetExit(lastCandle.Get("close"))
-		bt.orderMananger.AddExit(exit)
 	}
 }
