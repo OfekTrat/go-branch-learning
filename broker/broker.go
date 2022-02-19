@@ -1,37 +1,28 @@
 package broker
 
-import "sync"
-
 type Broker struct {
-	lock               sync.Mutex
 	exitStopLossTree   *exitNode
 	exitTakeProfitTree *exitNode
-	results            map[int]*accountStats // map[StrategyId]strategyResults
-	orders             map[int]map[int]bool  // map[StrategyId]map[TimeOfOrder]IsClosed
+	results            *accountStats
+	orders             map[int]bool // map[TimeOfOrder]IsClosed
 }
 
 func CreateBroker() *Broker {
 	broker := &Broker{}
 	broker.exitStopLossTree = nil
 	broker.exitTakeProfitTree = nil
-	broker.results = make(map[int]*accountStats)
-	broker.orders = make(map[int]map[int]bool)
+	broker.results = AccountStats()
+	broker.orders = make(map[int]bool)
 
 	return broker
 }
 
-func (broker *Broker) ScanResults() map[int]*accountStats {
+func (broker *Broker) ScanResults() *accountStats {
 	return broker.results
 }
 
 func (broker *Broker) AddOrder(ord Order) {
-	broker.lock.Lock()
-	defer broker.lock.Unlock()
-
-	if !broker.doesStrategyExist(ord.StrategyId()) {
-		broker.initializeStrategy(ord.StrategyId())
-	}
-	broker.orders[ord.StrategyId()][ord.Time()] = false
+	broker.orders[ord.Time()] = false
 
 	if broker.exitStopLossTree == nil || broker.exitTakeProfitTree == nil {
 		broker.exitStopLossTree = createExitNode(ord.stopLoss, ord)
@@ -42,18 +33,7 @@ func (broker *Broker) AddOrder(ord Order) {
 	}
 }
 
-func (broker *Broker) doesStrategyExist(strategyId int) bool {
-	return broker.orders[strategyId] != nil
-}
-
-func (broker *Broker) initializeStrategy(strategyId int) {
-	broker.orders[strategyId] = map[int]bool{}
-}
-
 func (broker *Broker) ScanOrders(lowPrice, highPrice float32) {
-	broker.lock.Lock()
-	defer broker.lock.Unlock()
-
 	broker.updateStopLossExits(lowPrice)
 	broker.updateTakeProfitExits(highPrice)
 }
@@ -81,19 +61,15 @@ func (broker *Broker) updateTakeProfitExits(highPrice float32) {
 }
 
 func (broker *Broker) isOrderClosed(ord Order) bool {
-	return broker.orders[ord.StrategyId()][ord.Time()]
+	return broker.orders[ord.Time()]
 }
 
 func (broker *Broker) closeOrder(ord Order, isWin bool) {
-	broker.orders[ord.StrategyId()][ord.Time()] = true
-
-	if broker.results[ord.StrategyId()] == nil {
-		broker.results[ord.StrategyId()] = AccountStats()
-	}
+	broker.orders[ord.Time()] = true
 
 	if isWin {
-		broker.results[ord.StrategyId()].AddWin()
+		broker.results.AddWin()
 	} else {
-		broker.results[ord.StrategyId()].AddLoss()
+		broker.results.AddLoss()
 	}
 }

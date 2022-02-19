@@ -1,23 +1,31 @@
 package broker
 
+import (
+	c "branch_learning/candle"
+	st "branch_learning/strategy"
+)
+
 type Order struct {
 	time       int
-	strategyId int
 	price      float32
 	takeProfit float32
 	stopLoss   float32
 }
 
-func MakeOrder(time int, strategyId int, price, takeProfit, stopLoss float32) Order {
-	return Order{time, strategyId, price, takeProfit, stopLoss}
+func MakeOrderFromCandleAndStrategy(strategy *st.Strategy, candle c.Candle) Order {
+	time := int(candle.Get("mts"))
+	price := candle.Get("close")
+	takeProfit := price * (100 + strategy.TakeProfit())
+	stopLoss := price * (100 + strategy.StopLoss())
+
+	return MakeOrder(time, price, takeProfit, stopLoss)
+}
+func MakeOrder(time int, price, takeProfit, stopLoss float32) Order {
+	return Order{time, price, takeProfit, stopLoss}
 }
 
 func (o Order) Time() int {
 	return o.time
-}
-
-func (o Order) StrategyId() int {
-	return o.strategyId
 }
 
 func (o Order) Price() float32 {
@@ -33,5 +41,5 @@ func (o Order) StopLoss() float32 {
 }
 
 func (o Order) Equals(other Order) bool {
-	return o.time == other.time && o.strategyId == other.strategyId
+	return o.time == other.time
 }

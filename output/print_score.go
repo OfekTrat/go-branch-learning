@@ -6,8 +6,8 @@ import (
 )
 
 func PrintScore(backtester *bt.BackTester) {
-	wins := backtester.Stats().Wins()
-	losses := backtester.Stats().Losses()
+	wins := backtester.Broker().ScanResults().Wins()
+	losses := backtester.Broker().ScanResults().Losses()
 	score := backtester.Score()
 	takeProfit := backtester.Strategy().TakeProfit()
 	stopLoss := backtester.Strategy().StopLoss()

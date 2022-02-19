@@ -1,18 +1,17 @@
 package broker
 
 import (
-	"fmt"
 	"testing"
 )
 
 func getSampleBroker() *Broker {
-	ord1 := MakeOrder(0, 1, 1, 6, 1)
-	ord2 := MakeOrder(1, 1, 2, 2, 2)
-	ord3 := MakeOrder(2, 1, 3, 3, 3)
-	ord4 := MakeOrder(3, 1, 4, 4, 4)
-	ord5 := MakeOrder(4, 1, 5, 5, 5)
-	ord6 := MakeOrder(5, 1, 6, 6, 6)
-	ord7 := MakeOrder(6, 1, 7, 7, 7)
+	ord1 := MakeOrder(0, 1, 6, 1)
+	ord2 := MakeOrder(1, 2, 2, 2)
+	ord3 := MakeOrder(2, 3, 3, 3)
+	ord4 := MakeOrder(3, 4, 4, 4)
+	ord5 := MakeOrder(4, 5, 5, 5)
+	ord6 := MakeOrder(5, 6, 6, 6)
+	ord7 := MakeOrder(6, 7, 7, 7)
 
 	broker := CreateBroker()
 	broker.AddOrder(ord4)
@@ -27,10 +26,10 @@ func getSampleBroker() *Broker {
 }
 
 func TestCreateBrokerAndInitialization(t *testing.T) {
-	ord1 := MakeOrder(0, 1, 1, 1.5, 0.5)
-	ord2 := MakeOrder(0, 2, 2, 2.5, 1.5)
-	ord3 := MakeOrder(0, 3, 3, 3.5, 2.5)
-	ord4 := MakeOrder(0, 4, 4, 4.5, 3.5)
+	ord1 := MakeOrder(0, 1, 1.5, 0.5)
+	ord2 := MakeOrder(0, 2, 2.5, 1.5)
+	ord3 := MakeOrder(0, 3, 3.5, 2.5)
+	ord4 := MakeOrder(0, 4, 4.5, 3.5)
 	broker := CreateBroker()
 	broker.AddOrder(ord3)
 	broker.AddOrder(ord4)
@@ -58,17 +57,13 @@ func TestScanningOrders(t *testing.T) {
 	broker := getSampleBroker()
 	broker.ScanOrders(5, 5.5)
 	results := broker.ScanResults()
-
-	for _, result := range results {
-		fmt.Println(result.Losses(), result.Wins())
-		if result.Losses() != 3 || result.Wins() != 3 {
-			t.Error("AssertionError: wrong number of wins or losses")
-		}
+	if results.Losses() != 3 || results.Wins() != 3 {
+		t.Error("AssertionError: wrong number of wins or losses")
 	}
 }
 
 func TestClosingOrders(t *testing.T) {
-	ord := MakeOrder(3, 1, 4, 4, 4)
+	ord := MakeOrder(3, 4, 4, 4)
 	broker := getSampleBroker()
 
 	if broker.isOrderClosed(ord) {
@@ -80,10 +75,7 @@ func TestClosingOrders(t *testing.T) {
 	}
 	results := broker.ScanResults()
 
-	if results[ord.StrategyId()] == nil {
-		t.Error("AssertionError: results should not be nil")
-	}
-	if results[ord.StrategyId()].Wins() != 0 || results[ord.StrategyId()].Losses() != 1 {
+	if results.Wins() != 0 || results.Losses() != 1 {
 		t.Error("AssertionError: did not add close retults")
 	}
 }

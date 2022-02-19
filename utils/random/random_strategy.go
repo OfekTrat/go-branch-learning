@@ -22,7 +22,7 @@ func CreateRandomStrategy(id int, config *RandomStrategyConfig) *st.Strategy {
 	nConditions := getRandomInt(config.ConditionNumberMin, config.ConditionNumberMax)
 
 	randConditions := getRandomConditions(nConditions, windowSize)
-	return st.CreateStrategy(id, windowSize, takeProfit, stopLoss, randConditions)
+	return st.CreateStrategy(windowSize, takeProfit, stopLoss, randConditions)
 }
 
 func getRandomInt(min, max int) int {
