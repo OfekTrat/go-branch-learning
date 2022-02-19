@@ -42,17 +42,23 @@ func (bt *BackTester) Score() float64 {
 }
 
 func calcSumOrdersWeight(sumOrders int) float64 {
-	// kind of sigmoid function aims for 3% of number of orders
-	//    4
-	// 1 + e^(-0.005*sumOrders)
-	// minus 2
+	/*
+		kind of sigmoid function aims for 3% of number of orders
+		   4
+		1 + e^(-0.005*sumOrders)
+		minus 2
 
-	// It should be changed to be relative to the given data size (if possible)
+		It should be changed to be relative to the given data size (if possible)
+	*/
 
 	return 4/(1+math.Pow(float64(math.E), -0.005*float64(sumOrders))) - 2
 }
 
 func calcConditionLengthWeight(numberOfConditions int) float64 {
+	/*
+		This function gives wait to the number of conditions of a strategy.
+		The reason for doing that is to keep the strategies simple and not get too much crazy.
+	*/
 	threshold := 100.0
 	slope := -0.02
 	if float64(numberOfConditions) <= threshold {
