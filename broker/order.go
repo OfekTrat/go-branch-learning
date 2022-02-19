@@ -15,8 +15,8 @@ type Order struct {
 func MakeOrderFromCandleAndStrategy(strategy *st.Strategy, candle c.Candle) Order {
 	time := int(candle.Get("mts"))
 	price := candle.Get("close")
-	takeProfit := price * (100 + strategy.TakeProfit())
-	stopLoss := price * (100 - strategy.StopLoss())
+	takeProfit := price * (1 + (strategy.TakeProfit() / 100))
+	stopLoss := price * (1 - (strategy.StopLoss() / 100))
 
 	return MakeOrder(time, price, takeProfit, stopLoss)
 }
