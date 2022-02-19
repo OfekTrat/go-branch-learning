@@ -93,7 +93,7 @@ func (en *exitNode) GetTakeProfitExits(value float32) (*exitNode, []Order) {
 }
 
 func (en *exitNode) getAndRemoveAllOrders() []Order {
-	orders := []Order{}
+	orders := make([]Order, len(en.orders))
 	copy(orders, en.orders)
 	en.orders = []Order{}
 

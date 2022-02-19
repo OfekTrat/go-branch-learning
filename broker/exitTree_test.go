@@ -117,3 +117,23 @@ func TestExitTree_GetTakeProfitOrders(t *testing.T) {
 		t.Error("AssertionError: Wrong new tree")
 	}
 }
+
+func TestRemoveAllOrders(t *testing.T) {
+	ord1 := MakeOrder(0, 0, 10, 11, 9)
+	ord2 := MakeOrder(0, 1, 10, 12, 8)
+	ord3 := MakeOrder(0, 2, 10, 10, 10)
+	ord4 := MakeOrder(1, 2, 10, 10.4, 9)
+	head := createExitNode(ord1.TakeProfit(), ord1)
+	head.Add(ord2.TakeProfit(), ord2)
+	head.Add(ord3.TakeProfit(), ord3)
+	head.Add(ord4.TakeProfit(), ord4)
+
+	orders := head.getAndRemoveAllOrders()
+
+	if len(orders) != 4 {
+		t.Error("AssertionError: Did not remove all orders")
+	}
+	if len(head.orders) != 0 {
+		t.Error("AssertionError: Did not remove orders")
+	}
+}

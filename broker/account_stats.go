@@ -5,8 +5,8 @@ type accountStats struct {
 	losses int
 }
 
-func AccountStats() accountStats {
-	return accountStats{0, 0}
+func AccountStats() *accountStats {
+	return &accountStats{0, 0}
 }
 
 func (as *accountStats) AddWin() {
