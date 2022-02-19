@@ -23,7 +23,7 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 	greenCond := condition.DummyCondition{CandleIndex: 1, IsGreen: true}
 	conditions := condition.CreateConditions([]condition.ICondition{redCond, greenCond})
 
-	s := CreateStrategy(10, 1, 1, conditions)
+	s := CreateStrategy(0, 10, 1, 1, conditions)
 	answer := s.MeetsConditions(candleStream)
 
 	if !answer {
@@ -33,7 +33,7 @@ func TestStrategy_MeetsConditions(t *testing.T) {
 }
 
 func TestStrategy_GetExit(t *testing.T) {
-	s := CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{}))
+	s := CreateStrategy(0, 10, 1, 1, condition.CreateConditions([]condition.ICondition{}))
 	exit := s.GetExit(100)
 	if exit.StopLossPercentage() != 99 || exit.TakeProfitPercentage() != 101 {
 		t.Error("AssertionError")
@@ -43,7 +43,7 @@ func TestStrategy_GetExit(t *testing.T) {
 func TestStrategy_GettingConditions(t *testing.T) {
 	redCondition := condition.DummyCondition{CandleIndex: 1, IsGreen: false}
 	redCondition2 := condition.DummyCondition{CandleIndex: 4, IsGreen: false}
-	s := CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition, redCondition2}))
+	s := CreateStrategy(0, 10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition, redCondition2}))
 
 	conditions1 := s.Conditions()
 	conditions2 := s.Conditions()

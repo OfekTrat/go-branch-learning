@@ -1,6 +1,9 @@
 package broker
 
+import "sync"
+
 type Broker struct {
+	lock               sync.Mutex
 	exitStopLossTree   *exitNode
 	exitTakeProfitTree *exitNode
 	results            map[int]*accountStats // map[StrategyId]strategyResults
@@ -8,7 +11,13 @@ type Broker struct {
 }
 
 func CreateBroker() *Broker {
-	return &Broker{nil, nil, make(map[int]*accountStats), make(map[int]map[int]bool)}
+	broker := &Broker{}
+	broker.exitStopLossTree = nil
+	broker.exitTakeProfitTree = nil
+	broker.results = make(map[int]*accountStats)
+	broker.orders = make(map[int]map[int]bool)
+
+	return broker
 }
 
 func (broker *Broker) ScanResults() map[int]*accountStats {
@@ -16,6 +25,9 @@ func (broker *Broker) ScanResults() map[int]*accountStats {
 }
 
 func (broker *Broker) AddOrder(ord Order) {
+	broker.lock.Lock()
+	defer broker.lock.Unlock()
+
 	if !broker.doesStrategyExist(ord.StrategyId()) {
 		broker.initializeStrategy(ord.StrategyId())
 	}
@@ -39,6 +51,9 @@ func (broker *Broker) initializeStrategy(strategyId int) {
 }
 
 func (broker *Broker) ScanOrders(lowPrice, highPrice float32) {
+	broker.lock.Lock()
+	defer broker.lock.Unlock()
+
 	broker.updateStopLossExits(lowPrice)
 	broker.updateTakeProfitExits(highPrice)
 }

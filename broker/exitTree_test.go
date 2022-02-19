@@ -137,3 +137,5 @@ func TestRemoveAllOrders(t *testing.T) {
 		t.Error("AssertionError: Did not remove orders")
 	}
 }
+
+// TODO: Integrate broker.
