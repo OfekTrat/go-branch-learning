@@ -1,7 +1,6 @@
 package reproducer
 
 import (
-	"branch_learning/condition"
 	st "branch_learning/strategy"
 	"math/rand"
 )
@@ -15,13 +14,13 @@ func Reproduce(s1 *st.Strategy, s2 *st.Strategy) *st.Strategy {
 }
 
 func reproduceByNConditions(s1, s2 *st.Strategy, nConds int) *st.Strategy {
-	conditions1 := s1.Conditions().ToList()
-	conditions2 := s2.Conditions().ToList()
+	conditions1 := s1.Conditions()
+	conditions2 := s2.Conditions()
 
 	for i := 0; i < nConds; i++ {
-		if conditions2[i].IsValidStreamSize(s1.WindowSize()) {
-			conditions1 = append(conditions1, conditions2[i])
+		if conditions2.GetByIndex(i).IsValidStreamSize(s1.WindowSize()) {
+			conditions1.Add(conditions2.GetByIndex(i))
 		}
 	}
-	return st.CreateStrategy(s1.WindowSize(), s1.TakeProfit(), s1.StopLoss(), condition.CreateConditions(conditions1))
+	return st.CreateStrategy(s1.WindowSize(), s1.TakeProfit(), s1.StopLoss(), conditions1)
 }

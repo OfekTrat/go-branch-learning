@@ -8,8 +8,9 @@ import (
 )
 
 type DummyCondition struct {
-	CandleIndex int  `json:"candle_index"`
-	IsGreen     bool `json:"is_green"`
+	CandleIndex int    `json:"candle_index"`
+	IsGreen     bool   `json:"is_green"`
+	Text        string `json:"text"`
 }
 
 func (c DummyCondition) ConditionType() string {
@@ -41,4 +42,16 @@ func (c DummyCondition) Mutate(streamsize int) ICondition {
 
 func (c DummyCondition) Hash() string {
 	return strings.Join([]string{c.ConditionType(), strconv.FormatInt(int64(c.CandleIndex), 10), strconv.FormatBool(c.IsGreen)}, "|")
+}
+
+func (c DummyCondition) IsOverriddenBy(o ICondition) bool {
+	return true
+}
+
+func (c DummyCondition) Equals(o ICondition) bool {
+	other, ok := o.(DummyCondition)
+	if !ok {
+		return false
+	}
+	return c.IsGreen == other.IsGreen && c.CandleIndex == other.CandleIndex && c.Text == other.Text
 }

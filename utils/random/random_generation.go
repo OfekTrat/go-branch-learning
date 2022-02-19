@@ -6,7 +6,7 @@ func CreateRandomGeneration(generationSize int, config *RandomStrategyConfig) []
 	generation := make([]*st.Strategy, generationSize)
 
 	for i := 0; i < generationSize; i++ {
-		generation[i] = CreateRandomStrategy(config)
+		generation[i] = CreateRandomStrategy(i, config)
 	}
 	return generation
 }

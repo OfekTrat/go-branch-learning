@@ -10,6 +10,7 @@ import (
 func TestMutateAddCondition(t *testing.T) {
 	redCondition := condition_list.CandleComparisonCondition{CandleIndex1: 0, CandlePart1: "open", CandleIndex2: 0, CandlePart2: "close", Percentage: 0}
 	s := strategy.CreateStrategy(10, 1, 1, condition.CreateConditions([]condition.ICondition{redCondition}))
+
 	newS := MutateAddCondition(s)
 
 	if newS.Conditions().Length() != s.Conditions().Length()+1 {

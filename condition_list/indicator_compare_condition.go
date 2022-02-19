@@ -66,3 +66,17 @@ func (c IndicatorCompareCondition) Hash() string {
 			strconv.FormatFloat(float64(c.Percentage), 'e', -1, 32),
 		}, "|")
 }
+
+func (c IndicatorCompareCondition) IsOverriddenBy(o condition.ICondition) bool {
+	other := o.(IndicatorCompareCondition)
+	return c.Percentage > other.Percentage
+}
+
+func (c IndicatorCompareCondition) Equals(o condition.ICondition) bool {
+	other, ok := o.(IndicatorCompareCondition)
+	if !ok {
+		return false
+	}
+	return other.Indicator == c.Indicator && other.CandleIndex1 == c.CandleIndex1 && other.CandleIndex2 == c.CandleIndex2 &&
+		other.Percentage == c.Percentage
+}
