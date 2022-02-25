@@ -8,7 +8,7 @@ import (
 	"math/rand"
 )
 
-func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *EvolutionConfig) []*st.Strategy {
+func createNextGeneration(generation int, chs chances, lastGeneration []*st.Strategy, config *EvolutionConfig) []*st.Strategy {
 	var i int = 0
 	var strategyIndex int
 	var strategyIndex2 int
@@ -31,7 +31,7 @@ func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *Ev
 	for k := 0; k < nMutated; k++ {
 		randNumber = rand.Float64() * maxScore
 		strategyIndex := chs.getIndexByChance(randNumber)
-		nextGeneration[i] = mutator.MutateStrategy(lastGeneration[strategyIndex])
+		nextGeneration[i] = mutator.MutateStrategy(i, generation, lastGeneration[strategyIndex])
 		i++
 	}
 
@@ -41,12 +41,12 @@ func createNextGeneration(chs chances, lastGeneration []*st.Strategy, config *Ev
 		strategyIndex = chs.getIndexByChance(randNumber)
 		strategyIndex2 = chs.getIndexByChance(randNumber2)
 
-		nextGeneration[i] = reproducer.Reproduce(lastGeneration[strategyIndex], lastGeneration[strategyIndex2])
+		nextGeneration[i] = reproducer.Reproduce(i, generation, lastGeneration[strategyIndex], lastGeneration[strategyIndex2])
 		i++
 	}
 
 	for k := 0; k < nNew; k++ {
-		nextGeneration[i] = random.CreateRandomStrategy(k, &config.RandomConfig)
+		nextGeneration[i] = random.CreateRandomStrategy(i, generation, &config.RandomConfig)
 		i++
 	}
 	return nextGeneration

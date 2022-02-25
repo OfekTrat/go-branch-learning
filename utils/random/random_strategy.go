@@ -15,14 +15,14 @@ type RandomStrategyConfig struct {
 	ConditionNumberMax int
 }
 
-func CreateRandomStrategy(id int, config *RandomStrategyConfig) *st.Strategy {
+func CreateRandomStrategy(id, generation int, config *RandomStrategyConfig) *st.Strategy {
 	windowSize := getRandomInt(config.WindowMin, config.WindowMax)
 	takeProfit := getRandomFloat32(1.0, config.ExitMax)
 	stopLoss := getRandomFloat32(config.ExitMin, 1.0)
 	nConditions := getRandomInt(config.ConditionNumberMin, config.ConditionNumberMax)
 
 	randConditions := getRandomConditions(nConditions, windowSize)
-	return st.CreateStrategy(windowSize, takeProfit, stopLoss, randConditions)
+	return st.CreateStrategy(id, generation, windowSize, takeProfit, stopLoss, randConditions)
 }
 
 func getRandomInt(min, max int) int {

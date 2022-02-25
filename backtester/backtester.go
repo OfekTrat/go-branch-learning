@@ -79,5 +79,6 @@ func (bt *BackTester) Test(stream *cst.CandleStream) {
 			broker.AddOrder(b.MakeOrderFromCandleAndStrategy(bt.strategy, lastCandle))
 		}
 	}
+
 	bt.accountStats.AddAccountStats(broker.ScanResults())
 }

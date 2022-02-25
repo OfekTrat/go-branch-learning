@@ -6,6 +6,8 @@ import (
 )
 
 type Strategy struct {
+	id         int
+	generation int
 	takeProfit float32 //In Percentage
 	stopLoss   float32 //In Percentage
 	windowSize int
@@ -27,8 +29,18 @@ func (strategy *Strategy) Conditions() *condition.Conditions {
 	return strategy.conditions.Clone()
 }
 
-func CreateStrategy(windowSize int, takeProfit, stopLoss float32, conditions *condition.Conditions) *Strategy {
+func (strategy *Strategy) Id() int {
+	return strategy.id
+}
+
+func (strategy *Strategy) Generation() int {
+	return strategy.generation
+}
+
+func CreateStrategy(id, generation, windowSize int, takeProfit, stopLoss float32, conditions *condition.Conditions) *Strategy {
 	return &Strategy{
+		id:         id,
+		generation: generation,
 		windowSize: windowSize,
 		takeProfit: takeProfit,
 		stopLoss:   stopLoss,

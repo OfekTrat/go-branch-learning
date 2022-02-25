@@ -5,11 +5,16 @@ import (
 )
 
 type CandleStream struct {
+	name    string
 	candles []candle.Candle
 }
 
-func CreateCandleStream(candles []candle.Candle) *CandleStream {
-	return &CandleStream{candles: candles}
+func CreateCandleStream(name string, candles []candle.Candle) *CandleStream {
+	return &CandleStream{name: name, candles: candles}
+}
+
+func (stream *CandleStream) Name() string {
+	return stream.name
 }
 
 func (stream *CandleStream) Get(candleIndex int) candle.Candle {

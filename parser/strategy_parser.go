@@ -19,7 +19,7 @@ func ParseStrategy(strategyStr []byte) *st.Strategy {
 	takeProfit := float32(mappedStrategy["take_profit"].(float64))
 	window := int(mappedStrategy["window"].(float64))
 	conditions := ParseConditions(mappedStrategy["conditions"].([]interface{}))
-	strategy := st.CreateStrategy(window, takeProfit, stopLoss, conditions)
+	strategy := st.CreateStrategy(0, 0, window, takeProfit, stopLoss, conditions) // The parser is used only in strategy tester which means its default id, generation are 0
 	return strategy
 }
 

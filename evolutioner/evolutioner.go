@@ -17,14 +17,14 @@ func Evolve(data_path string, config *EvolutionConfig, output_config *output.Out
 	var chs chances
 	var backtesters []*bt.BackTester
 	data := candle_stream.GetStreamsFromPath(data_path)
-	generation := random.CreateRandomGeneration(config.GenerationSize, &config.RandomConfig)
+	generation := random.CreateRandomGeneration(0, config.GenerationSize, &config.RandomConfig)
 
 	for i := 0; i < config.NumEvolutions; i++ {
 		backtesters = createBacktesters(generation)
 		scs = backtestGeneration(data, backtesters)
 		chs = calcChances(scs)
 		printBestStrategy(backtesters, chs, scs, i, output_config)
-		generation = createNextGeneration(chs, generation, config)
+		generation = createNextGeneration(i+1, chs, generation, config)
 	}
 	if output_config.PrintFrequency == "once" {
 		output_config.PrintFrequency = "foreach"
