@@ -20,9 +20,9 @@ func TestStrategy(configuration *parser.Configuration) {
 
 	strategy := parser.ParseStrategy(fileData)
 	backtester := bt.CreateBackTester(strategy)
-	stream := candle_stream.GetStreamsFromPath(configuration.DataPath)
+	streams := candle_stream.GetStreamsFromPath(configuration.DataPath)
 
-	for _, s := range stream {
+	for _, s := range streams {
 		backtester.Test(s)
 	}
 	output.PrintScore(backtester)

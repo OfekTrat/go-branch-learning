@@ -3,7 +3,7 @@ package broker
 type Broker struct {
 	exitStopLossTree   *exitNode
 	exitTakeProfitTree *exitNode
-	results            *accountStats
+	results            *AccountStats
 	orders             map[int]bool // map[TimeOfOrder]IsClosed
 }
 
@@ -11,13 +11,13 @@ func CreateBroker() *Broker {
 	broker := &Broker{}
 	broker.exitStopLossTree = nil
 	broker.exitTakeProfitTree = nil
-	broker.results = AccountStats()
+	broker.results = CreateEmptyAccountStats()
 	broker.orders = make(map[int]bool)
 
 	return broker
 }
 
-func (broker *Broker) ScanResults() *accountStats {
+func (broker *Broker) ScanResults() *AccountStats {
 	return broker.results
 }
 

@@ -21,3 +21,7 @@ func main() {
 		evolutioner.Evolve(configuration.DataPath, configuration.EvolutionConfig, configuration.OutputConfig)
 	}
 }
+
+// There is a crazy overfit, check how to demolish it.
+// I have a problem in test, testing on trained data does not give the same result as the training.
+// Make sure the train works well, because it does not match well the number of wanted orders
