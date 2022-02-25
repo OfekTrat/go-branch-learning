@@ -8,32 +8,31 @@ import (
 )
 
 type BackTester struct {
-	broker   *b.Broker
-	strategy *st.Strategy
+	accountStats *b.AccountStats
+	strategy     *st.Strategy
 }
 
 func CreateBackTester(strategy *st.Strategy) *BackTester {
-	broker := b.CreateBroker()
-	return &BackTester{broker: broker, strategy: strategy}
+	return &BackTester{strategy: strategy, accountStats: b.CreateEmptyAccountStats()}
 }
 
 func (bt *BackTester) Strategy() *st.Strategy {
 	return bt.strategy
 }
 
-func (bt *BackTester) Broker() *b.Broker {
-	return bt.broker
+func (bt *BackTester) AccountStats() *b.AccountStats {
+	return bt.accountStats
 }
 
 func (bt *BackTester) Score() float64 {
-	sumOrders := bt.broker.ScanResults().Wins() + bt.broker.ScanResults().Losses()
+	sumOrders := bt.accountStats.Wins() + bt.accountStats.Losses()
 
 	if sumOrders == 0 {
 		return 0
 	}
 	numberOfConditionWeight := calcConditionLengthWeight(bt.strategy.Conditions().Length())
-	winRate := float32(bt.broker.ScanResults().Wins()) / float32(sumOrders)
-	lossRate := float32(bt.broker.ScanResults().Losses()) / float32(sumOrders)
+	winRate := float32(bt.accountStats.Wins()) / float32(sumOrders)
+	lossRate := float32(bt.accountStats.Losses()) / float32(sumOrders)
 	totalEstimatedEarningsForHundredOrders := (winRate * bt.strategy.TakeProfit()) - (lossRate * bt.strategy.StopLoss())
 	sumOrdersWeight := calcSumOrdersWeight(sumOrders)
 
@@ -69,15 +68,17 @@ func calcConditionLengthWeight(numberOfConditions int) float64 {
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
 	windowSize := bt.strategy.WindowSize()
+	broker := b.CreateBroker()
 
 	for i := 0; i < stream.Length()-windowSize; i++ {
 		slicedStream := stream.GetSlice(i, i+windowSize)
 		lastCandle := slicedStream.Get(windowSize - 1)
 
-		bt.broker.ScanOrders(lastCandle.Get("low"), lastCandle.Get("high"))
+		broker.ScanOrders(lastCandle.Get("low"), lastCandle.Get("high"))
 
 		if bt.strategy.MeetsConditions(slicedStream) {
-			bt.broker.AddOrder(b.MakeOrderFromCandleAndStrategy(bt.strategy, lastCandle))
+			broker.AddOrder(b.MakeOrderFromCandleAndStrategy(bt.strategy, lastCandle))
 		}
 	}
+	bt.accountStats.AddAccountStats(broker.ScanResults())
 }
