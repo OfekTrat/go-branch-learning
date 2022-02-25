@@ -5,11 +5,9 @@ import (
 	cst "branch_learning/candle_stream"
 	st "branch_learning/strategy"
 	"math"
-	"sync"
 )
 
 type BackTester struct {
-	mu           sync.Mutex
 	accountStats *b.AccountStats
 	strategy     *st.Strategy
 }
@@ -69,8 +67,6 @@ func calcConditionLengthWeight(numberOfConditions int) float64 {
 }
 
 func (bt *BackTester) Test(stream *cst.CandleStream) {
-	bt.mu.Lock()
-	defer bt.mu.Unlock()
 	windowSize := bt.strategy.WindowSize()
 	broker := b.CreateBroker()
 	for i := 0; i < stream.Length()-windowSize; i++ {
