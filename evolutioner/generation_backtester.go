@@ -17,7 +17,7 @@ func backtestGeneration(streams []*candle_stream.CandleStream, backtesters []*bt
 		jumpSize := int(nStrategies / nWorkers)
 		go func(i int) {
 			defer wg.Done()
-			worker(streams, backtesters[i*jumpSize:(i+1)*jumpSize])
+			bt.TestMultipleBacktesters(backtesters[i*jumpSize:(i+1)*jumpSize], streams)
 		}(i)
 	}
 	wg.Wait()
@@ -25,16 +25,4 @@ func backtestGeneration(streams []*candle_stream.CandleStream, backtesters []*bt
 		scores[i] = backtester.Score()
 	}
 	return scores
-}
-
-func worker(streams []*candle_stream.CandleStream, backtesters []*bt.BackTester) {
-	for _, backtester := range backtesters {
-		backtestStrategy(backtester, streams)
-	}
-}
-
-func backtestStrategy(backtester *bt.BackTester, streams []*candle_stream.CandleStream) {
-	for _, stream := range streams {
-		backtester.Test(stream)
-	}
 }
