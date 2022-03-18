@@ -10,7 +10,7 @@ type Conditions struct {
 	length     int
 }
 
-func emptyConditions() *Conditions {
+func EmptyConditions() *Conditions {
 	conditions := new(Conditions)
 	conditions.conditions = make(map[string]ICondition)
 	conditions.keys = make(map[int]string)
@@ -18,7 +18,7 @@ func emptyConditions() *Conditions {
 }
 
 func CreateConditions(conditionList []ICondition) *Conditions {
-	conditions := emptyConditions()
+	conditions := EmptyConditions()
 
 	for _, cond := range conditionList {
 		conditions.Add(cond)
@@ -96,7 +96,7 @@ func (cs *Conditions) RemoveByIndex(index int) {
 }
 
 func (cs *Conditions) Clone() *Conditions {
-	newConditions := emptyConditions()
+	newConditions := EmptyConditions()
 
 	for _, cond := range cs.conditions {
 		newConditions.Add(cond)

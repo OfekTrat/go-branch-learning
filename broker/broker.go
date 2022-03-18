@@ -33,12 +33,12 @@ func (broker *Broker) AddOrder(ord Order) {
 	}
 }
 
-func (broker *Broker) ScanOrders(lowPrice, highPrice float32) {
+func (broker *Broker) ScanOrders(lowPrice, highPrice float64) {
 	broker.updateStopLossExits(lowPrice)
 	broker.updateTakeProfitExits(highPrice)
 }
 
-func (broker *Broker) updateStopLossExits(lowPrice float32) {
+func (broker *Broker) updateStopLossExits(lowPrice float64) {
 	newStopLoss, orders := broker.exitStopLossTree.GetStopLossExits(lowPrice)
 	broker.exitStopLossTree = newStopLoss
 	for _, ord := range orders {
@@ -49,7 +49,7 @@ func (broker *Broker) updateStopLossExits(lowPrice float32) {
 
 }
 
-func (broker *Broker) updateTakeProfitExits(highPrice float32) {
+func (broker *Broker) updateTakeProfitExits(highPrice float64) {
 	newHead, orders := broker.exitTakeProfitTree.GetTakeProfitExits(highPrice)
 	broker.exitTakeProfitTree = newHead
 

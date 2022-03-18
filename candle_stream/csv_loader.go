@@ -36,14 +36,14 @@ func LoadCandleStreamFromCsv(csvpath string) *CandleStream {
 }
 
 func createCandleFromLines(headers []string, line []string) (candle.Candle, error) {
-	candleMap := make(map[string]float32)
+	candleMap := make(map[string]float64)
 
 	for i := 0; i < len(headers); i++ {
-		val, err := strconv.ParseFloat(line[i], 32)
+		val, err := strconv.ParseFloat(line[i], 64)
 		if err != nil {
 			return candle.Candle{}, err
 		}
-		candleMap[headers[i]] = float32(val)
+		candleMap[headers[i]] = val
 	}
 	return candle.CreateCandle(candleMap), nil
 }

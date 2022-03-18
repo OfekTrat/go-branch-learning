@@ -12,7 +12,7 @@ type IndicatorCompareCondition struct {
 	Indicator    string
 	CandleIndex1 int
 	CandleIndex2 int
-	Percentage   float32
+	Percentage   float64
 }
 
 func (c IndicatorCompareCondition) ConditionType() string {
@@ -36,7 +36,7 @@ func (c IndicatorCompareCondition) Mutate(streamsize int) condition.ICondition {
 	// Everything but the indicator type can be changed
 	randCandleIndex := rand.Intn(streamsize)
 	randCandle := rand.Intn(2)
-	randPercentage := c.Percentage + (rand.Float32()-0.5)*20
+	randPercentage := c.Percentage + (rand.Float64()-0.5)*20
 
 	if randCandle == 0 {
 		return IndicatorCompareCondition{

@@ -8,10 +8,10 @@ import (
 )
 
 func TestStrategy_MeetsConditions(t *testing.T) {
-	redCandleMap := make(map[string]float32)
+	redCandleMap := make(map[string]float64)
 	redCandleMap["close"] = 9
 	redCandleMap["open"] = 10
-	greenCandleMap := make(map[string]float32)
+	greenCandleMap := make(map[string]float64)
 	greenCandleMap["close"] = 10
 	greenCandleMap["open"] = 9
 

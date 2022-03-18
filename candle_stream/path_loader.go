@@ -1,19 +1,28 @@
 package candlestream
 
 import (
+	l "branch_learning/logger"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
 )
 
+var logger *l.Logger = l.CreateLogger()
+
 func GetStreamsFromPath(data_path string) []*CandleStream {
 	var streams []*CandleStream
 	data_files := getDataFiles(data_path)
 
+	logger.Info.Printf("GetStreamsFromPath - Starting to collect data from %s\n", data_path)
+	candlesSum := 0
+
 	for _, filepath := range data_files {
-		streams = append(streams, LoadCandleStreamFromCsv(filepath))
+		stream := LoadCandleStreamFromCsv(filepath)
+		candlesSum += stream.Length()
+		streams = append(streams, stream)
 	}
+	logger.Info.Printf("GetStreamsFromPath - Done. Collected from %d data files. Total of %d candles\n\n", len(streams), candlesSum)
 	return streams
 }
 

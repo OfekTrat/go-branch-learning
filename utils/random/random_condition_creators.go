@@ -23,7 +23,7 @@ func CreateRandomCandleComparisonCondition(streamsize int) condition.ICondition 
 	index2 := rand.Intn(streamsize)
 	part1 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
 	part2 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
-	percentage := (rand.Float32() - 0.5) * 200
+	percentage := (rand.Float64() - 0.5) * 200
 	return condition_list.CandleComparisonCondition{CandleIndex1: index1, CandlePart1: part1,
 		CandleIndex2: index2, CandlePart2: part2, Percentage: percentage}
 }
@@ -67,12 +67,12 @@ func CreateRandomIndicatorComparisonCondition(streamsize int) condition.IConditi
 
 }
 
-func getRandomIndicatorValueByIndicator(indicator string) float32 {
+func getRandomIndicatorValueByIndicator(indicator string) float64 {
 	switch indicator {
 	case "macd":
-		return (rand.Float32() - 0.5) * 10
+		return (rand.Float64() - 0.5) * 10
 	case "rsi":
-		return rand.Float32() * 100
+		return rand.Float64() * 100
 	default:
 		return 0
 	}
@@ -82,6 +82,6 @@ func getRandomGreaterThan() bool {
 	return greaterThanOptions[rand.Intn(2)]
 }
 
-func getRandomPercentage() float32 {
-	return (rand.Float32() - 0.5) * 20000
+func getRandomPercentage() float64 {
+	return (rand.Float64() - 0.5) * 20000
 }

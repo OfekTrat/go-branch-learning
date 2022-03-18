@@ -7,9 +7,9 @@ import (
 
 type Order struct {
 	time       int
-	price      float32
-	takeProfit float32
-	stopLoss   float32
+	price      float64
+	takeProfit float64
+	stopLoss   float64
 }
 
 func MakeOrderFromCandleAndStrategy(strategy *st.Strategy, candle c.Candle) Order {
@@ -20,7 +20,7 @@ func MakeOrderFromCandleAndStrategy(strategy *st.Strategy, candle c.Candle) Orde
 
 	return MakeOrder(time, price, takeProfit, stopLoss)
 }
-func MakeOrder(time int, price, takeProfit, stopLoss float32) Order {
+func MakeOrder(time int, price, takeProfit, stopLoss float64) Order {
 	return Order{time: time, price: price, takeProfit: takeProfit, stopLoss: stopLoss}
 }
 
@@ -28,15 +28,15 @@ func (o Order) Time() int {
 	return o.time
 }
 
-func (o Order) Price() float32 {
+func (o Order) Price() float64 {
 	return o.price
 }
 
-func (o Order) TakeProfit() float32 {
+func (o Order) TakeProfit() float64 {
 	return o.takeProfit
 }
 
-func (o Order) StopLoss() float32 {
+func (o Order) StopLoss() float64 {
 	return o.stopLoss
 }
 

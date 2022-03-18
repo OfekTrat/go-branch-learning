@@ -7,8 +7,8 @@ import (
 )
 
 func TestCreateConditions_MeetsConditions(t *testing.T) {
-	candle1 := map[string]float32{"close": 2, "open": 1}
-	candle2 := map[string]float32{"close": 1, "open": 2}
+	candle1 := map[string]float64{"close": 2, "open": 1}
+	candle2 := map[string]float64{"close": 1, "open": 2}
 	c1 := DummyCondition{0, true, "c1"}
 	c2 := DummyCondition{1, false, "c2"}
 	stream := candlestream.CreateCandleStream("test", []candle.Candle{
@@ -24,8 +24,8 @@ func TestCreateConditions_MeetsConditions(t *testing.T) {
 }
 
 func TestCreateConditions_DoesNotMeetConditions(t *testing.T) {
-	candle1 := map[string]float32{"close": 1, "open": 2}
-	candle2 := map[string]float32{"close": 2, "open": 1}
+	candle1 := map[string]float64{"close": 1, "open": 2}
+	candle2 := map[string]float64{"close": 2, "open": 1}
 	c1 := DummyCondition{0, true, "c1"}
 	c2 := DummyCondition{1, false, "c2"}
 	stream := candlestream.CreateCandleStream("test", []candle.Candle{

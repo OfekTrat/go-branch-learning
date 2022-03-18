@@ -1,27 +1,75 @@
 package main
 
+// import (
+// 	"branch_learning/evolutioner"
+// 	"branch_learning/initialization"
+// 	"branch_learning/output"
+// 	"branch_learning/parser"
+// 	tester "branch_learning/strategy_tester"
+// 	"math/rand"
+// 	"time"
+// )
+
 import (
-	"branch_learning/evolutioner"
-	"branch_learning/output"
-	"branch_learning/parser"
-	tester "branch_learning/strategy_tester"
-	"math/rand"
-	"time"
+	candlestream "branch_learning/candle_stream"
+	"branch_learning/configuration"
+	l "branch_learning/logger"
+	t "branch_learning/strategy_trainer"
+	"flag"
+	"fmt"
+	"os"
 )
 
-func main() {
-	rand.Seed(time.Now().Unix())
-	configuration := parser.InitArgs()
+var isTrain bool
+var trainConfiguration *configuration.TrainConfiguration
+var testConfiguration *configuration.TestConfiguration
+var logConfiguration *configuration.LogConfiguration
 
-	switch configuration.CallType {
+func init() {
+	var configFile string
+	flag.StringVar(&configFile, "file", "", "Yaml Configuration file")
+	flag.Parse()
+
+	command := flag.Arg(0)
+
+	switch command {
+	case "train":
+		isTrain = true
+		trainConfiguration = configuration.ParseTrainConfiguration(configFile)
+		logConfiguration = &trainConfiguration.LogConf
 	case "test":
-		tester.TestStrategy(configuration)
+		isTrain = false
+		testConfiguration = configuration.ParseTestConfiguration(configFile)
+		logConfiguration = &testConfiguration.LogConf
 	default:
-		output.LogInitialize(configuration.OutputConfig)
-		evolutioner.Evolve(configuration.DataPath, configuration.EvolutionConfig, configuration.OutputConfig)
+		fmt.Println("Wrong command type")
+		os.Exit(1)
 	}
 }
 
-// There is a crazy overfit, check how to demolish it.
-// I have a problem in test, testing on trained data does not give the same result as the training.
-// Make sure the train works well, because it does not match well the number of wanted orders
+func main() {
+	l.InitLoggers(*logConfiguration)
+	logger := l.CreateLogger()
+
+	if isTrain {
+		logger.Info.Printf(
+			"Starting To Train\nEpochs: %d\nGeneration Size: %d\nData: %s\n\nLogs Information\nLogs File: %s\nStrategies File: %s\nResults File: %s\n\n",
+			trainConfiguration.EvolutionConf.Epochs,
+			trainConfiguration.EvolutionConf.GenerationSize,
+			trainConfiguration.DataPath,
+			trainConfiguration.LogConf.LogsFile,
+			trainConfiguration.LogConf.StrategiesFile,
+			trainConfiguration.LogConf.ResultsFile,
+		)
+		trainer := t.CreateStrategyTrainer(trainConfiguration)
+		data := candlestream.GetStreamsFromPath(trainConfiguration.DataPath)
+		trainer.Train(data)
+	} else {
+		logger.Info.Printf(
+			"Testing Strategy\nStrategy %s\nData: %s\n",
+			testConfiguration.Strategy,
+			testConfiguration.DataPath,
+		)
+	}
+
+}
