@@ -1,3 +1,5 @@
+github.com/30x/zipper v0.0.0-20170202204324-2ce12acb6961 h1:lEnJB8BHy9Wtp/lO0JgkoHjPWSkxeRAFdPmo3si+zk0=
+github.com/30x/zipper v0.0.0-20170202204324-2ce12acb6961/go.mod h1:AmvwnAFYEXBtRLD7zbRCjGCgo9J90rW6xTEcuTXSf+k=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -48,7 +48,6 @@ func init() {
 }
 
 func main() {
-	l.InitLoggers(*logConfiguration)
 	logger := l.CreateLogger()
 
 	if isTrain {
@@ -71,5 +70,10 @@ func main() {
 			testConfiguration.DataPath,
 		)
 	}
-
+	l.ZipLogs("test_data/test.zip")
 }
+
+// TODO:
+// 1. Add more logs in relevant places.
+// 2. Add zipping of in the end of the program, so that there won't be much data stored.
+// 3. Find more stuff to do

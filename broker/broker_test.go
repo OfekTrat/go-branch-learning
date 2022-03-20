@@ -1,6 +1,8 @@
 package broker
 
 import (
+	c "branch_learning/condition"
+	s "branch_learning/strategy"
 	"testing"
 )
 
@@ -54,8 +56,14 @@ func TestCreateBrokerAndInitialization(t *testing.T) {
 }
 
 func TestScanningOrders(t *testing.T) {
+	conditions := &c.Conditions{}
+	strategy := s.CreateStrategy(0, 0, 10, 1.1, 1.1, conditions)
 	broker := getSampleBroker()
-	broker.ScanOrders(5, 5.5)
+	ordersLost, ordersWon := broker.ScanOrders(5, 5.5)
+
+	broker.CloseLossOrders(0, strategy, ordersLost)
+	broker.CloseWinOrders(0, strategy, ordersWon)
+
 	results := broker.ScanResults()
 	if results.Losses() != 3 || results.Wins() != 3 {
 		t.Error("AssertionError: wrong number of wins or losses")
