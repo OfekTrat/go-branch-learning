@@ -6,7 +6,6 @@ import (
 	"branch_learning/configuration"
 	l "branch_learning/logger"
 	st "branch_learning/strategy"
-	"time"
 )
 
 var logger *l.Logger = l.CreateLogger()
@@ -59,6 +58,7 @@ func (st *StrategyTester) Test(streams []*candlestream.CandleStream) {
 }
 
 func (st *StrategyTester) testSingleCandleStream(stream *candlestream.CandleStream) {
+	ticker := stream.Name()
 	window := st.strategy.WindowSize()
 	broker := b.CreateBroker()
 
@@ -72,14 +72,16 @@ func (st *StrategyTester) testSingleCandleStream(stream *candlestream.CandleStre
 		broker.CloseOrders(closeTime, st.strategy, ordersWon, true)
 
 		if st.strategy.MeetsConditions(streamSlice) {
-			order := b.MakeOrderFromCandleAndStrategy(st.strategy, lastCandle)
+			order := b.MakeOrderFromCandleAndStrategy(ticker, st.strategy, lastCandle)
 			broker.AddOrder(order)
 
 			logger.Orders.Printf(
-				"Open [%s] Generation=%d, Strategy=%d, Price=%f\n",
-				time.UnixMilli(int64(order.Time())).Format(TIME_FORMAT),
+				"%s,%d,%d,%d,%d,%f\n",
+				order.Ticker(),
+				order.Time(),
 				st.strategy.Generation(),
 				st.strategy.Id(),
+				0,
 				order.Price(),
 			)
 		}

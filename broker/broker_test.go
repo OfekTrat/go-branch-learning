@@ -7,13 +7,13 @@ import (
 )
 
 func getSampleBroker() *Broker {
-	ord1 := MakeOrder(0, 1, 6, 1)
-	ord2 := MakeOrder(1, 2, 2, 2)
-	ord3 := MakeOrder(2, 3, 3, 3)
-	ord4 := MakeOrder(3, 4, 4, 4)
-	ord5 := MakeOrder(4, 5, 5, 5)
-	ord6 := MakeOrder(5, 6, 6, 6)
-	ord7 := MakeOrder(6, 7, 7, 7)
+	ord1 := MakeOrder("test", 0, 1, 6, 1)
+	ord2 := MakeOrder("test", 1, 2, 2, 2)
+	ord3 := MakeOrder("test", 2, 3, 3, 3)
+	ord4 := MakeOrder("test", 3, 4, 4, 4)
+	ord5 := MakeOrder("test", 4, 5, 5, 5)
+	ord6 := MakeOrder("test", 5, 6, 6, 6)
+	ord7 := MakeOrder("test", 6, 7, 7, 7)
 
 	broker := CreateBroker()
 	broker.AddOrder(ord4)
@@ -28,10 +28,10 @@ func getSampleBroker() *Broker {
 }
 
 func TestCreateBrokerAndInitialization(t *testing.T) {
-	ord1 := MakeOrder(0, 1, 1.5, 0.5)
-	ord2 := MakeOrder(0, 2, 2.5, 1.5)
-	ord3 := MakeOrder(0, 3, 3.5, 2.5)
-	ord4 := MakeOrder(0, 4, 4.5, 3.5)
+	ord1 := MakeOrder("test", 0, 1, 1.5, 0.5)
+	ord2 := MakeOrder("test", 0, 2, 2.5, 1.5)
+	ord3 := MakeOrder("test", 0, 3, 3.5, 2.5)
+	ord4 := MakeOrder("test", 0, 4, 4.5, 3.5)
 	broker := CreateBroker()
 	broker.AddOrder(ord3)
 	broker.AddOrder(ord4)
@@ -71,7 +71,7 @@ func TestScanningOrders(t *testing.T) {
 }
 
 func TestClosingOrders(t *testing.T) {
-	ord := MakeOrder(3, 4, 4, 4)
+	ord := MakeOrder("test", 3, 4, 4, 4)
 	broker := getSampleBroker()
 
 	if broker.isOrderClosed(ord) {

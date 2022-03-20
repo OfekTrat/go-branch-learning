@@ -3,7 +3,6 @@ package broker
 import (
 	l "branch_learning/logger"
 	s "branch_learning/strategy"
-	"time"
 )
 
 type Broker struct {
@@ -74,17 +73,7 @@ func (broker *Broker) CloseOrders(timeClose int, strategy *s.Strategy, orders []
 		if !broker.isOrderClosed(ord) {
 			broker.closeOrder(ord, isWin)
 
-			logger.Orders.Printf(
-				"Close [%s] - Generation=%d, StrategyId=%d, buyTime=%s, price=%f, takeProfit=%f, stopLoss=%f, isWin=%t\n",
-				time.UnixMilli(int64(timeClose)).Format(TIME_FORMAT),
-				strategy.Generation(),
-				strategy.Id(),
-				time.UnixMilli(int64(ord.time)).Format(TIME_FORMAT),
-				ord.price,
-				ord.takeProfit,
-				ord.stopLoss,
-				isWin,
-			)
+			logger.Orders.Printf("%s,%d,%d,%d,%d,%f\n", ord.ticker, timeClose, strategy.Generation(), strategy.Id(), 1, ord.stopLoss)
 		}
 	}
 }

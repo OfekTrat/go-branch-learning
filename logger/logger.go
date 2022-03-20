@@ -59,6 +59,8 @@ func initLoggers() {
 	logger.Info = infoLogger
 	logger.Error = errorLogger
 	logger.Orders = ordersLogger
+
+	logger.Orders.Println("ticker,time,generation,strategy,type,price")
 }
 
 func makeDir(path string) {
@@ -114,7 +116,6 @@ func ZipLogs(path string) {
 			header.Name += "/"
 		}
 
-		// 5. Create writer for the file header and save content of the file
 		headerWriter, err := zipWriter.CreateHeader(header)
 		if err != nil {
 			return err

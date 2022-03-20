@@ -6,7 +6,7 @@ import (
 )
 
 func TestCreateTree_SingleNodeSingleOrder(t *testing.T) {
-	ord := MakeOrder(0, 10, 11, 9)
+	ord := MakeOrder("test", 0, 10, 11, 9)
 	node := createExitNode(ord.stopLoss, ord)
 
 	if node.value != ord.stopLoss {
@@ -24,9 +24,9 @@ func TestCreateTree_SingleNodeSingleOrder(t *testing.T) {
 }
 
 func TestCreateTree_MultipleNodes(t *testing.T) {
-	ord1 := MakeOrder(0, 10, 11, 9)
-	ord2 := MakeOrder(0, 10, 11, 8)
-	ord3 := MakeOrder(0, 10, 11, 10)
+	ord1 := MakeOrder("test", 0, 10, 11, 9)
+	ord2 := MakeOrder("test", 0, 10, 11, 8)
+	ord3 := MakeOrder("test", 0, 10, 11, 10)
 	head := createExitNode(ord1.stopLoss, ord1)
 	head.Add(ord2.stopLoss, ord2)
 	head.Add(ord3.stopLoss, ord3)
@@ -43,9 +43,9 @@ func TestCreateTree_MultipleNodes(t *testing.T) {
 }
 
 func TestCreateTree_MultipleNodesMultipleOrders(t *testing.T) {
-	ord1 := MakeOrder(0, 10, 11, 9)
-	ord2 := MakeOrder(0, 10, 11, 10)
-	ord3 := MakeOrder(0, 10, 11, 10)
+	ord1 := MakeOrder("test", 0, 10, 11, 9)
+	ord2 := MakeOrder("test", 0, 10, 11, 10)
+	ord3 := MakeOrder("test", 0, 10, 11, 10)
 
 	head := createExitNode(ord1.stopLoss, ord1)
 	head.Add(ord2.stopLoss, ord2)
@@ -63,11 +63,11 @@ func TestCreateTree_MultipleNodesMultipleOrders(t *testing.T) {
 }
 
 func TestExitTree_GetStopLossOrders(t *testing.T) {
-	ord1 := MakeOrder(0, 10, 11, 9)
-	ord2 := MakeOrder(0, 10, 11, 8)
-	ord5 := MakeOrder(1, 11, 1, 7.5)
-	ord3 := MakeOrder(0, 10, 11, 10)
-	ord4 := MakeOrder(1, 12, 11, 9.5)
+	ord1 := MakeOrder("test", 0, 10, 11, 9)
+	ord2 := MakeOrder("test", 0, 10, 11, 8)
+	ord5 := MakeOrder("test", 1, 11, 1, 7.5)
+	ord3 := MakeOrder("test", 0, 10, 11, 10)
+	ord4 := MakeOrder("test", 1, 12, 11, 9.5)
 	head := createExitNode(ord1.StopLoss(), ord1)
 	head.Add(ord2.StopLoss(), ord2)
 	head.Add(ord3.StopLoss(), ord3)
@@ -92,10 +92,10 @@ func TestExitTree_GetStopLossOrders(t *testing.T) {
 }
 
 func TestExitTree_GetTakeProfitOrders(t *testing.T) {
-	ord1 := MakeOrder(0, 10, 11, 9)
-	ord2 := MakeOrder(0, 10, 12, 8)
-	ord3 := MakeOrder(0, 10, 10, 10)
-	ord4 := MakeOrder(1, 10, 10.4, 9)
+	ord1 := MakeOrder("test", 0, 10, 11, 9)
+	ord2 := MakeOrder("test", 0, 10, 12, 8)
+	ord3 := MakeOrder("test", 0, 10, 10, 10)
+	ord4 := MakeOrder("test", 1, 10, 10.4, 9)
 	head := createExitNode(ord1.TakeProfit(), ord1)
 	head.Add(ord2.TakeProfit(), ord2)
 	head.Add(ord3.TakeProfit(), ord3)
@@ -119,10 +119,10 @@ func TestExitTree_GetTakeProfitOrders(t *testing.T) {
 }
 
 func TestRemoveAllOrders(t *testing.T) {
-	ord1 := MakeOrder(0, 10, 11, 9)
-	ord2 := MakeOrder(0, 10, 12, 8)
-	ord3 := MakeOrder(0, 10, 10, 10)
-	ord4 := MakeOrder(1, 10, 10.4, 9)
+	ord1 := MakeOrder("test", 0, 10, 11, 9)
+	ord2 := MakeOrder("test", 0, 10, 12, 8)
+	ord3 := MakeOrder("test", 0, 10, 10, 10)
+	ord4 := MakeOrder("test", 1, 10, 10.4, 9)
 	head := createExitNode(ord1.TakeProfit(), ord1)
 	head.Add(ord2.TakeProfit(), ord2)
 	head.Add(ord3.TakeProfit(), ord3)
