@@ -31,9 +31,9 @@ func createChanceTree(orderedTestersByScore []*tester.StrategyTester, chances []
 	}
 }
 
-func createChanceTreeFromTesters(orderedTestersByScore []*tester.StrategyTester) *chanceTree {
+func createChanceTreeFromTesters(orderedTestersByScore []*tester.StrategyTester) (float64, *chanceTree) {
 	chances := calcChancesFromOrderedStrategyTesters(orderedTestersByScore)
-	return createChanceTree(orderedTestersByScore, chances)
+	return chances[len(chances)-1], createChanceTree(orderedTestersByScore, chances)
 }
 
 func calcChancesFromOrderedStrategyTesters(orderedTesters []*tester.StrategyTester) []float64 {
@@ -50,16 +50,17 @@ func calcChancesFromOrderedStrategyTesters(orderedTesters []*tester.StrategyTest
 func (ct *chanceTree) GetStrategyTesterByChance(chance float64) *tester.StrategyTester {
 	if ct.chance == chance || (ct.higherChance == nil && ct.lowerChance == nil) {
 		return ct.strategyTester
-
-	} else if ct.chance < chance && ct.higherChance == nil {
-		return ct.strategyTester
-	} else if ct.chance < chance && ct.higherChance.chance > chance {
-		return ct.higherChance.strategyTester
-	}
-
-	if ct.chance < chance && ct.higherChance.chance < chance {
-		return ct.higherChance.GetStrategyTesterByChance(chance)
-	} else { // ct.chance > chance (last scenario)
-		return ct.lowerChance.GetStrategyTesterByChance(chance)
+	} else if ct.chance < chance {
+		if ct.higherChance == nil {
+			return ct.strategyTester
+		} else {
+			return ct.higherChance.GetStrategyTesterByChance(chance)
+		}
+	} else {
+		if ct.lowerChance == nil {
+			return ct.strategyTester
+		} else {
+			return ct.lowerChance.GetStrategyTesterByChance(chance)
+		}
 	}
 }
