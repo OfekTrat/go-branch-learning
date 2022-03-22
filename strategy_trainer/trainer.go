@@ -29,11 +29,17 @@ func (trainer *StrategyTrainer) Train(streams []*candlestream.CandleStream) {
 		logger.Info.Printf("----------- START Generation %d -----------\n", epoch)
 
 		testResults := generation.test(streams)
-
+		logBestScore(testResults)
 		if epoch != trainer.EvolutionConfiguration.Epochs-1 {
 			generation = createNextGenerationFromTestResults(epoch+1, testResults, trainer.EvolutionConfiguration, trainer.RandomConfiguration)
 		}
 
 		logger.Info.Printf("----------- END Generation %d -----------\n", epoch)
 	}
+}
+
+func logBestScore(results *generationTestResults) {
+	maxChance := results.GetMaxChance()
+	bestResults := results.tree.GetStrategyTesterByChance(maxChance + 1).Results()
+	logger.Info.Printf("#### BEST SCORE: %f ####", bestResults.Score)
 }
