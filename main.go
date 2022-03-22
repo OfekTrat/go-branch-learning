@@ -19,6 +19,7 @@ import (
 	t "branch_learning/strategy_trainer"
 	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -53,6 +54,7 @@ func init() {
 	if shouldLogOrders {
 		l.EnableOrdersLogs()
 	}
+	rand.Seed(time.Now().UnixNano())
 }
 
 func main() {
