@@ -20,6 +20,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 )
 
 var isTrain bool
@@ -77,5 +79,19 @@ func main() {
 			testConfiguration.DataPath,
 		)
 	}
-	l.ZipLogs("test_data/test.zip")
+
+	filename := createTimeFilename()
+	l.ZipLogs(filename)
+}
+
+func createTimeFilename() string {
+	now := time.Now()
+	filename := strconv.FormatInt(int64(now.Year()), 10) +
+		strconv.FormatInt(int64(now.Month()), 10) +
+		strconv.FormatInt(int64(now.Day()), 10) +
+		"-" +
+		strconv.FormatInt(int64(now.Hour()), 10) +
+		strconv.FormatInt(int64(now.Minute()), 10)
+
+	return filename + ".zip"
 }
