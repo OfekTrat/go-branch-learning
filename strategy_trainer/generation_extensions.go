@@ -15,6 +15,8 @@ func createRandomGeneration(generationId, generationSize int, randConf *configur
 	for i := 0; i < generationSize; i++ {
 		strategy := random_util.CreateRandomStrategy(i, generationId, randConf)
 		strategies[i] = strategy
+
+		logger.Strategies.Println(strategy.ToJsonString())
 	}
 	return newGeneration(generationId, strategies)
 }
@@ -38,12 +40,16 @@ func createNextGenerationFromTestResults(generationId int, generationTestResults
 		strategy := generationTestResults.GetStrategyByChance(chance)
 		newStrategies[pos] = st.CreateStrategyFromOtherStrategy(pos, generationId, strategy)
 		pos++
+
+		logger.Strategies.Println(strategy.ToJsonString())
 	}
 	for i := 0; i < mutateSize; i++ {
 		chance := generateChance(maxChance)
 		strategy := generationTestResults.GetStrategyByChance(chance)
 		newStrategies[pos] = mutator.MutateStrategy(pos, generationId, strategy)
 		pos++
+
+		logger.Strategies.Println(strategy.ToJsonString())
 	}
 	for i := 0; i < reproducedSize; i++ {
 		chance1 := generateChance(maxChance)
@@ -51,13 +57,18 @@ func createNextGenerationFromTestResults(generationId int, generationTestResults
 
 		strategy1 := generationTestResults.GetStrategyByChance(chance1)
 		strategy2 := generationTestResults.GetStrategyByChance(chance2)
-
-		newStrategies[pos] = reproducer.Reproduce(pos, generationId, strategy1, strategy2)
+		newStrategy := reproducer.Reproduce(pos, generationId, strategy1, strategy2)
+		newStrategies[pos] = newStrategy
 		pos++
+
+		logger.Strategies.Println(newStrategy.ToJsonString())
 	}
 	for i := 0; i < randomSize; i++ {
-		newStrategies[pos] = random_util.CreateRandomStrategy(pos, generationId, randConf)
+		strategy := random_util.CreateRandomStrategy(pos, generationId, randConf)
+		newStrategies[pos] = strategy
 		pos++
+
+		logger.Strategies.Println(strategy.ToJsonString())
 	}
 	logger.Info.Printf("Created new generation #%d", generationId)
 	return newGeneration(generationId, newStrategies)

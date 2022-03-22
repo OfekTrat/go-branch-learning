@@ -9,6 +9,8 @@ import (
 
 func (strategy *Strategy) ToJsonString() string {
 	mappedStrategy := make(map[string]interface{})
+	mappedStrategy["generation"] = strategy.Generation()
+	mappedStrategy["id"] = strategy.Id()
 	mappedStrategy["stop_loss"] = strategy.StopLoss()
 	mappedStrategy["take_profit"] = strategy.TakeProfit()
 	mappedStrategy["window"] = strategy.WindowSize()
