@@ -13,7 +13,8 @@ func createRandomGeneration(generationId, generationSize int, randConf *configur
 	strategies := make([]*st.Strategy, generationSize)
 
 	for i := 0; i < generationSize; i++ {
-		strategies[i] = random_util.CreateRandomStrategy(i, generationId, randConf)
+		strategy := random_util.CreateRandomStrategy(i, generationId, randConf)
+		strategies[i] = strategy
 	}
 	return newGeneration(generationId, strategies)
 }

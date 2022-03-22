@@ -67,9 +67,8 @@ func (st *StrategyTester) testSingleCandleStream(stream *candlestream.CandleStre
 		lastCandle := streamSlice.Get(window - 1)
 		ordersLost, ordersWon := broker.ScanOrders(lastCandle.Get("low"), lastCandle.Get("high"))
 
-		closeTime := int(lastCandle.Get("mts"))
-		broker.CloseOrders(closeTime, st.strategy, ordersLost, false)
-		broker.CloseOrders(closeTime, st.strategy, ordersWon, true)
+		broker.CloseOrders(st.strategy, ordersLost, false)
+		broker.CloseOrders(st.strategy, ordersWon, true)
 
 		if st.strategy.MeetsConditions(streamSlice) {
 			order := b.MakeOrderFromCandleAndStrategy(ticker, st.strategy, lastCandle)

@@ -45,15 +45,13 @@ func initLoggers() {
 
 	multiWriter := io.MultiWriter(logsFile, os.Stdout)
 
-	logsLogger := log.New(multiWriter, "", 0)
 	ordersLogger := log.New(ordersFile, "", 0)
 	strategiesLogger := log.New(strategiesFile, "", 0)
 	resultsLogger := log.New(resultsFile, "", 0)
-	infoLogger := log.New(os.Stdout, "", 0)
+	infoLogger := log.New(multiWriter, "", 0)
 	errorLogger := log.New(os.Stderr, "", 0)
 
 	logger = &Logger{}
-	logger.Logs = logsLogger
 	logger.Strategies = strategiesLogger
 	logger.Results = resultsLogger
 	logger.Info = infoLogger

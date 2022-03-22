@@ -61,8 +61,8 @@ func TestScanningOrders(t *testing.T) {
 	broker := getSampleBroker()
 	ordersLost, ordersWon := broker.ScanOrders(5, 5.5)
 
-	broker.CloseLossOrders(0, strategy, ordersLost)
-	broker.CloseWinOrders(0, strategy, ordersWon)
+	broker.CloseLossOrders(strategy, ordersLost)
+	broker.CloseWinOrders(strategy, ordersWon)
 
 	results := broker.ScanResults()
 	if results.Losses() != 3 || results.Wins() != 3 {
