@@ -75,5 +75,4 @@ func main() {
 }
 
 // TODO:
-// 1. Add broker logs as an option.
 // 2. Log all strategies.
