@@ -79,6 +79,3 @@ func main() {
 	}
 	l.ZipLogs("test_data/test.zip")
 }
-
-// TODO:
-// 2. Log all strategies.
