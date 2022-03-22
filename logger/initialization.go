@@ -37,6 +37,8 @@ func InitLoggers(shouldLogOrders bool) {
 	logger.Results = resultsLogger
 	logger.Info = infoLogger
 	logger.Error = errorLogger
+
+	logger.Results.Println("generation,id,conditionCount,wins,losses,winRate,takeProfit,stopLoss,Score")
 }
 
 func EnableOrdersLogs() {

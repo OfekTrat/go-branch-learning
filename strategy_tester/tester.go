@@ -44,7 +44,7 @@ func (st *StrategyTester) Test(streams []*candlestream.CandleStream) {
 	st.results.CalcScore()
 
 	logger.Results.Printf(
-		"generation=%d, strategyId=%d, conditionCount=%d, wins=%d, losses=%d, winRate=%f, takeProfit=%f, stopLoss=%f, Score=%f\n",
+		"%d,%d,%d,%d,%d,%f,%f,%f,%f\n",
 		st.strategy.Generation(),
 		st.strategy.Id(),
 		st.results.ConditionCount,
