@@ -38,18 +38,20 @@ func createNextGenerationFromTestResults(generationId int, generationTestResults
 	for i := 0; i < oldSize; i++ {
 		chance := generateChance(maxChance)
 		strategy := generationTestResults.GetStrategyByChance(chance)
-		newStrategies[pos] = st.CreateStrategyFromOtherStrategy(pos, generationId, strategy)
+		newStrategy := st.CreateStrategyFromOtherStrategy(pos, generationId, strategy)
+		newStrategies[pos] = newStrategy
 		pos++
 
-		logger.Strategies.Println(strategy.ToJsonString())
+		logger.Strategies.Println(newStrategy.ToJsonString())
 	}
 	for i := 0; i < mutateSize; i++ {
 		chance := generateChance(maxChance)
 		strategy := generationTestResults.GetStrategyByChance(chance)
-		newStrategies[pos] = mutator.MutateStrategy(pos, generationId, strategy)
+		newStrategy := mutator.MutateStrategy(pos, generationId, strategy)
+		newStrategies[pos] = newStrategy
 		pos++
 
-		logger.Strategies.Println(strategy.ToJsonString())
+		logger.Strategies.Println(newStrategy.ToJsonString())
 	}
 	for i := 0; i < reproducedSize; i++ {
 		chance1 := generateChance(maxChance)

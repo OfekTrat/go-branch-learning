@@ -25,11 +25,14 @@ func (trainer *StrategyTrainer) Train(streams []*candlestream.CandleStream) {
 
 	generation := createRandomGeneration(0, trainer.EvolutionConfiguration.GenerationSize, trainer.RandomConfiguration)
 
-	for epoch := 1; epoch <= trainer.EvolutionConfiguration.Epochs; epoch++ {
+	for epoch := 0; epoch <= trainer.EvolutionConfiguration.Epochs-1; epoch++ {
 		logger.Info.Printf("----------- START Generation %d -----------\n", epoch)
 
 		testResults := generation.test(streams)
-		generation = createNextGenerationFromTestResults(epoch, testResults, trainer.EvolutionConfiguration, trainer.RandomConfiguration)
+
+		if epoch != trainer.EvolutionConfiguration.Epochs-1 {
+			generation = createNextGenerationFromTestResults(epoch+1, testResults, trainer.EvolutionConfiguration, trainer.RandomConfiguration)
+		}
 
 		logger.Info.Printf("----------- END Generation %d -----------\n", epoch)
 	}
