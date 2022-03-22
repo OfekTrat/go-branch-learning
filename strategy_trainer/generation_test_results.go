@@ -69,7 +69,7 @@ func orderStrategyTestersByScore(testers []*tester.StrategyTester) []*tester.Str
 }
 
 func (gtr *generationTestResults) GetStrategyByChance(chance float64) *st.Strategy {
-	return gtr.tree.getStrategyTesterByChance(chance).Strategy()
+	return gtr.tree.GetStrategyTesterByChance(chance).Strategy()
 }
 
 func (gtr *generationTestResults) GetMaxChance() float64 {

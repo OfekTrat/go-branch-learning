@@ -47,7 +47,7 @@ func calcChancesFromOrderedStrategyTesters(orderedTesters []*tester.StrategyTest
 	return chances
 }
 
-func (ct *chanceTree) getStrategyTesterByChance(chance float64) *tester.StrategyTester {
+func (ct *chanceTree) GetStrategyTesterByChance(chance float64) *tester.StrategyTester {
 	if ct.chance == chance || (ct.higherChance == nil && ct.lowerChance == nil) {
 		return ct.strategyTester
 
@@ -58,8 +58,8 @@ func (ct *chanceTree) getStrategyTesterByChance(chance float64) *tester.Strategy
 	}
 
 	if ct.chance < chance && ct.higherChance.chance < chance {
-		return ct.higherChance.getStrategyTesterByChance(chance)
+		return ct.higherChance.GetStrategyTesterByChance(chance)
 	} else { // ct.chance > chance (last scenario)
-		return ct.lowerChance.getStrategyTesterByChance(chance)
+		return ct.lowerChance.GetStrategyTesterByChance(chance)
 	}
 }
