@@ -13,8 +13,8 @@ var (
 		CreateRandomIndicatorCondition,
 		CreateRandomIndicatorComparisonCondition,
 	}
-	possibleIndicatorsForIndicatorCondition        = []string{"macd", "rsi"}
-	possibleIndicatorsForIndicatorCompareCondition = []string{"macd", "rsi", "volume"}
+	possibleIndicatorsForIndicatorCondition        = []string{"macd", "rsi", "ao", "apo", "bias", "bop", "entropy", "kurtosis", "zscore", "adx", "amat_lr", "amat_sr", "aroon_osc", "chop", "decreasing", "increasing"}
+	possibleIndicatorsForIndicatorCompareCondition = []string{"macd", "rsi", "volume", "ao", "apo", "bias", "bop", "entropy", "kurtosis", "zscore", "adx", "amat_lr", "amat_sr", "aroon_osc", "chop", "decreasing", "increasing"}
 	greaterThanOptions                             = []bool{true, false}
 )
 
@@ -73,6 +73,34 @@ func getRandomIndicatorValueByIndicator(indicator string) float64 {
 		return (rand.Float64() - 0.5) * 10
 	case "rsi":
 		return rand.Float64() * 100
+	case "ao":
+		return (rand.Float64() - 0.5) * 4000
+	case "apo":
+		return (rand.Float64() - 0.5) * 4000
+	case "bias":
+		return (rand.Float64() - 0.5) * 0.5
+	case "bop":
+		return (rand.Float64() - 0.5) * 2
+	case "entropy":
+		return rand.Float64() + 3
+	case "kurtosis":
+		return rand.Float64()*22 - 2
+	case "zscore":
+		return (rand.Float64() - 0.5) * 10
+	case "adx":
+		return rand.Float64() * 100
+	case "amat_lr":
+		return rand.Float64()
+	case "amat_sr":
+		return rand.Float64()
+	case "aroon_osc":
+		return (rand.Float64() - 0.5) * 200
+	case "chop":
+		return rand.Float64() * 100
+	case "decreasing":
+		return rand.Float64()
+	case "increasing":
+		return rand.Float64()
 	default:
 		return 0
 	}
