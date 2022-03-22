@@ -9,9 +9,9 @@ import (
 )
 
 type TestConfiguration struct {
-	DataPath string           `yaml:"data_path"`
-	Strategy string           `yaml:"strategy"`
-	LogConf  LogConfiguration `yaml:"log"`
+	DataPath        string `yaml:"data_path"`
+	Strategy        string `yaml:"strategy"`
+	ShouldLogOrders bool   `yaml:"should_log_orders"`
 }
 
 func ParseTestConfiguration(confFileName string) *TestConfiguration {

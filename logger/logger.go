@@ -18,12 +18,12 @@ const (
 )
 
 type Logger struct {
-	Logs       *log.Logger
-	Orders     *log.Logger
-	Strategies *log.Logger
-	Results    *log.Logger
-	Info       *log.Logger
-	Error      *log.Logger
+	shouldLogOrders bool
+	orders          *log.Logger
+	Strategies      *log.Logger
+	Results         *log.Logger
+	Info            *log.Logger
+	Error           *log.Logger
 }
 
 var logger *Logger
@@ -33,19 +33,18 @@ var strategiesFile *os.File
 var resultsFile *os.File
 
 func init() {
-	initLoggers()
+	// Default behavior is not to log orders
+	InitLoggers(false)
 }
 
-func initLoggers() {
+func InitLoggers(shouldLogOrders bool) {
 	makeDir(TMP_DIR_PATH)
 	logsFile = createFilePanicError(LOGS_FILE)
-	ordersFile = createFilePanicError(ORDERS_FILE)
 	strategiesFile = createFilePanicError(STRATEGIES_FILE)
 	resultsFile = createFilePanicError(RESULTS_FILE)
 
 	multiWriter := io.MultiWriter(logsFile, os.Stdout)
 
-	ordersLogger := log.New(ordersFile, "", 0)
 	strategiesLogger := log.New(strategiesFile, "", 0)
 	resultsLogger := log.New(resultsFile, "", 0)
 	infoLogger := log.New(multiWriter, "", 0)
@@ -56,9 +55,20 @@ func initLoggers() {
 	logger.Results = resultsLogger
 	logger.Info = infoLogger
 	logger.Error = errorLogger
-	logger.Orders = ordersLogger
+}
 
-	logger.Orders.Println("ticker,time,generation,strategy,type,price")
+func (l *Logger) LogOrder(message string, params ...interface{}) {
+	if l.shouldLogOrders && l.orders != nil {
+		l.orders.Printf(message, params...)
+	}
+}
+
+func EnableOrdersLogs() {
+	logger.shouldLogOrders = true
+	ordersFile = createFilePanicError(ORDERS_FILE)
+	ordersLogger := log.New(ordersFile, "", 0)
+	logger.orders = ordersLogger
+	logger.LogOrder("ticker,time,generation,strategy,type,price\n")
 }
 
 func makeDir(path string) {
@@ -82,8 +92,9 @@ func CreateLogger() *Logger {
 	if logger != nil {
 		return logger
 	}
-	initLoggers()
-	return logger
+	fmt.Println("Logger is not initialized")
+	os.Exit(1)
+	return nil
 }
 
 func ZipLogs(path string) {
@@ -138,9 +149,12 @@ func ZipLogs(path string) {
 
 func closeFiles() {
 	closeFile(logsFile)
-	closeFile(ordersFile)
 	closeFile(strategiesFile)
 	closeFile(resultsFile)
+
+	if logger.shouldLogOrders {
+		closeFile(ordersFile)
+	}
 }
 
 func closeFile(file *os.File) {

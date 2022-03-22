@@ -23,7 +23,7 @@ import (
 var isTrain bool
 var trainConfiguration *configuration.TrainConfiguration
 var testConfiguration *configuration.TestConfiguration
-var logConfiguration *configuration.LogConfiguration
+var shouldLogOrders bool
 
 func init() {
 	var configFile string
@@ -36,14 +36,18 @@ func init() {
 	case "train":
 		isTrain = true
 		trainConfiguration = configuration.ParseTrainConfiguration(configFile)
-		logConfiguration = &trainConfiguration.LogConf
+		shouldLogOrders = trainConfiguration.ShouldLogOrders
 	case "test":
 		isTrain = false
 		testConfiguration = configuration.ParseTestConfiguration(configFile)
-		logConfiguration = &testConfiguration.LogConf
+		shouldLogOrders = testConfiguration.ShouldLogOrders
 	default:
 		fmt.Println("Wrong command type")
 		os.Exit(1)
+	}
+
+	if shouldLogOrders {
+		l.EnableOrdersLogs()
 	}
 }
 
@@ -52,13 +56,10 @@ func main() {
 
 	if isTrain {
 		logger.Info.Printf(
-			"Starting To Train\nEpochs: %d\nGeneration Size: %d\nData: %s\n\nLogs Information\nLogs File: %s\nStrategies File: %s\nResults File: %s\n\n",
+			"Starting To Train\nEpochs: %d\nGeneration Size: %d\nData: %s\n\n",
 			trainConfiguration.EvolutionConf.Epochs,
 			trainConfiguration.EvolutionConf.GenerationSize,
 			trainConfiguration.DataPath,
-			trainConfiguration.LogConf.LogsFile,
-			trainConfiguration.LogConf.StrategiesFile,
-			trainConfiguration.LogConf.ResultsFile,
 		)
 		trainer := t.CreateStrategyTrainer(trainConfiguration)
 		data := candlestream.GetStreamsFromPath(trainConfiguration.DataPath)
@@ -74,6 +75,5 @@ func main() {
 }
 
 // TODO:
-// 1. Add more logs in relevant places.
-// 2. Add zipping of in the end of the program, so that there won't be much data stored.
-// 3. Find more stuff to do
+// 1. Add broker logs as an option.
+// 2. Log all strategies.

@@ -9,10 +9,10 @@ import (
 )
 
 type TrainConfiguration struct {
-	DataPath      string                 `yaml:"data"`
-	LogConf       LogConfiguration       `yaml:"log"`
-	EvolutionConf EvolutionConfiguration `yaml:"evolution"`
-	RandomConf    RandomConfiguration    `yaml:"random"`
+	DataPath        string                 `yaml:"data"`
+	ShouldLogOrders bool                   `yaml:"should_log_orders"`
+	EvolutionConf   EvolutionConfiguration `yaml:"evolution"`
+	RandomConf      RandomConfiguration    `yaml:"random"`
 }
 
 func ParseTrainConfiguration(confFileName string) *TrainConfiguration {

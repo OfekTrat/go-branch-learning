@@ -73,7 +73,7 @@ func (broker *Broker) CloseOrders(strategy *s.Strategy, orders []Order, isWin bo
 		if !broker.isOrderClosed(ord) {
 			broker.closeOrder(ord, isWin)
 
-			logger.Orders.Printf("%s,%d,%d,%d,%d,%f\n", ord.ticker, ord.Time(), strategy.Generation(), strategy.Id(), 1, ord.stopLoss)
+			logger.LogOrder("%s,%d,%d,%d,%d,%f\n", ord.ticker, ord.Time(), strategy.Generation(), strategy.Id(), 1, ord.stopLoss)
 		}
 	}
 }

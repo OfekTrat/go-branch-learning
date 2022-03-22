@@ -74,7 +74,7 @@ func (st *StrategyTester) testSingleCandleStream(stream *candlestream.CandleStre
 			order := b.MakeOrderFromCandleAndStrategy(ticker, st.strategy, lastCandle)
 			broker.AddOrder(order)
 
-			logger.Orders.Printf(
+			logger.LogOrder(
 				"%s,%d,%d,%d,%d,%f\n",
 				order.Ticker(),
 				order.Time(),
