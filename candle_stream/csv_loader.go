@@ -3,12 +3,14 @@ package candlestream
 import (
 	candle "branch_learning/candle"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
 
 func LoadCandleStreamFromCsv(csvpath string) *CandleStream {
 	candleList := []candle.Candle{}
+	filename := strings.TrimSuffix(filepath.Base(csvpath), ".csv")
 	fileData, err := os.ReadFile(csvpath)
 
 	if err != nil {
@@ -30,18 +32,18 @@ func LoadCandleStreamFromCsv(csvpath string) *CandleStream {
 		}
 		candleList = append(candleList, c)
 	}
-	return CreateCandleStream(candleList)
+	return CreateCandleStream(filename, candleList)
 }
 
 func createCandleFromLines(headers []string, line []string) (candle.Candle, error) {
-	candleMap := make(map[string]float32)
+	candleMap := make(map[string]float64)
 
 	for i := 0; i < len(headers); i++ {
-		val, err := strconv.ParseFloat(line[i], 32)
+		val, err := strconv.ParseFloat(line[i], 64)
 		if err != nil {
 			return candle.Candle{}, err
 		}
-		candleMap[headers[i]] = float32(val)
+		candleMap[headers[i]] = val
 	}
 	return candle.CreateCandle(candleMap), nil
 }

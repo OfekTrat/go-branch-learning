@@ -1,11 +1,20 @@
 package broker
 
+import (
+	l "branch_learning/logger"
+	s "branch_learning/strategy"
+)
+
 type Broker struct {
 	exitStopLossTree   *exitNode
 	exitTakeProfitTree *exitNode
 	results            *AccountStats
 	orders             map[int]bool // map[TimeOfOrder]IsClosed
 }
+
+var logger *l.Logger = l.CreateLogger()
+
+const TIME_FORMAT = "2006-01-02 15:04:05"
 
 func CreateBroker() *Broker {
 	broker := &Broker{}
@@ -33,29 +42,38 @@ func (broker *Broker) AddOrder(ord Order) {
 	}
 }
 
-func (broker *Broker) ScanOrders(lowPrice, highPrice float32) {
-	broker.updateStopLossExits(lowPrice)
-	broker.updateTakeProfitExits(highPrice)
+func (broker *Broker) ScanOrders(lowPrice, highPrice float64) ([]Order, []Order) {
+	ordersLost := broker.updateStopLossExits(lowPrice)
+	ordersWon := broker.updateTakeProfitExits(highPrice)
+	return ordersLost, ordersWon
 }
 
-func (broker *Broker) updateStopLossExits(lowPrice float32) {
+func (broker *Broker) updateStopLossExits(lowPrice float64) []Order {
 	newStopLoss, orders := broker.exitStopLossTree.GetStopLossExits(lowPrice)
 	broker.exitStopLossTree = newStopLoss
-	for _, ord := range orders {
-		if !broker.isOrderClosed(ord) {
-			broker.closeOrder(ord, false)
-		}
-	}
-
+	return orders
 }
 
-func (broker *Broker) updateTakeProfitExits(highPrice float32) {
+func (broker *Broker) updateTakeProfitExits(highPrice float64) []Order {
 	newHead, orders := broker.exitTakeProfitTree.GetTakeProfitExits(highPrice)
 	broker.exitTakeProfitTree = newHead
+	return orders
+}
 
+func (broker *Broker) CloseWinOrders(strategy *s.Strategy, orders []Order) {
+	broker.CloseOrders(strategy, orders, true)
+}
+
+func (broker *Broker) CloseLossOrders(strategy *s.Strategy, orders []Order) {
+	broker.CloseOrders(strategy, orders, false)
+}
+
+func (broker *Broker) CloseOrders(strategy *s.Strategy, orders []Order, isWin bool) {
 	for _, ord := range orders {
 		if !broker.isOrderClosed(ord) {
-			broker.closeOrder(ord, true)
+			broker.closeOrder(ord, isWin)
+
+			logger.LogOrder("%s,%d,%d,%d,%d,%f\n", ord.ticker, ord.Time(), strategy.Generation(), strategy.Id(), 1, ord.stopLoss)
 		}
 	}
 }

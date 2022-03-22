@@ -13,7 +13,7 @@ type CandleComparisonCondition struct {
 	CandlePart1  string
 	CandleIndex2 int
 	CandlePart2  string
-	Percentage   float32
+	Percentage   float64
 }
 
 func (c CandleComparisonCondition) ConditionType() string {
@@ -38,7 +38,7 @@ func (c CandleComparisonCondition) Mutate(streamsize int) icondition.ICondition 
 	randCandle := rand.Intn(2)
 	randCandlePart := rand.Intn(len(CandleParts))
 	randIndex := rand.Intn(streamsize)
-	randPercentage := (rand.Float32() - 0.5) * 20
+	randPercentage := (rand.Float64() - 0.5) * 20
 
 	if randCandle == 0 {
 		return CandleComparisonCondition{

@@ -6,14 +6,14 @@ import (
 )
 
 type Candle struct {
-	data map[string]float32
+	data map[string]float64
 }
 
-func CreateCandle(candleMap map[string]float32) Candle {
+func CreateCandle(candleMap map[string]float64) Candle {
 	return Candle{candleMap}
 }
 
-func (c *Candle) Get(key string) float32 {
+func (c *Candle) Get(key string) float64 {
 	val, ok := c.data[key]
 	if !ok {
 		fmt.Printf("Missing value of %s\n", key)
