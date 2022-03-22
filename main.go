@@ -14,6 +14,8 @@ import (
 	candlestream "branch_learning/candle_stream"
 	"branch_learning/configuration"
 	l "branch_learning/logger"
+	s "branch_learning/strategy"
+	st "branch_learning/strategy_tester"
 	t "branch_learning/strategy_trainer"
 	"flag"
 	"fmt"
@@ -65,6 +67,10 @@ func main() {
 		data := candlestream.GetStreamsFromPath(trainConfiguration.DataPath)
 		trainer.Train(data)
 	} else {
+		strategy := s.CreateStrategyFromFile(testConfiguration.Strategy)
+		data := candlestream.GetStreamsFromPath(testConfiguration.DataPath)
+		tester := st.NewStrategyTester(strategy)
+		tester.Test(data)
 		logger.Info.Printf(
 			"Testing Strategy\nStrategy %s\nData: %s\n",
 			testConfiguration.Strategy,
