@@ -12,9 +12,7 @@ type generationTestResults struct {
 
 func newGenerationTestResultsFromStrategyTesters(testers []*tester.StrategyTester) *generationTestResults {
 	orderedStrategyTesters := orderStrategyTestersByScore(testers)
-	chances := calcChancesFromOrderedStrategyTesters(testers)
-	tree := createChanceTree(orderedStrategyTesters, chances)
-	maxChance := chances[len(chances)-1]
+	maxChance, tree := createChanceTreeFromTesters(orderedStrategyTesters)
 
 	logger.Info.Println("Calculated Test Results and probabilities for choosing strategy")
 
@@ -74,4 +72,16 @@ func (gtr *generationTestResults) GetStrategyByChance(chance float64) *st.Strate
 
 func (gtr *generationTestResults) GetMaxChance() float64 {
 	return gtr.maxChance
+}
+
+func (gtr *generationTestResults) GetNBestStrategy(n int) []*st.Strategy {
+	testers := make([]*st.Strategy, n)
+	chance := gtr.maxChance
+
+	for i := 0; i < n; i++ {
+		strategyTester := gtr.tree.GetStrategyTesterByChance(chance)
+		testers[i] = strategyTester.Strategy()
+		chance -= strategyTester.Results().Score
+	}
+	return testers
 }

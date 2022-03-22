@@ -35,9 +35,9 @@ func createNextGenerationFromTestResults(generationId int, generationTestResults
 
 	validateSizes(evoConf.GenerationSize, oldSize, mutateSize, reproducedSize, randomSize)
 
+	oldStrategies := generationTestResults.GetNBestStrategy(oldSize)
 	for i := 0; i < oldSize; i++ {
-		chance := generateChance(maxChance)
-		strategy := generationTestResults.GetStrategyByChance(chance)
+		strategy := oldStrategies[i]
 		newStrategy := st.CreateStrategyFromOtherStrategy(pos, generationId, strategy)
 		newStrategies[pos] = newStrategy
 		pos++
