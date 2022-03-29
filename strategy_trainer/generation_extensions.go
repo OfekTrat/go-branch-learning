@@ -3,17 +3,16 @@ package strategytrainer
 import (
 	mutator "branch_learning/alternators/mutator"
 	reproducer "branch_learning/alternators/reproducer"
-	"branch_learning/configuration"
 	st "branch_learning/strategy"
 	random_util "branch_learning/utils/random"
 	"math/rand"
 )
 
-func createRandomGeneration(generationId, generationSize int, randConf *configuration.RandomConfiguration) *generation {
+func createRandomGeneration(generationId, generationSize int) *generation {
 	strategies := make([]*st.Strategy, generationSize)
 
 	for i := 0; i < generationSize; i++ {
-		strategy := random_util.CreateRandomStrategy(i, generationId, randConf)
+		strategy := random_util.CreateRandomStrategy(i, generationId)
 		strategies[i] = strategy
 
 		logger.Strategies.Println(strategy.ToJsonString())
@@ -21,19 +20,19 @@ func createRandomGeneration(generationId, generationSize int, randConf *configur
 	return newGeneration(generationId, strategies)
 }
 
-func createNextGenerationFromTestResults(generationId int, generationTestResults *generationTestResults, evoConf *configuration.EvolutionConfiguration, randConf *configuration.RandomConfiguration) *generation {
+func createNextGenerationFromTestResults(generationId int, generationTestResults *generationTestResults) *generation {
 	logger.Info.Printf("Start creating generation %d using test results\n", generationId)
 	maxChance := generationTestResults.maxChance + 1
-	newStrategies := make([]*st.Strategy, evoConf.GenerationSize)
+	newStrategies := make([]*st.Strategy, configuration.GenerationSize())
 	pos := 0
 
 	// Size of the pieces that make up new generation.
-	oldSize := int(evoConf.OldPercentage * float32(evoConf.GenerationSize))
-	mutateSize := int(evoConf.MutatePercentage * float32(evoConf.GenerationSize))
-	reproducedSize := int(evoConf.ReproducedPercentage * float32(evoConf.GenerationSize))
-	randomSize := evoConf.GenerationSize - oldSize - mutateSize - reproducedSize
+	oldSize := int(configuration.OldPercentage() * float32(configuration.GenerationSize()))
+	mutateSize := int(configuration.MutatePercentage() * float32(configuration.GenerationSize()))
+	reproducedSize := int(configuration.ReproducedPercentage() * float32(configuration.GenerationSize()))
+	randomSize := configuration.GenerationSize() - oldSize - mutateSize - reproducedSize
 
-	validateSizes(evoConf.GenerationSize, oldSize, mutateSize, reproducedSize, randomSize)
+	validateSizes(configuration.GenerationSize(), oldSize, mutateSize, reproducedSize, randomSize)
 
 	oldStrategies := generationTestResults.GetNBestStrategy(oldSize)
 	for i := 0; i < oldSize; i++ {
@@ -66,7 +65,7 @@ func createNextGenerationFromTestResults(generationId int, generationTestResults
 		logger.Strategies.Println(newStrategy.ToJsonString())
 	}
 	for i := 0; i < randomSize; i++ {
-		strategy := random_util.CreateRandomStrategy(pos, generationId, randConf)
+		strategy := random_util.CreateRandomStrategy(pos, generationId)
 		newStrategies[pos] = strategy
 		pos++
 

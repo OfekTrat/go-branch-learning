@@ -2,16 +2,18 @@ package random
 
 import (
 	"branch_learning/condition"
-	"branch_learning/configuration"
+	c "branch_learning/configuration"
 	st "branch_learning/strategy"
 	"math/rand"
 )
 
-func CreateRandomStrategy(id, generation int, config *configuration.RandomConfiguration) *st.Strategy {
-	windowSize := getRandomInt(config.WindowMin, config.WindowMax)
-	takeProfit := getRandomFloat64(1.0, config.TakeProfitMax)
-	stopLoss := getRandomFloat64(config.StopLossMin, 1.0)
-	nConditions := getRandomInt(config.ConditionNumberMin, config.ConditionNumberMax)
+var configuration *c.Configuration = c.GetConfiguration()
+
+func CreateRandomStrategy(id, generation int) *st.Strategy {
+	windowSize := getRandomInt(configuration.WindowMin(), configuration.WindowMax())
+	takeProfit := getRandomFloat64(1.0, configuration.TakeProfitMax())
+	stopLoss := getRandomFloat64(configuration.StopLossMin(), 1.0)
+	nConditions := getRandomInt(configuration.ConditionNumberMin(), configuration.ConditionNumberMax())
 
 	randConditions := getRandomConditions(nConditions, windowSize)
 	return st.CreateStrategy(id, generation, windowSize, takeProfit, stopLoss, randConditions)

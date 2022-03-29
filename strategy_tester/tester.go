@@ -3,12 +3,13 @@ package strategytester
 import (
 	b "branch_learning/broker"
 	candlestream "branch_learning/candle_stream"
-	"branch_learning/configuration"
+	c "branch_learning/configuration"
 	l "branch_learning/logger"
 	st "branch_learning/strategy"
 )
 
 var logger *l.Logger = l.CreateLogger()
+var configuration *c.Configuration = c.GetConfiguration()
 
 const TIME_FORMAT = "2006-01-02 15:04:05"
 
@@ -22,8 +23,8 @@ func NewStrategyTester(strategy *st.Strategy) *StrategyTester {
 	return &StrategyTester{strategy: strategy, results: results}
 }
 
-func NewStrategyFromConfiguration(testConfiguration configuration.TestConfiguration) *StrategyTester {
-	strategy := st.CreateStrategyFromFile(testConfiguration.Strategy)
+func NewStrategyFromConfiguration() *StrategyTester {
+	strategy := st.CreateStrategyFromFile(configuration.Strategy())
 	results := CreateTestResultsFromStrategy(strategy)
 	return &StrategyTester{strategy: strategy, results: results}
 }
