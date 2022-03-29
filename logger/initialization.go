@@ -41,14 +41,6 @@ func InitLoggers(shouldLogOrders bool) {
 	logger.Results.Println("generation,id,conditionCount,wins,losses,winRate,takeProfit,stopLoss,Score")
 }
 
-func EnableOrdersLogs() {
-	logger.shouldLogOrders = true
-	ordersFile = createFilePanicError(ORDERS_FILE)
-	ordersLogger := log.New(ordersFile, "", 0)
-	logger.orders = ordersLogger
-	logger.LogOrder("ticker,time,generation,strategy,type,price\n")
-}
-
 func makeDir(path string) {
 	err := os.Mkdir(path, 0755)
 	if err != nil {

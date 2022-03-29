@@ -2,36 +2,58 @@ package strategytrainer
 
 import (
 	candlestream "branch_learning/candle_stream"
-	"branch_learning/configuration"
+	c "branch_learning/configuration"
 	l "branch_learning/logger"
 )
 
 var logger *l.Logger = l.CreateLogger()
+var configuration *c.Configuration = c.GetConfiguration()
 
 type StrategyTrainer struct {
-	*configuration.EvolutionConfiguration
-	*configuration.RandomConfiguration
+	generationSize       int
+	epochs               int
+	oldPercentage        float32
+	mutatePercentage     float32
+	reproducedPercentage float32
+	randomPercentage     float32
+
+	windowMin          int
+	windowMax          int
+	stopLossMin        float64
+	takeProfitMax      float64
+	conditionNumberMin int
+	conditionNumberMax int
 }
 
-func CreateStrategyTrainer(trainConf *configuration.TrainConfiguration) *StrategyTrainer {
+func CreateStrategyTrainer() *StrategyTrainer {
 	return &StrategyTrainer{
-		EvolutionConfiguration: &trainConf.EvolutionConf,
-		RandomConfiguration:    &trainConf.RandomConf,
+		generationSize:       configuration.GenerationSize(),
+		epochs:               configuration.Epochs(),
+		oldPercentage:        configuration.OldPercentage(),
+		mutatePercentage:     configuration.MutatePercentage(),
+		reproducedPercentage: configuration.ReproducedPercentage(),
+		randomPercentage:     configuration.RandomPercentage(),
+		windowMin:            configuration.WindowMin(),
+		windowMax:            configuration.WindowMax(),
+		stopLossMin:          configuration.StopLossMin(),
+		takeProfitMax:        configuration.TakeProfitMax(),
+		conditionNumberMin:   configuration.ConditionNumberMin(),
+		conditionNumberMax:   configuration.ConditionNumberMax(),
 	}
 }
 
 func (trainer *StrategyTrainer) Train(streams []*candlestream.CandleStream) {
 	logger.Info.Println("Train - Started training")
 
-	generation := createRandomGeneration(0, trainer.EvolutionConfiguration.GenerationSize, trainer.RandomConfiguration)
+	generation := createRandomGeneration(0, trainer.generationSize)
 
-	for epoch := 0; epoch <= trainer.EvolutionConfiguration.Epochs-1; epoch++ {
+	for epoch := 0; epoch <= trainer.epochs-1; epoch++ {
 		logger.Info.Printf("----------- START Generation %d -----------\n", epoch)
 
 		testResults := generation.test(streams)
 		logBestScore(testResults)
-		if epoch != trainer.EvolutionConfiguration.Epochs-1 {
-			generation = createNextGenerationFromTestResults(epoch+1, testResults, trainer.EvolutionConfiguration, trainer.RandomConfiguration)
+		if epoch != trainer.epochs-1 {
+			generation = createNextGenerationFromTestResults(epoch+1, testResults)
 		}
 
 		logger.Info.Printf("----------- END Generation %d -----------\n", epoch)

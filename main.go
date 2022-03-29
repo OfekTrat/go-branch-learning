@@ -12,7 +12,7 @@ package main
 
 import (
 	candlestream "branch_learning/candle_stream"
-	"branch_learning/configuration"
+	c "branch_learning/configuration"
 	l "branch_learning/logger"
 	s "branch_learning/strategy"
 	st "branch_learning/strategy_tester"
@@ -26,59 +26,47 @@ import (
 )
 
 var isTrain bool
-var trainConfiguration *configuration.TrainConfiguration
-var testConfiguration *configuration.TestConfiguration
-var shouldLogOrders bool
+var configuration *c.Configuration = c.GetConfiguration()
 
 func init() {
-	var configFile string
-	flag.StringVar(&configFile, "file", "", "Yaml Configuration file")
-	flag.Parse()
-
 	command := flag.Arg(0)
-
+	fmt.Println(configuration)
 	switch command {
 	case "train":
 		isTrain = true
-		trainConfiguration = configuration.ParseTrainConfiguration(configFile)
-		shouldLogOrders = trainConfiguration.ShouldLogOrders
 	case "test":
 		isTrain = false
-		testConfiguration = configuration.ParseTestConfiguration(configFile)
-		shouldLogOrders = testConfiguration.ShouldLogOrders
 	default:
 		fmt.Println("Wrong command type")
 		os.Exit(1)
-	}
-
-	if shouldLogOrders {
-		l.EnableOrdersLogs()
 	}
 	rand.Seed(time.Now().UnixNano())
 }
 
 func main() {
 	logger := l.CreateLogger()
+	dataPath := configuration.Data()
 
 	if isTrain {
 		logger.Info.Printf(
 			"Starting To Train\nEpochs: %d\nGeneration Size: %d\nData: %s\n\n",
-			trainConfiguration.EvolutionConf.Epochs,
-			trainConfiguration.EvolutionConf.GenerationSize,
-			trainConfiguration.DataPath,
+			configuration.Epochs(),
+			configuration.GenerationSize(),
+			dataPath,
 		)
-		trainer := t.CreateStrategyTrainer(trainConfiguration)
-		data := candlestream.GetStreamsFromPath(trainConfiguration.DataPath)
+		trainer := t.CreateStrategyTrainer()
+		data := candlestream.GetStreamsFromPath(dataPath)
 		trainer.Train(data)
 	} else {
-		strategy := s.CreateStrategyFromFile(testConfiguration.Strategy)
-		data := candlestream.GetStreamsFromPath(testConfiguration.DataPath)
+		strategyPath := configuration.Strategy()
+		strategy := s.CreateStrategyFromFile(strategyPath)
+		data := candlestream.GetStreamsFromPath(dataPath)
 		tester := st.NewStrategyTester(strategy)
 		tester.Test(data)
 		logger.Info.Printf(
 			"Testing Strategy\nStrategy %s\nData: %s\n",
-			testConfiguration.Strategy,
-			testConfiguration.DataPath,
+			configuration.Strategy(),
+			dataPath,
 		)
 	}
 
@@ -97,3 +85,7 @@ func createTimeFilename() string {
 
 	return filename + ".zip"
 }
+
+// TODO:
+// 2. Make score relate to the number of the candles (think of a way that large number is not different
+//    then pretty small since the win rate is caluclated, but low number of orders is problematic (win=1, losses=0 --> win rate = 100% which is not good)
