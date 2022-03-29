@@ -87,6 +87,5 @@ func createTimeFilename() string {
 }
 
 // TODO:
-// 1. Add configuration like logger: global, only one, can be accessed from other files.
 // 2. Make score relate to the number of the candles (think of a way that large number is not different
 //    then pretty small since the win rate is caluclated, but low number of orders is problematic (win=1, losses=0 --> win rate = 100% which is not good)
