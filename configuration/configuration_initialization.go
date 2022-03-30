@@ -129,7 +129,7 @@ func parseYamlConfiguration(filename string) {
 	configuration.conditionNumberMax = getFirstOrDefaultInt(parsedConfiguration["condition_number_max"], configuration.conditionNumberMax)
 	configuration.sumOrdersThreshold = getFirstOrDefaultInt(parsedConfiguration["sum_orders_threshold"], configuration.sumOrdersThreshold)
 	configuration.conditionCountThreshold = getFirstOrDefaultInt(parsedConfiguration["condition_count_threshold"], configuration.conditionCountThreshold)
-	configuration.conditionCountSlope = getFirstOrDefaultFloat64(parsedConfiguration["condition_count_threshold"], configuration.conditionCountSlope)
+	configuration.conditionCountSlope = getFirstOrDefaultFloat64(parsedConfiguration["condition_count_slope"], configuration.conditionCountSlope)
 }
 
 func getFirstOrDefaultString(value interface{}, defaultValue string) string {
