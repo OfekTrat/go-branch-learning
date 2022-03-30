@@ -12,18 +12,21 @@ import (
 var configuration *Configuration
 
 const (
-	GENERATION_SIZE       = 100
-	EPOCHS                = 100
-	OLD_PERCENTAGE        = 0.05
-	MUTATE_PERCENTAGE     = 0.35
-	REPRODUCED_PERCENTAGE = 0.35
-	RANDOM_PERCENTAGE     = 0.25
-	WINDOW_MIN            = 10
-	WINDOW_MAX            = 30
-	STOPLOSS_MIN          = 1.5
-	TAKE_PROFIT_MAX       = 1.5
-	CONDITION_NUMBER_MIN  = 3
-	CONDITION_NUMBER_MAX  = 10
+	GENERATION_SIZE           = 100
+	EPOCHS                    = 100
+	OLD_PERCENTAGE            = 0.05
+	MUTATE_PERCENTAGE         = 0.35
+	REPRODUCED_PERCENTAGE     = 0.35
+	RANDOM_PERCENTAGE         = 0.25
+	WINDOW_MIN                = 10
+	WINDOW_MAX                = 30
+	STOPLOSS_MIN              = 1.5
+	TAKE_PROFIT_MAX           = 1.5
+	CONDITION_NUMBER_MIN      = 3
+	CONDITION_NUMBER_MAX      = 10
+	SUM_ORDERS_THRESHOLD      = 100
+	CONDITION_COUNT_THRESHOLD = 100
+	CONDITION_COUNT_SLOPE     = -0.02
 )
 
 func init() {
@@ -43,6 +46,9 @@ func init() {
 	var takeProfitMax float64
 	var conditionNumberMin int
 	var conditionNumberMax int
+	var sumOrdersThreshold int
+	var conditionCountThreshold int
+	var conditionCountSlope float64
 
 	flag.StringVar(&configFile, "f", "", "Yaml configuration file")
 	flag.StringVar(&data, "d", "", "Data Path")
@@ -60,24 +66,30 @@ func init() {
 	flag.Float64Var(&takeProfitMax, "takeprofit", TAKE_PROFIT_MAX, "The maximum takeprofit a random strategy will start with")
 	flag.IntVar(&conditionNumberMin, "condition-number-min", CONDITION_NUMBER_MIN, "Minimum condition number")
 	flag.IntVar(&conditionNumberMax, "condition-number-max", CONDITION_NUMBER_MAX, "Maximum condition number")
+	flag.IntVar(&sumOrdersThreshold, "sum-orders-threshold", SUM_ORDERS_THRESHOLD, "Threshold of sum orders score")
+	flag.IntVar(&conditionCountThreshold, "condition-count-threshold", CONDITION_COUNT_THRESHOLD, "Threshold of condition count")
+	flag.Float64Var(&conditionCountSlope, "condition-count-slope", CONDITION_COUNT_SLOPE, "Slope for decreasing condition count weight")
 	flag.Parse()
 
 	configuration = &Configuration{
-		data:                 data,
-		shouldLogOrders:      shouldLogOrders,
-		strategy:             strategy,
-		generationSize:       generationSize,
-		epochs:               epochs,
-		oldPercentage:        float32(oldPercentage),
-		mutatePercentage:     float32(mutatePercentage),
-		reproducedPercentage: float32(reproducedPercentage),
-		randomPercentage:     float32(randomPercentage),
-		windowMin:            windowMin,
-		windowMax:            windowMax,
-		stopLossMin:          stopLossMin,
-		takeProfitMax:        takeProfitMax,
-		conditionNumberMin:   conditionNumberMin,
-		conditionNumberMax:   conditionNumberMax,
+		data:                    data,
+		shouldLogOrders:         shouldLogOrders,
+		strategy:                strategy,
+		generationSize:          generationSize,
+		epochs:                  epochs,
+		oldPercentage:           float32(oldPercentage),
+		mutatePercentage:        float32(mutatePercentage),
+		reproducedPercentage:    float32(reproducedPercentage),
+		randomPercentage:        float32(randomPercentage),
+		windowMin:               windowMin,
+		windowMax:               windowMax,
+		stopLossMin:             stopLossMin,
+		takeProfitMax:           takeProfitMax,
+		conditionNumberMin:      conditionNumberMin,
+		conditionNumberMax:      conditionNumberMax,
+		sumOrdersThreshold:      sumOrdersThreshold,
+		conditionCountThreshold: conditionCountThreshold,
+		conditionCountSlope:     conditionCountSlope,
 	}
 
 	if configFile != "" {
@@ -99,22 +111,25 @@ func parseYamlConfiguration(filename string) {
 	parsedConfiguration := make(map[string]interface{})
 	yaml.Unmarshal(confFile, parsedConfiguration)
 
-	configuration.data = getFirstOrDefaultString(parsedConfiguration["data"], "")
-	configuration.shouldLogOrders = getFirstOrDefaultBool(parsedConfiguration["shouldLogOrders"], false)
-	configuration.strategy = getFirstOrDefaultString(parsedConfiguration["strategy"], "")
+	configuration.data = getFirstOrDefaultString(parsedConfiguration["data"], configuration.data)
+	configuration.shouldLogOrders = getFirstOrDefaultBool(parsedConfiguration["shouldLogOrders"], configuration.shouldLogOrders)
+	configuration.strategy = getFirstOrDefaultString(parsedConfiguration["strategy"], configuration.strategy)
 
-	configuration.generationSize = getFirstOrDefaultInt(parsedConfiguration["generation_size"], GENERATION_SIZE)
-	configuration.epochs = getFirstOrDefaultInt(parsedConfiguration["epochs"], EPOCHS)
-	configuration.oldPercentage = getFirstOrDefaultFloat32(parsedConfiguration["old_percentage"], OLD_PERCENTAGE)
-	configuration.mutatePercentage = getFirstOrDefaultFloat32(parsedConfiguration["mutate_percentage"], MUTATE_PERCENTAGE)
-	configuration.reproducedPercentage = getFirstOrDefaultFloat32(parsedConfiguration["reproduced_percentage"], REPRODUCED_PERCENTAGE)
-	configuration.randomPercentage = getFirstOrDefaultFloat32(parsedConfiguration["random_percentage"], RANDOM_PERCENTAGE)
-	configuration.windowMin = getFirstOrDefaultInt(parsedConfiguration["window_min"], WINDOW_MIN)
-	configuration.windowMax = getFirstOrDefaultInt(parsedConfiguration["window_max"], WINDOW_MAX)
-	configuration.stopLossMin = getFirstOrDefaultFloat64(parsedConfiguration["stoploss_min"], STOPLOSS_MIN)
-	configuration.takeProfitMax = getFirstOrDefaultFloat64(parsedConfiguration["takeprofit_max"], TAKE_PROFIT_MAX)
-	configuration.conditionNumberMin = getFirstOrDefaultInt(parsedConfiguration["condition_number_min"], CONDITION_NUMBER_MIN)
-	configuration.conditionNumberMax = getFirstOrDefaultInt(parsedConfiguration["condition_number_max"], CONDITION_NUMBER_MAX)
+	configuration.generationSize = getFirstOrDefaultInt(parsedConfiguration["generation_size"], configuration.generationSize)
+	configuration.epochs = getFirstOrDefaultInt(parsedConfiguration["epochs"], configuration.epochs)
+	configuration.oldPercentage = getFirstOrDefaultFloat32(parsedConfiguration["old_percentage"], configuration.oldPercentage)
+	configuration.mutatePercentage = getFirstOrDefaultFloat32(parsedConfiguration["mutate_percentage"], configuration.mutatePercentage)
+	configuration.reproducedPercentage = getFirstOrDefaultFloat32(parsedConfiguration["reproduced_percentage"], configuration.reproducedPercentage)
+	configuration.randomPercentage = getFirstOrDefaultFloat32(parsedConfiguration["random_percentage"], configuration.randomPercentage)
+	configuration.windowMin = getFirstOrDefaultInt(parsedConfiguration["window_min"], configuration.windowMin)
+	configuration.windowMax = getFirstOrDefaultInt(parsedConfiguration["window_max"], configuration.windowMax)
+	configuration.stopLossMin = getFirstOrDefaultFloat64(parsedConfiguration["stoploss_min"], configuration.stopLossMin)
+	configuration.takeProfitMax = getFirstOrDefaultFloat64(parsedConfiguration["takeprofit_max"], configuration.takeProfitMax)
+	configuration.conditionNumberMin = getFirstOrDefaultInt(parsedConfiguration["condition_number_min"], configuration.conditionNumberMin)
+	configuration.conditionNumberMax = getFirstOrDefaultInt(parsedConfiguration["condition_number_max"], configuration.conditionNumberMax)
+	configuration.sumOrdersThreshold = getFirstOrDefaultInt(parsedConfiguration["sum_orders_threshold"], configuration.sumOrdersThreshold)
+	configuration.conditionCountThreshold = getFirstOrDefaultInt(parsedConfiguration["condition_count_threshold"], configuration.conditionCountThreshold)
+	configuration.conditionCountSlope = getFirstOrDefaultFloat64(parsedConfiguration["condition_count_threshold"], configuration.conditionCountSlope)
 }
 
 func getFirstOrDefaultString(value interface{}, defaultValue string) string {
