@@ -31,6 +31,6 @@ func calcConditionCountWeight(numberOfConditions int) float64 {
 	if numberOfConditions <= configuration.ConditionCountThreshold() {
 		return float64(1)
 	} else {
-		return float64(configuration.ConditionCountThreshold()) + configuration.ConditionCountSlope()*float64(numberOfConditions)
+		return float64(1) + (float64(configuration.ConditionCountSlope()) * float64(configuration.ConditionCountThreshold()))
 	}
 }
