@@ -28,6 +28,11 @@ type Configuration struct {
 	takeProfitMax      float64 `yaml:"takeprofit_max"`
 	conditionNumberMin int     `yaml:"condition_number_min"`
 	conditionNumberMax int     `yaml:"condition_number_max"`
+
+	// Score
+	sumOrdersThreshold      int     `yaml:"sum_orders_threshold"`
+	conditionCountThreshold int     `yaml:"condition_count_threshold"`
+	conditionCountSlope     float64 `yaml:"condition_count_slope"`
 }
 
 func (c *Configuration) Data() string {
@@ -98,4 +103,16 @@ func (c *Configuration) ConditionNumberMin() int {
 
 func (c *Configuration) ConditionNumberMax() int {
 	return c.conditionNumberMax
+}
+
+func (c *Configuration) SumOrdersThreshold() int {
+	return c.sumOrdersThreshold
+}
+
+func (c *Configuration) ConditionCountThreshold() int {
+	return c.conditionCountThreshold
+}
+
+func (c *Configuration) ConditionCountSlope() float64 {
+	return c.conditionCountSlope
 }
