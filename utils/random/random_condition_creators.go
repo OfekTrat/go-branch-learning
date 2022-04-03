@@ -13,8 +13,8 @@ var (
 		CreateRandomIndicatorCondition,
 		CreateRandomIndicatorComparisonCondition,
 	}
-	possibleIndicatorsForIndicatorCondition        = []string{"macd", "rsi"}
-	possibleIndicatorsForIndicatorCompareCondition = []string{"macd", "rsi", "volume"}
+	possibleIndicatorsForIndicatorCondition        = []string{"macd", "rsi", "ao", "apo", "bias", "bop", "entropy", "kurtosis", "zscore", "adx", "amat_lr", "amat_sr", "aroon_osc", "chop", "decreasing", "increasing"}
+	possibleIndicatorsForIndicatorCompareCondition = []string{"macd", "rsi", "volume", "ao", "apo", "bias", "bop", "entropy", "kurtosis", "zscore", "adx", "amat_lr", "amat_sr", "aroon_osc", "chop", "decreasing", "increasing"}
 	greaterThanOptions                             = []bool{true, false}
 )
 
@@ -23,7 +23,7 @@ func CreateRandomCandleComparisonCondition(streamsize int) condition.ICondition 
 	index2 := rand.Intn(streamsize)
 	part1 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
 	part2 := condition_list.CandleParts[rand.Intn(len(condition_list.CandleParts))]
-	percentage := (rand.Float32() - 0.5) * 200
+	percentage := (rand.Float64() - 0.5) * 200
 	return condition_list.CandleComparisonCondition{CandleIndex1: index1, CandlePart1: part1,
 		CandleIndex2: index2, CandlePart2: part2, Percentage: percentage}
 }
@@ -67,12 +67,40 @@ func CreateRandomIndicatorComparisonCondition(streamsize int) condition.IConditi
 
 }
 
-func getRandomIndicatorValueByIndicator(indicator string) float32 {
+func getRandomIndicatorValueByIndicator(indicator string) float64 {
 	switch indicator {
 	case "macd":
-		return (rand.Float32() - 0.5) * 10
+		return (rand.Float64() - 0.5) * 10
 	case "rsi":
-		return rand.Float32() * 100
+		return rand.Float64() * 100
+	case "ao":
+		return (rand.Float64() - 0.5) * 4000
+	case "apo":
+		return (rand.Float64() - 0.5) * 4000
+	case "bias":
+		return (rand.Float64() - 0.5) * 0.5
+	case "bop":
+		return (rand.Float64() - 0.5) * 2
+	case "entropy":
+		return rand.Float64() + 3
+	case "kurtosis":
+		return rand.Float64()*22 - 2
+	case "zscore":
+		return (rand.Float64() - 0.5) * 10
+	case "adx":
+		return rand.Float64() * 100
+	case "amat_lr":
+		return rand.Float64()
+	case "amat_sr":
+		return rand.Float64()
+	case "aroon_osc":
+		return (rand.Float64() - 0.5) * 200
+	case "chop":
+		return rand.Float64() * 100
+	case "decreasing":
+		return rand.Float64()
+	case "increasing":
+		return rand.Float64()
 	default:
 		return 0
 	}
@@ -82,6 +110,6 @@ func getRandomGreaterThan() bool {
 	return greaterThanOptions[rand.Intn(2)]
 }
 
-func getRandomPercentage() float32 {
-	return (rand.Float32() - 0.5) * 20000
+func getRandomPercentage() float64 {
+	return (rand.Float64() - 0.5) * 20000
 }

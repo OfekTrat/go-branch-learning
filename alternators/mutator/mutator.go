@@ -14,25 +14,25 @@ const (
 	MutateRemoveConditionChance = 5
 )
 
-func MutateStrategy(strategy *st.Strategy) *st.Strategy {
+func MutateStrategy(id, generation int, strategy *st.Strategy) *st.Strategy {
 	randMutationType := rand.Intn(5)
-	return mutateStrategy(strategy, randMutationType)
+	return mutateStrategy(id, generation, strategy, randMutationType)
 }
 
-func mutateStrategy(strategy *st.Strategy, mutationType int) *st.Strategy {
+func mutateStrategy(id, generation int, strategy *st.Strategy, mutationType int) *st.Strategy {
 	switch mutationType {
 	case MutateWindowChance:
-		return MutateWindowSize(strategy)
+		return MutateWindowSize(id, generation, strategy)
 	case MutateTakeProfitChance:
-		return MutateTakeProfit(strategy)
+		return MutateTakeProfit(id, generation, strategy)
 	case MutateStopLossChance:
-		return MutateStopLoss(strategy)
+		return MutateStopLoss(id, generation, strategy)
 	case MutateAddConditionChance:
-		return MutateAddCondition(strategy)
+		return MutateAddCondition(id, generation, strategy)
 	case MutateChangeConditionChance:
-		return MutateChangeCondition(strategy)
+		return MutateChangeCondition(id, generation, strategy)
 	case MutateRemoveConditionChance:
-		return MutateRemoveCondition(strategy)
+		return MutateRemoveCondition(id, generation, strategy)
 	default:
 		return nil
 	}

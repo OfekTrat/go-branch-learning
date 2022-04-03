@@ -11,8 +11,8 @@ import (
 type IndicatorCondition struct {
 	Indicator      string
 	CandleIndex    int
-	IndicatorValue float32
-	Percentage     float32
+	IndicatorValue float64
+	Percentage     float64
 	GreaterThan    bool
 }
 
@@ -38,8 +38,8 @@ func (c IndicatorCondition) IsValidStreamSize(streamsize int) bool {
 func (c IndicatorCondition) Mutate(streamsize int) condition.ICondition {
 	// Everything but the indicator type can be changed
 	randCandleIndex := rand.Intn(streamsize)
-	randPercentage := c.Percentage + (rand.Float32()-0.5)*20
-	randIndicatorValue := c.IndicatorValue + ((rand.Float32() - 0.5) * 20)
+	randPercentage := c.Percentage + (rand.Float64()-0.5)*20
+	randIndicatorValue := c.IndicatorValue + ((rand.Float64() - 0.5) * 20)
 	isGreaterThan := rand.Intn(2)
 
 	greaterThan := false

@@ -1,35 +1,36 @@
-package output
+package strategy
 
 import (
-	st "branch_learning/strategy"
+	"branch_learning/condition"
 	"encoding/json"
 	"log"
 	"os"
 )
 
-func PrintStrategy(strategy *st.Strategy) {
+func (strategy *Strategy) ToJsonString() string {
 	mappedStrategy := make(map[string]interface{})
+	mappedStrategy["generation"] = strategy.Generation()
+	mappedStrategy["id"] = strategy.Id()
 	mappedStrategy["stop_loss"] = strategy.StopLoss()
 	mappedStrategy["take_profit"] = strategy.TakeProfit()
 	mappedStrategy["window"] = strategy.WindowSize()
-	// mappedStrategy["conditions"] = getConditionStrList(strategy)
-	mappedStrategy["conditions"] = getConditionStrList(strategy)
+	mappedStrategy["conditions"] = mapConditions(strategy.Conditions())
 	data, err := json.MarshalIndent(mappedStrategy, "", "    ")
 
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
-	log.Println(string(data))
+	return string(data)
 }
 
-func getConditionStrList(strategy *st.Strategy) []map[string]interface{} {
+func mapConditions(conditions *condition.Conditions) []map[string]interface{} {
 	var err error
 	var conditionJsonNoType []byte
-	conditions := []map[string]interface{}{}
+	mappedConditions := []map[string]interface{}{}
 
-	for i := 0; i < strategy.Conditions().Length(); i++ {
-		cond := strategy.Conditions().GetByIndex(i)
+	for i := 0; i < conditions.Length(); i++ {
+		cond := conditions.GetByIndex(i)
 		mappedCond := make(map[string]interface{})
 		conditionJsonNoType, err = json.Marshal(cond)
 		if err != nil {
@@ -43,7 +44,7 @@ func getConditionStrList(strategy *st.Strategy) []map[string]interface{} {
 		}
 
 		mappedCond["type"] = cond.ConditionType()
-		conditions = append(conditions, mappedCond)
+		mappedConditions = append(mappedConditions, mappedCond)
 	}
-	return conditions
+	return mappedConditions
 }

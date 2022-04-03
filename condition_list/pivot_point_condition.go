@@ -12,7 +12,7 @@ type PivotPointCondition struct {
 	CandleIndex int
 	CandlePart  string
 	PivotPart   string
-	Percentage  float32
+	Percentage  float64
 	GreaterThan bool
 }
 
@@ -40,7 +40,7 @@ func (c PivotPointCondition) Mutate(streamsize int) icondition.ICondition {
 	randCandlePart := CandleParts[rand.Intn(len(CandleParts))]
 	randPivotPart := PivotParts[rand.Intn(len(PivotParts))]
 	isGreaterThan := rand.Intn(2)
-	randPercentage := c.Percentage + (rand.Float32()-0.5)*20
+	randPercentage := c.Percentage + (rand.Float64()-0.5)*20
 	if isGreaterThan == 1 {
 		return PivotPointCondition{CandleIndex: randIndex, CandlePart: randCandlePart, PivotPart: randPivotPart, Percentage: randPercentage, GreaterThan: true}
 	} else {

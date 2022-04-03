@@ -2,35 +2,29 @@ package random
 
 import (
 	"branch_learning/condition"
+	c "branch_learning/configuration"
 	st "branch_learning/strategy"
 	"math/rand"
 )
 
-type RandomStrategyConfig struct {
-	WindowMin          int
-	WindowMax          int
-	ExitMin            float32
-	ExitMax            float32
-	ConditionNumberMin int
-	ConditionNumberMax int
-}
+var configuration *c.Configuration = c.GetConfiguration()
 
-func CreateRandomStrategy(id int, config *RandomStrategyConfig) *st.Strategy {
-	windowSize := getRandomInt(config.WindowMin, config.WindowMax)
-	takeProfit := getRandomFloat32(1.0, config.ExitMax)
-	stopLoss := getRandomFloat32(config.ExitMin, 1.0)
-	nConditions := getRandomInt(config.ConditionNumberMin, config.ConditionNumberMax)
+func CreateRandomStrategy(id, generation int) *st.Strategy {
+	windowSize := getRandomInt(configuration.WindowMin(), configuration.WindowMax())
+	takeProfit := getRandomFloat64(1.0, configuration.TakeProfitMax())
+	stopLoss := getRandomFloat64(configuration.StopLossMin(), 1.0)
+	nConditions := getRandomInt(configuration.ConditionNumberMin(), configuration.ConditionNumberMax())
 
 	randConditions := getRandomConditions(nConditions, windowSize)
-	return st.CreateStrategy(windowSize, takeProfit, stopLoss, randConditions)
+	return st.CreateStrategy(id, generation, windowSize, takeProfit, stopLoss, randConditions)
 }
 
 func getRandomInt(min, max int) int {
 	return min + rand.Intn(max-min)
 }
 
-func getRandomFloat32(min, max float32) float32 {
-	return min + rand.Float32()*(max-min)
+func getRandomFloat64(min, max float64) float64 {
+	return min + rand.Float64()*(max-min)
 }
 
 func getRandomConditions(nConditions, windowSize int) *condition.Conditions {
@@ -41,3 +35,5 @@ func getRandomConditions(nConditions, windowSize int) *condition.Conditions {
 	}
 	return condition.CreateConditions(conditions)
 }
+
+// TODO: Make random function for each value and not for each type (for stop loss not for float32)

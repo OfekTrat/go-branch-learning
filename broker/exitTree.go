@@ -1,17 +1,17 @@
 package broker
 
 type exitNode struct {
-	value  float32
+	value  float64
 	orders []Order
 	lower  *exitNode
 	upper  *exitNode
 }
 
-func createExitNode(value float32, ord Order) *exitNode {
+func createExitNode(value float64, ord Order) *exitNode {
 	return &exitNode{value, []Order{ord}, nil, nil}
 }
 
-func (en *exitNode) Add(value float32, ord Order) {
+func (en *exitNode) Add(value float64, ord Order) {
 	pos := en
 
 	for pos != nil {
@@ -39,7 +39,7 @@ func (en *exitNode) Add(value float32, ord Order) {
 }
 
 // TODO: Implement Tree Pruning. So that when GetStopLossExits, or GetTakeProfitExits are called, the tree is pruned to the only left nodes.
-func (en *exitNode) GetStopLossExits(value float32) (*exitNode, []Order) {
+func (en *exitNode) GetStopLossExits(value float64) (*exitNode, []Order) {
 	orders := []Order{}
 
 	if en == nil {
@@ -66,7 +66,7 @@ func (en *exitNode) GetStopLossExits(value float32) (*exitNode, []Order) {
 	}
 }
 
-func (en *exitNode) GetTakeProfitExits(value float32) (*exitNode, []Order) {
+func (en *exitNode) GetTakeProfitExits(value float64) (*exitNode, []Order) {
 	orders := []Order{}
 
 	if en == nil {

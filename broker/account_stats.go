@@ -1,26 +1,31 @@
 package broker
 
-type accountStats struct {
+type AccountStats struct {
 	wins   int
 	losses int
 }
 
-func AccountStats() *accountStats {
-	return &accountStats{0, 0}
+func CreateEmptyAccountStats() *AccountStats {
+	return &AccountStats{0, 0}
 }
 
-func (as *accountStats) AddWin() {
+func (as *AccountStats) AddWin() {
 	as.wins++
 }
 
-func (as *accountStats) AddLoss() {
+func (as *AccountStats) AddLoss() {
 	as.losses++
 }
 
-func (as *accountStats) Wins() int {
+func (as *AccountStats) Wins() int {
 	return as.wins
 }
 
-func (as *accountStats) Losses() int {
+func (as *AccountStats) Losses() int {
 	return as.losses
+}
+
+func (as *AccountStats) AddAccountStats(other *AccountStats) {
+	as.wins += other.wins
+	as.losses += other.losses
 }
