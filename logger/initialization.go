@@ -41,6 +41,7 @@ func InitLoggers(shouldLogOrders bool) {
 	if configuration.ShouldLogOrders() {
 		ordersFile = createFilePanicError(ORDERS_FILE)
 		logger.orders = log.New(ordersFile, "", 0)
+		logger.orders.Println("coin,buy_time,generation,strategy,buy_sell,price")
 	}
 
 	logger.Results.Println("generation,id,conditionCount,wins,losses,winRate,takeProfit,stopLoss,Score")
