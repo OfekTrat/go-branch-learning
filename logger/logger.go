@@ -1,6 +1,7 @@
 package logger
 
 import (
+	c "branch_learning/configuration"
 	"fmt"
 	"log"
 	"os"
@@ -14,13 +15,14 @@ const (
 	LOGS_FILE       = "logs"
 )
 
+var configuration *c.Configuration = c.GetConfiguration()
+
 type Logger struct {
-	shouldLogOrders bool
-	orders          *log.Logger
-	Strategies      *log.Logger
-	Results         *log.Logger
-	Info            *log.Logger
-	Error           *log.Logger
+	orders     *log.Logger
+	Strategies *log.Logger
+	Results    *log.Logger
+	Info       *log.Logger
+	Error      *log.Logger
 }
 
 func CreateLogger() *Logger {
@@ -33,7 +35,7 @@ func CreateLogger() *Logger {
 }
 
 func (l *Logger) LogOrder(message string, params ...interface{}) {
-	if l.shouldLogOrders && l.orders != nil {
+	if configuration.ShouldLogOrders() && l.orders != nil {
 		l.orders.Printf(message, params...)
 	}
 }

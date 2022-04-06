@@ -63,7 +63,7 @@ func closeFiles() {
 	closeFile(strategiesFile)
 	closeFile(resultsFile)
 
-	if logger.shouldLogOrders {
+	if configuration.ShouldLogOrders() {
 		closeFile(ordersFile)
 	}
 }

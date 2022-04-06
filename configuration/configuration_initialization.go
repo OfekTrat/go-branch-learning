@@ -129,7 +129,7 @@ func parseYamlConfiguration(filename string) {
 	yaml.Unmarshal(confFile, parsedConfiguration)
 
 	configuration.data = getFirstOrDefaultString(parsedConfiguration["data"], configuration.data)
-	configuration.shouldLogOrders = getFirstOrDefaultBool(parsedConfiguration["shouldLogOrders"], configuration.shouldLogOrders)
+	configuration.shouldLogOrders = getFirstOrDefaultBool(parsedConfiguration["should_log_orders"], configuration.shouldLogOrders)
 	configuration.strategy = getFirstOrDefaultString(parsedConfiguration["strategy"], configuration.strategy)
 
 	configuration.generationSize = getFirstOrDefaultInt(parsedConfiguration["generation_size"], configuration.generationSize)
