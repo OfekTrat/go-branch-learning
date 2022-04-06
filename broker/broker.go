@@ -60,20 +60,20 @@ func (broker *Broker) updateTakeProfitExits(highPrice float64) []Order {
 	return orders
 }
 
-func (broker *Broker) CloseWinOrders(strategy *s.Strategy, orders []Order) {
-	broker.CloseOrders(strategy, orders, true)
+func (broker *Broker) CloseWinOrders(closeTime int, strategy *s.Strategy, orders []Order) {
+	broker.CloseOrders(closeTime, strategy, orders, true)
 }
 
-func (broker *Broker) CloseLossOrders(strategy *s.Strategy, orders []Order) {
-	broker.CloseOrders(strategy, orders, false)
+func (broker *Broker) CloseLossOrders(closeTime int, strategy *s.Strategy, orders []Order) {
+	broker.CloseOrders(closeTime, strategy, orders, false)
 }
 
-func (broker *Broker) CloseOrders(strategy *s.Strategy, orders []Order, isWin bool) {
+func (broker *Broker) CloseOrders(closeTime int, strategy *s.Strategy, orders []Order, isWin bool) {
 	for _, ord := range orders {
 		if !broker.isOrderClosed(ord) {
 			broker.closeOrder(ord, isWin)
 
-			logger.LogOrder("%s,%d,%d,%d,%d,%f\n", ord.ticker, ord.Time(), strategy.Generation(), strategy.Id(), 1, ord.stopLoss)
+			logger.LogOrder("%s,%d,%d,%d,%d,%f,%d\n", ord.ticker, ord.Time(), strategy.Generation(), strategy.Id(), 1, ord.stopLoss, closeTime)
 		}
 	}
 }
