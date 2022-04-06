@@ -9,6 +9,7 @@ type Configuration struct {
 	// General
 	data            string `yaml:"data"`
 	shouldLogOrders bool   `yaml:"should_log_orders"`
+	output          string
 
 	// Test Related
 	strategy string `yaml:"strategy"`
@@ -46,6 +47,10 @@ func (c *Configuration) Data() string {
 
 func (c *Configuration) ShouldLogOrders() bool {
 	return c.shouldLogOrders
+}
+
+func (c *Configuration) Output() string {
+	return c.output
 }
 
 func (c *Configuration) Strategy() string {
