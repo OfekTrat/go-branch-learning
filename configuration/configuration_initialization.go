@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
+	"time"
 
 	yaml "gopkg.in/yaml.v3"
 )
@@ -49,6 +51,7 @@ func init() {
 	var sumOrdersThreshold int
 	var conditionCountThreshold int
 	var conditionCountSlope float64
+	var output string
 
 	flag.StringVar(&configFile, "f", "", "Yaml configuration file")
 	flag.StringVar(&data, "d", "", "Data Path")
@@ -69,6 +72,7 @@ func init() {
 	flag.IntVar(&sumOrdersThreshold, "sum-orders-threshold", SUM_ORDERS_THRESHOLD, "Threshold of sum orders score")
 	flag.IntVar(&conditionCountThreshold, "condition-count-threshold", CONDITION_COUNT_THRESHOLD, "Threshold of condition count")
 	flag.Float64Var(&conditionCountSlope, "condition-count-slope", CONDITION_COUNT_SLOPE, "Slope for decreasing condition count weight")
+	flag.StringVar(&output, "output", generateDefaultOutputFile(), "The output file for the results")
 	flag.Parse()
 
 	configuration = &Configuration{
@@ -90,6 +94,7 @@ func init() {
 		sumOrdersThreshold:      sumOrdersThreshold,
 		conditionCountThreshold: conditionCountThreshold,
 		conditionCountSlope:     conditionCountSlope,
+		output:                  output,
 	}
 
 	if configFile != "" {
@@ -99,6 +104,18 @@ func init() {
 
 func GetConfiguration() *Configuration {
 	return configuration
+}
+
+func generateDefaultOutputFile() string {
+	now := time.Now()
+	filename := strconv.FormatInt(int64(now.Year()), 10) +
+		strconv.FormatInt(int64(now.Month()), 10) +
+		strconv.FormatInt(int64(now.Day()), 10) +
+		"-" +
+		strconv.FormatInt(int64(now.Hour()), 10) +
+		strconv.FormatInt(int64(now.Minute()), 10)
+
+	return filename + ".zip"
 }
 
 func parseYamlConfiguration(filename string) {
@@ -130,6 +147,7 @@ func parseYamlConfiguration(filename string) {
 	configuration.sumOrdersThreshold = getFirstOrDefaultInt(parsedConfiguration["sum_orders_threshold"], configuration.sumOrdersThreshold)
 	configuration.conditionCountThreshold = getFirstOrDefaultInt(parsedConfiguration["condition_count_threshold"], configuration.conditionCountThreshold)
 	configuration.conditionCountSlope = getFirstOrDefaultFloat64(parsedConfiguration["condition_count_slope"], configuration.conditionCountSlope)
+	configuration.output = getFirstOrDefaultString(parsedConfiguration["output"], configuration.output)
 }
 
 func getFirstOrDefaultString(value interface{}, defaultValue string) string {
