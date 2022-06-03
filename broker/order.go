@@ -11,6 +11,7 @@ type Order struct {
 	price      float64
 	takeProfit float64
 	stopLoss   float64
+	closeTime  int // Default will be 0 which means there was not close time
 }
 
 func MakeOrderFromCandleAndStrategy(ticker string, strategy *st.Strategy, candle c.Candle) Order {

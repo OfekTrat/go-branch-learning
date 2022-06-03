@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -69,23 +68,5 @@ func main() {
 			dataPath,
 		)
 	}
-
-	filename := createTimeFilename()
-	l.ZipLogs(filename)
+	l.ZipLogs(configuration.Output())
 }
-
-func createTimeFilename() string {
-	now := time.Now()
-	filename := strconv.FormatInt(int64(now.Year()), 10) +
-		strconv.FormatInt(int64(now.Month()), 10) +
-		strconv.FormatInt(int64(now.Day()), 10) +
-		"-" +
-		strconv.FormatInt(int64(now.Hour()), 10) +
-		strconv.FormatInt(int64(now.Minute()), 10)
-
-	return filename + ".zip"
-}
-
-// TODO:
-// 2. Make score relate to the number of the candles (think of a way that large number is not different
-//    then pretty small since the win rate is caluclated, but low number of orders is problematic (win=1, losses=0 --> win rate = 100% which is not good)

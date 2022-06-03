@@ -38,6 +38,12 @@ func InitLoggers(shouldLogOrders bool) {
 	logger.Info = infoLogger
 	logger.Error = errorLogger
 
+	if configuration.ShouldLogOrders() {
+		ordersFile = createFilePanicError(ORDERS_FILE)
+		logger.orders = log.New(ordersFile, "", 0)
+		logger.orders.Println("coin,buy_time,generation,strategy,buy_sell,price,close_time")
+	}
+
 	logger.Results.Println("generation,id,conditionCount,wins,losses,winRate,takeProfit,stopLoss,Score")
 }
 
